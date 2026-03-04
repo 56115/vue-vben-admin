@@ -204,9 +204,6 @@ test.describe('CRM 菜单重构验证', () => {
 
       for (const text of menuTexts) {
         const hasMenu = pageContent.includes(text);
-        if (!hasMenu) {
-          console.log(`Warning: Menu "${text}" not found in page content`);
-        }
         // 使用软断言，记录但不失败（菜单可能需要权限）
       }
     });

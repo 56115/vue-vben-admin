@@ -103,7 +103,6 @@ test.describe('📝 提示词管理 - 列表页功能', () => {
       .filter({ hasText: /新建|新增|Create/i })
       .first();
     const hasCreateButton = await createButton.isVisible().catch(() => false);
-    console.log('新建按钮存在:', hasCreateButton);
   });
 
   test('列表页 - 搜索功能', async ({ page }) => {
@@ -186,7 +185,6 @@ test.describe('📝 提示词管理 - 列表页功能', () => {
 
     // 如果按钮不存在则跳过
     if (!(await createButton.isVisible().catch(() => false))) {
-      console.log('新建按钮未找到，跳过此测试');
       test.skip();
       return;
     }
@@ -224,8 +222,6 @@ test.describe('📝 提示词管理 - 列表页功能', () => {
       .catch(() => false);
 
     if (hasData) {
-      console.log('表格有数据，验证操作按钮');
-
       // 验证编辑按钮
       const editBtn = editButtons.first();
       expect(await editBtn.isVisible()).toBe(true);
@@ -242,7 +238,6 @@ test.describe('📝 提示词管理 - 列表页功能', () => {
       const versionBtn = versionButtons.first();
       expect(await versionBtn.isVisible()).toBe(true);
     } else {
-      console.log('表格暂无数据，跳过操作按钮验证');
       test.skip();
     }
   });
@@ -374,10 +369,6 @@ test.describe('✏️ 提示词管理 - 编辑页功能', () => {
     // 验证页面已加载（通过检查页面是否有任何内容）
     const body = page.locator('body');
     const bodyText = await body.innerText().catch(() => '');
-
-    // 记录页面内容以便调试
-    console.log('页面内容长度:', bodyText.length);
-    console.log('页面内容前100字符:', bodyText.substring(0, 100));
 
     // 只要有任何文本内容就认为页面加载成功
     expect(bodyText.length > 0).toBe(true);
@@ -785,9 +776,6 @@ test.describe('✏️ 提示词管理 - 编辑页功能', () => {
         }
       }
 
-      // 验证页面变化（可能是列表页或编辑页还在）
-      const currentUrl = page.url();
-      console.log('返回后的URL:', currentUrl);
     }
   });
 });
@@ -1210,8 +1198,6 @@ test.describe('⚡ 提示词管理 - 性能和边界测试', () => {
         const startTime = Date.now();
         await editor.fill(largeText);
         const endTime = Date.now();
-
-        console.log(`大文本填充耗时: ${endTime - startTime}ms`);
 
         await page.screenshot({
           path: 'test-results/prompt-perf-01-large-text.png',

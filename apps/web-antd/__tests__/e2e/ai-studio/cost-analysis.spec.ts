@@ -46,25 +46,6 @@ test.describe('AI Studio 成本分析页面', () => {
   });
 
   test('应该正确显示成本数据，而不是 [object Object]', async ({ page }) => {
-    // 监听控制台日志
-    page.on('console', (msg) => {
-      console.log('Browser console:', msg.type(), msg.text());
-    });
-
-    // 监听网络请求，查看实际响应
-    page.on('response', async (response) => {
-      if (response.url().includes('/ai-studio/cost')) {
-        console.log('API URL:', response.url());
-        console.log('API Status:', response.status());
-        try {
-          const data = await response.json();
-          console.log('API Response:', JSON.stringify(data, null, 2));
-        } catch (e) {
-          console.log('Failed to parse response as JSON');
-        }
-      }
-    });
-
     // 等待页面主要内容加载
     try {
       await page.waitForSelector('.cost-dashboard', { timeout: 10000 });
@@ -74,7 +55,6 @@ test.describe('AI Studio 成本分析页面', () => {
         path: 'test-results/cost-analysis-page-not-loaded.png',
         fullPage: true,
       });
-      console.log('页面未完全加载，可能登录状态有问题');
       test.skip();
       return;
     }
@@ -103,8 +83,6 @@ test.describe('AI Studio 成本分析页面', () => {
         .filter({ hasText: 'Token 总消耗' })
         .locator('.ant-statistic-content-value')
         .textContent();
-      console.log('Token 总消耗值:', tokenValue);
-
       // 验证数值不是 [object Object]
       expect(tokenValue).not.toContain('[object Object]');
       expect(tokenValue).not.toBeNull();
@@ -116,7 +94,6 @@ test.describe('AI Studio 成本分析页面', () => {
         .filter({ hasText: '总成本' })
         .locator('.ant-statistic-content-value')
         .textContent();
-      console.log('总成本值:', costValue);
       expect(costValue).not.toContain('[object Object]');
 
       // 验证输入 Token 卡片
@@ -125,7 +102,6 @@ test.describe('AI Studio 成本分析页面', () => {
         .filter({ hasText: '输入 Token' })
         .locator('.ant-statistic-content-value')
         .textContent();
-      console.log('输入 Token 值:', promptValue);
       expect(promptValue).not.toContain('[object Object]');
 
       // 验证输出 Token 卡片
@@ -134,7 +110,6 @@ test.describe('AI Studio 成本分析页面', () => {
         .filter({ hasText: '输出 Token' })
         .locator('.ant-statistic-content-value')
         .textContent();
-      console.log('输出 Token 值:', completionValue);
       expect(completionValue).not.toContain('[object Object]');
     }
   });
@@ -144,7 +119,6 @@ test.describe('AI Studio 成本分析页面', () => {
     try {
       await page.waitForSelector('.cost-dashboard', { timeout: 10000 });
     } catch (e) {
-      console.log('页面未完全加载，跳过此测试');
       test.skip();
       return;
     }
@@ -154,7 +128,6 @@ test.describe('AI Studio 成本分析页面', () => {
     const isVisible = await timeRangeSelect.isVisible().catch(() => false);
 
     if (!isVisible) {
-      console.log('时间选择器不可见，跳过此测试');
       test.skip();
       return;
     }
@@ -195,7 +168,6 @@ test.describe('AI Studio 成本分析页面', () => {
 
     // 如果返回 401，说明认证方式不同，跳过此测试
     if (apiResponse.status() === 401) {
-      console.log('API 认证失败，跳过 API 测试');
       test.skip();
       return;
     }
@@ -203,8 +175,6 @@ test.describe('AI Studio 成本分析页面', () => {
     expect(apiResponse.status()).toBe(200);
 
     const responseData = await apiResponse.json();
-    console.log('API 响应:', JSON.stringify(responseData, null, 2));
-
     // 验证响应格式
     expect(responseData).toHaveProperty('code');
     expect(responseData).toHaveProperty('data');

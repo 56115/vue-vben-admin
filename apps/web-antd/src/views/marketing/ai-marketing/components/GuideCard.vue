@@ -25,41 +25,31 @@ defineOptions({ name: 'GuideCard' });
         <template #icon>
           <EditOutlined />
         </template>
-        <template #description>
-          用自然语言描述营销目标
-        </template>
+        <template #description> 用自然语言描述营销目标 </template>
       </Step>
       <Step title="设置规则">
         <template #icon>
           <TeamOutlined />
         </template>
-        <template #description>
-          可选：设置目标人群规则
-        </template>
+        <template #description> 可选：设置目标人群规则 </template>
       </Step>
       <Step title="预览匹配">
         <template #icon>
           <EyeOutlined />
         </template>
-        <template #description>
-          AI 匹配人群和分群
-        </template>
+        <template #description> AI 匹配人群和分群 </template>
       </Step>
       <Step title="生成文案">
         <template #icon>
           <FileTextOutlined />
         </template>
-        <template #description>
-          自动生成个性化文案
-        </template>
+        <template #description> 自动生成个性化文案 </template>
       </Step>
       <Step title="创建活动">
         <template #icon>
           <RocketOutlined />
         </template>
-        <template #description>
-          一键创建营销活动
-        </template>
+        <template #description> 一键创建营销活动 </template>
       </Step>
     </Steps>
   </Card>

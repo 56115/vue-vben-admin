@@ -245,13 +245,13 @@ const {
     if (params.minViews) apiParams.minViews = params.minViews;
 
     const res = await requestClient.get<{ items: MomentTask[]; total: number }>(
-      '/moments',
+      '/messaging/moments',
       { params: apiParams },
     );
     return { items: res.items || [], total: res.total || 0 };
   },
   deleteApi: async (id) => {
-    await requestClient.delete(`/moments/${id}`);
+    await requestClient.delete(`/messaging/moments/${id}`);
   },
 });
 
@@ -263,7 +263,7 @@ async function fetchMaterials() {
     const res = await requestClient.get<{
       items: MaterialItem[];
       total: number;
-    }>('/moments/materials', {
+    }>('/messaging/moments/materials', {
       params: { page: materialsPage.value, pageSize: 10 },
     });
     materials.value = res.items || [];
@@ -453,7 +453,7 @@ async function handlePublish() {
       }
     }
 
-    await requestClient.post('/moments', payload);
+    await requestClient.post('/messaging/moments', payload);
     message.success('已通知成员发表');
 
     // Reset form
@@ -483,7 +483,7 @@ async function handlePublish() {
 
 async function handleRemind(id: number) {
   try {
-    await requestClient.post(`/moments/${id}/remind`);
+    await requestClient.post(`/messaging/moments/${id}/remind`);
     message.success('已发送提醒');
   } catch (e: unknown) {
     const errorMessage = e instanceof Error ? e.message : '提醒失败';
@@ -493,7 +493,7 @@ async function handleRemind(id: number) {
 
 async function handleDelete(id: number) {
   try {
-    await requestClient.delete(`/moments/${id}`);
+    await requestClient.delete(`/messaging/moments/${id}`);
     message.success('删除成功');
     fetchMoments();
   } catch (e: unknown) {
@@ -524,7 +524,7 @@ async function fetchFailedCount() {
     const res = await requestClient.get<{
       totalTasks: number;
       failedTasks: number;
-    }>('/moments/statistics');
+    }>('/messaging/moments/statistics');
     failedCount.value = res.failedTasks || 0;
   } catch (e) {
     console.error(e);
@@ -538,7 +538,7 @@ async function handleRetryFailed() {
       total: number;
       succeeded: number;
       failed: number;
-    }>('/moments/retry-failed');
+    }>('/messaging/moments/retry-failed');
     message.success(
       `重试完成：成功 ${res.succeeded} 条，失败 ${res.failed} 条`,
     );

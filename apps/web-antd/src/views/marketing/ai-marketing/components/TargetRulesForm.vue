@@ -40,7 +40,10 @@ const audienceLimitOptions = [
   { value: 10000, label: '10000人' },
 ];
 
-function updateRules<K extends keyof TargetRules>(field: K, value: TargetRules[K]) {
+function updateRules<K extends keyof TargetRules>(
+  field: K,
+  value: TargetRules[K],
+) {
   emit('update:rules', { ...props.rules, [field]: value });
 }
 
@@ -65,7 +68,9 @@ defineOptions({ name: 'TargetRulesForm' });
         <span>最低消费</span>
         <InputNumber
           :value="rules.minMonetary"
-          @update:value="(v) => updateRules('minMonetary', v as number | undefined)"
+          @update:value="
+            (v) => updateRules('minMonetary', v as number | undefined)
+          "
           :min="0"
           :step="100"
           placeholder="不限"
@@ -80,7 +85,9 @@ defineOptions({ name: 'TargetRulesForm' });
         <span>最近</span>
         <InputNumber
           :value="rules.maxRecencyDays"
-          @update:value="(v) => updateRules('maxRecencyDays', v as number | undefined)"
+          @update:value="
+            (v) => updateRules('maxRecencyDays', v as number | undefined)
+          "
           :min="1"
           :max="365"
           placeholder="不限"
@@ -97,7 +104,7 @@ defineOptions({ name: 'TargetRulesForm' });
         :options="audienceLimitOptions"
         style="width: 200px"
       />
-      <div class="text-gray-400 text-sm mt-1">最多匹配10000人</div>
+      <div class="mt-1 text-sm text-gray-400">最多匹配10000人</div>
     </Form.Item>
   </div>
 </template>

@@ -85,7 +85,6 @@ const handleStartGrading = async () => {
     formData.append('gradingMode', gradingMode.value);
 
     // 调用工作流批改 API (homework-grading-approval 工作流 id=51)
-    console.log('Submitting to workflow...');
     const submitResponse = await requestClient.post<{
       recordId: string;
       executionId: string;
@@ -98,7 +97,6 @@ const handleStartGrading = async () => {
       timeout: 120000,
     });
 
-    console.log('✅ Workflow submitted:', submitResponse);
     currentStep.value = '批改任务已提交，正在处理...';
 
     const { executionId, recordId } = submitResponse;
@@ -129,8 +127,6 @@ const handleStartGrading = async () => {
           requiresApproval?: boolean;
           approvalReason?: string;
         }>(`/education/paper/executions/${executionId}/status`);
-
-        console.log('📊 Execution status:', statusResponse);
 
         // 更新进度条
         progress.value = statusResponse.progress || 0;
@@ -172,7 +168,7 @@ const handleStartGrading = async () => {
           router.push('/ai-tutor/grading-history');
         }
       } catch (error: any) {
-        console.error('❌ Poll status error:', error);
+        console.error('Poll status error:', error);
         attempts++;
         if (attempts < maxAttempts) {
           setTimeout(pollStatus, pollInterval);
@@ -187,7 +183,7 @@ const handleStartGrading = async () => {
     setTimeout(pollStatus, pollInterval);
   } catch (error: any) {
     message.error(error?.response?.data?.message || error.message || '提交批改失败');
-    console.error('❌ Grading submission error:', error);
+    console.error('Grading submission error:', error);
     isLoading.value = false;
   }
 };

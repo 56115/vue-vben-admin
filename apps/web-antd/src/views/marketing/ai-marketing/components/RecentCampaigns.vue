@@ -131,11 +131,7 @@ defineOptions({ name: 'RecentCampaigns' });
             {{ dayjs(record.createdAt).format('MM-DD HH:mm') }}
           </template>
           <template v-else-if="column.key === 'action'">
-            <Button
-              type="link"
-              size="small"
-              @click="goToStatistics"
-            >
+            <Button type="link" size="small" @click="goToStatistics">
               <BarChartOutlined /> 统计
             </Button>
           </template>

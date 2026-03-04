@@ -17,7 +17,10 @@ import {
   ReloadOutlined,
   InfoCircleOutlined,
 } from '@ant-design/icons-vue';
-import type { PersonalizedCopy, AudienceSegment } from '#/api/marketing/ai-marketing';
+import type {
+  PersonalizedCopy,
+  AudienceSegment,
+} from '#/api/marketing/ai-marketing';
 import { message } from 'ant-design-vue';
 
 interface Props {
@@ -115,10 +118,12 @@ defineOptions({ name: 'CopyPreview' });
           >
             <div class="space-y-4">
               <!-- 文案内容 -->
-              <div class="bg-gray-50 p-4 rounded-lg">
-                <div class="flex items-center justify-between mb-2">
+              <div class="rounded-lg bg-gray-50 p-4">
+                <div class="mb-2 flex items-center justify-between">
                   <Tag :color="getSegmentColor(index)">
-                    {{ getSegment(copy.segmentId)?.segmentName || copy.segmentId }}
+                    {{
+                      getSegment(copy.segmentId)?.segmentName || copy.segmentId
+                    }}
                   </Tag>
                   <Space>
                     <Tooltip title="复制文案">
@@ -141,12 +146,17 @@ defineOptions({ name: 'CopyPreview' });
                     </Tooltip>
                   </Space>
                 </div>
-                <p class="text-gray-800 whitespace-pre-wrap">{{ copy.textContent }}</p>
+                <p class="whitespace-pre-wrap text-gray-800">
+                  {{ copy.textContent }}
+                </p>
               </div>
 
               <!-- 链接信息 -->
-              <div v-if="copy.linkTitle || copy.linkDesc" class="border rounded-lg p-3">
-                <div class="text-sm text-gray-500 mb-1">链接卡片</div>
+              <div
+                v-if="copy.linkTitle || copy.linkDesc"
+                class="rounded-lg border p-3"
+              >
+                <div class="mb-1 text-sm text-gray-500">链接卡片</div>
                 <div class="font-medium">{{ copy.linkTitle }}</div>
                 <div class="text-sm text-gray-600">{{ copy.linkDesc }}</div>
               </div>

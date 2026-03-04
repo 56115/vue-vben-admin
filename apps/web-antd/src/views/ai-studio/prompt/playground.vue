@@ -79,7 +79,9 @@ const modelConfig = ref({
 
 // 输出状态
 const outputContent = ref('');
-const renderedPrompt = ref<{ systemPrompt: string; userPrompt: string } | null>(null);
+const renderedPrompt = ref<{ systemPrompt: string; userPrompt: string } | null>(
+  null,
+);
 const lastResult = ref<{
   success: boolean;
   latencyMs: number;
@@ -213,7 +215,8 @@ const generateTestData = () => {
         inputs[v.name] = v.defaultValue || `示例${v.name}`;
         break;
       case 'text':
-        inputs[v.name] = v.defaultValue || `这是一段示例文本，对应变量 ${v.name}`;
+        inputs[v.name] =
+          v.defaultValue || `这是一段示例文本，对应变量 ${v.name}`;
         break;
       case 'number':
         inputs[v.name] = v.defaultValue || 42;
@@ -430,7 +433,7 @@ watch(selectedTemplateId, async (newId) => {
               placeholder="选择要测试的模板"
               show-search
               option-filter-prop="label"
-              :options="templates.map(t => ({ value: t.id, label: t.name }))"
+              :options="templates.map((t) => ({ value: t.id, label: t.name }))"
               style="width: 100%"
             />
           </Form.Item>
@@ -447,7 +450,10 @@ watch(selectedTemplateId, async (newId) => {
               />
 
               <!-- 变量输入 -->
-              <div v-if="templateVariables.length > 0" class="variables-section">
+              <div
+                v-if="templateVariables.length > 0"
+                class="variables-section"
+              >
                 <div class="section-header">
                   <Typography.Text strong>变量输入</Typography.Text>
                   <Space>
@@ -514,11 +520,7 @@ watch(selectedTemplateId, async (newId) => {
                 </div>
               </div>
 
-              <Empty
-                v-else
-                description="该模板没有变量"
-                class="empty-vars"
-              />
+              <Empty v-else description="该模板没有变量" class="empty-vars" />
 
               <!-- 模型配置 -->
               <div class="model-config-section mt-4">
@@ -589,7 +591,9 @@ watch(selectedTemplateId, async (newId) => {
             <Space>
               <span>输出结果</span>
               <Tag v-if="lastResult?.success" color="success">成功</Tag>
-              <Tag v-else-if="lastResult && !lastResult.success" color="error">失败</Tag>
+              <Tag v-else-if="lastResult && !lastResult.success" color="error"
+                >失败</Tag
+              >
             </Space>
           </template>
 
@@ -633,7 +637,9 @@ watch(selectedTemplateId, async (newId) => {
             <Tabs.TabPane key="output" tab="LLM 输出">
               <div class="output-content">
                 <Spin :spinning="testing" tip="正在生成...">
-                  <pre v-if="outputContent" class="output-text">{{ outputContent }}</pre>
+                  <pre v-if="outputContent" class="output-text">{{
+                    outputContent
+                  }}</pre>
                   <Empty v-else description="运行测试后在此显示输出" />
                 </Spin>
               </div>
@@ -643,7 +649,9 @@ watch(selectedTemplateId, async (newId) => {
               <div v-if="renderedPrompt" class="rendered-prompts">
                 <div class="prompt-section">
                   <Typography.Text strong>系统提示词</Typography.Text>
-                  <pre class="prompt-text">{{ renderedPrompt.systemPrompt || '(空)' }}</pre>
+                  <pre class="prompt-text">{{
+                    renderedPrompt.systemPrompt || '(空)'
+                  }}</pre>
                 </div>
                 <div class="prompt-section">
                   <Typography.Text strong>用户提示词</Typography.Text>
@@ -682,7 +690,10 @@ watch(selectedTemplateId, async (newId) => {
                     />
                   </Col>
                   <Col :span="8">
-                    <Statistic title="使用模型" :value="lastResult.model || '-'" />
+                    <Statistic
+                      title="使用模型"
+                      :value="lastResult.model || '-'"
+                    />
                   </Col>
                 </Row>
               </div>
@@ -694,11 +705,7 @@ watch(selectedTemplateId, async (newId) => {
     </Row>
 
     <!-- 测试历史抽屉 -->
-    <Drawer
-      v-model:open="showHistory"
-      title="测试历史统计"
-      :width="500"
-    >
+    <Drawer v-model:open="showHistory" title="测试历史统计" :width="500">
       <template v-if="historyStats">
         <Row :gutter="[16, 16]">
           <Col :span="12">

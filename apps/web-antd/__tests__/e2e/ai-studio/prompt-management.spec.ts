@@ -55,7 +55,6 @@ test.describe('AI Studio 提示词管理', () => {
         path: 'test-results/prompt-list-not-loaded.png',
         fullPage: true,
       });
-      console.log('提示词列表页未完全加载');
       test.skip();
       return;
     }
@@ -93,7 +92,6 @@ test.describe('AI Studio 提示词管理', () => {
         path: 'test-results/prompt-edit-not-loaded.png',
         fullPage: true,
       });
-      console.log('提示词编辑页未完全加载');
       test.skip();
       return;
     }

@@ -64,12 +64,12 @@ interface CustomerFilters {
 
 interface CustomerFormState {
   name: string;
-  phone: string;
-  email: string;
-  company: string;
+  phone: string | undefined;
+  email: string | undefined;
+  company: string | undefined;
   status: string;
-  source: string;
-  remark: string;
+  source: string | undefined;
+  remark: string | undefined;
 }
 
 // ==================== 表格列定义 ====================
@@ -184,12 +184,12 @@ const {
   },
   initialValues: () => ({
     name: '',
-    phone: '',
-    email: '',
-    company: '',
+    phone: undefined,
+    email: undefined,
+    company: undefined,
     status: 'LEAD',
-    source: '',
-    remark: '',
+    source: undefined,
+    remark: undefined,
   }),
   afterSubmit: fetchData,
 });
@@ -209,12 +209,12 @@ function handleView(record: CustomerItem) {
 function handleEdit(record: CustomerItem) {
   openEdit(record.id, {
     name: record.name,
-    phone: record.phone || '',
-    email: record.email || '',
-    company: record.company || '',
+    phone: record.phone || undefined,
+    email: record.email || undefined,
+    company: record.company || undefined,
     status: record.status,
-    source: record.source || '',
-    remark: record.remark || '',
+    source: record.source || undefined,
+    remark: record.remark || undefined,
   });
 }
 

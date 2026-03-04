@@ -141,15 +141,13 @@ onMounted(() => {
 
               <!-- 分页控制 -->
               <div v-if="hasMultiplePages" class="page-controls">
-                <Button
-                  :disabled="currentImageIndex === 0"
-                  @click="prevPage"
-                >
+                <Button :disabled="currentImageIndex === 0" @click="prevPage">
                   <template #icon><LeftOutlined /></template>
                   上一页
                 </Button>
                 <span class="page-indicator">
-                  {{ currentImageIndex + 1 }} / {{ detail.paperImageUrls!.length }}
+                  {{ currentImageIndex + 1 }} /
+                  {{ detail.paperImageUrls!.length }}
                 </span>
                 <Button
                   :disabled="

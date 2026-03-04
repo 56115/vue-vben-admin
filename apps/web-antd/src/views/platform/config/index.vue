@@ -104,7 +104,6 @@ async function fetchData() {
         },
       },
     );
-    console.log('API Response:', res);
     if (res && res.data) {
       dataSource.value = res.data;
       pagination.value.total = res.total;

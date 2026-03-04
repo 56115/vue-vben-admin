@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
-import { message, Modal } from 'ant-design-vue';
+import { Button, message, Modal } from 'ant-design-vue';
 import { useI18n } from '@vben/locales';
 import {
   getSessionsApi,
@@ -194,13 +194,13 @@ onMounted(() => {
             {{ $t('authentication.otherSessions') }}
             <span class="session-count">({{ otherSessions.length }})</span>
           </h4>
-          <a-button
+          <Button
             danger
             size="small"
             @click="handleRevokeAllOthers"
           >
             {{ $t('authentication.revokeAllOthers') }}
-          </a-button>
+          </Button>
         </div>
 
         <div class="session-list">
@@ -237,13 +237,13 @@ onMounted(() => {
               </div>
             </div>
             <div class="session-action">
-              <a-button
+              <Button
                 danger
                 size="small"
                 @click="handleRevokeSession(session)"
               >
                 {{ $t('authentication.logout') }}
-              </a-button>
+              </Button>
             </div>
           </div>
         </div>

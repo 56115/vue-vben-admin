@@ -65,7 +65,6 @@ async function fetchData() {
         pageSize: pagination.value.pageSize,
       },
     });
-    console.log('API Response:', res);
     if (res && res.items) {
       dataSource.value = res.items;
       pagination.value.total = res.total;

@@ -188,9 +188,12 @@ function handleAddMember() {
 async function handleAddMemberSubmit() {
   if (!currentGroup.value || !selectedCustomerId.value) return;
   try {
-    await requestClient.post(`/customer/group/${currentGroup.value.id}/members`, {
-      customerId: selectedCustomerId.value,
-    });
+    await requestClient.post(
+      `/customer/group/${currentGroup.value.id}/members`,
+      {
+        customerId: selectedCustomerId.value,
+      },
+    );
     message.success('添加成功');
     addMemberModalVisible.value = false;
     await fetchMembers(currentGroup.value.id);

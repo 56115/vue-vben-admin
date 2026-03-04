@@ -77,8 +77,10 @@ const totalCustomers = computed(() =>
   (segmentData.value || []).reduce((sum, s) => sum + s.count, 0),
 );
 
-const championsCount = computed(() =>
-  (segmentData.value || []).find((s) => s.segment === 'CHAMPIONS')?.count || 0,
+const championsCount = computed(
+  () =>
+    (segmentData.value || []).find((s) => s.segment === 'CHAMPIONS')?.count ||
+    0,
 );
 
 const atRiskCount = computed(() =>
@@ -215,7 +217,9 @@ async function loadData() {
   try {
     const response = await getRfmSegmentDistribution();
     // Handle both direct array response and wrapped { data: [...] } response
-    segmentData.value = Array.isArray(response) ? response : (response as any)?.data || [];
+    segmentData.value = Array.isArray(response)
+      ? response
+      : (response as any)?.data || [];
     renderDistributionChartData();
   } catch (e) {
     console.error('加载RFM数据失败', e);
@@ -236,7 +240,9 @@ function renderDistributionChartData() {
     .map((item) => ({
       name: item!.segmentLabel,
       value: item!.count,
-      itemStyle: { color: item!.color || segmentColors[item!.segment as RfmSegment] },
+      itemStyle: {
+        color: item!.color || segmentColors[item!.segment as RfmSegment],
+      },
     }));
 
   renderDistributionChart({

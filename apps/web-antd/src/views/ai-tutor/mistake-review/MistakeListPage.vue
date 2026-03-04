@@ -4,29 +4,29 @@
     <div class="page-header">
       <div class="header-content">
         <h2>错题管理</h2>
-        <a-space>
-          <a-button @click="refreshData" :loading="loading">
+        <Space>
+          <Button @click="refreshData" :loading="loading">
             <ReloadOutlined />
             刷新
-          </a-button>
-          <a-button type="primary" @click="showImportModal">
+          </Button>
+          <Button type="primary" @click="showImportModal">
             <UploadOutlined />
             导入错题
-          </a-button>
-          <a-button @click="exportMistakes" :loading="exporting">
+          </Button>
+          <Button @click="exportMistakes" :loading="exporting">
             <DownloadOutlined />
             导出
-          </a-button>
-        </a-space>
+          </Button>
+        </Space>
       </div>
     </div>
 
     <!-- 统计卡片 -->
     <div class="stats-section">
-      <a-row :gutter="16">
-        <a-col :span="6">
-          <a-card :bordered="false" class="stat-card">
-            <a-statistic
+      <Row :gutter="16">
+        <Col :span="6">
+          <Card :bordered="false" class="stat-card">
+            <Statistic
               title="错题总数"
               :value="stats.total"
               :value-style="{ color: '#ff4d4f' }"
@@ -34,12 +34,12 @@
               <template #prefix>
                 <FileTextOutlined />
               </template>
-            </a-statistic>
-          </a-card>
-        </a-col>
-        <a-col :span="6">
-          <a-card :bordered="false" class="stat-card">
-            <a-statistic
+            </Statistic>
+          </Card>
+        </Col>
+        <Col :span="6">
+          <Card :bordered="false" class="stat-card">
+            <Statistic
               title="待复习"
               :value="stats.pending"
               :value-style="{ color: '#faad14' }"
@@ -47,12 +47,12 @@
               <template #prefix>
                 <ClockCircleOutlined />
               </template>
-            </a-statistic>
-          </a-card>
-        </a-col>
-        <a-col :span="6">
-          <a-card :bordered="false" class="stat-card">
-            <a-statistic
+            </Statistic>
+          </Card>
+        </Col>
+        <Col :span="6">
+          <Card :bordered="false" class="stat-card">
+            <Statistic
               title="已掌握"
               :value="stats.mastered"
               :value-style="{ color: '#52c41a' }"
@@ -60,12 +60,12 @@
               <template #prefix>
                 <CheckCircleOutlined />
               </template>
-            </a-statistic>
-          </a-card>
-        </a-col>
-        <a-col :span="6">
-          <a-card :bordered="false" class="stat-card">
-            <a-statistic
+            </Statistic>
+          </Card>
+        </Col>
+        <Col :span="6">
+          <Card :bordered="false" class="stat-card">
+            <Statistic
               title="掌握率"
               :value="stats.masteryRate"
               suffix="%"
@@ -75,84 +75,84 @@
               <template #prefix>
                 <TrophyOutlined />
               </template>
-            </a-statistic>
-          </a-card>
-        </a-col>
-      </a-row>
+            </Statistic>
+          </Card>
+        </Col>
+      </Row>
     </div>
 
     <!-- 筛选器 -->
-    <a-card :bordered="false" class="filter-card">
-      <a-form layout="inline">
-        <a-form-item label="学科">
-          <a-select
+    <Card :bordered="false" class="filter-card">
+      <Form layout="inline">
+        <FormItem label="学科">
+          <Select
             v-model:value="filters.subject"
             style="width: 120px"
             placeholder="全部学科"
             allow-clear
             @change="handleFilterChange"
           >
-            <a-select-option value="">全部</a-select-option>
-            <a-select-option value="MATH">数学</a-select-option>
-            <a-select-option value="CHINESE">语文</a-select-option>
-            <a-select-option value="ENGLISH">英语</a-select-option>
-            <a-select-option value="PHYSICS">物理</a-select-option>
-            <a-select-option value="CHEMISTRY">化学</a-select-option>
-          </a-select>
-        </a-form-item>
+            <SelectOption value="">全部</SelectOption>
+            <SelectOption value="MATH">数学</SelectOption>
+            <SelectOption value="CHINESE">语文</SelectOption>
+            <SelectOption value="ENGLISH">英语</SelectOption>
+            <SelectOption value="PHYSICS">物理</SelectOption>
+            <SelectOption value="CHEMISTRY">化学</SelectOption>
+          </Select>
+        </FormItem>
 
-        <a-form-item label="错误类型">
-          <a-select
+        <FormItem label="错误类型">
+          <Select
             v-model:value="filters.errorType"
             style="width: 140px"
             placeholder="全部类型"
             allow-clear
             @change="handleFilterChange"
           >
-            <a-select-option value="">全部</a-select-option>
-            <a-select-option value="CALCULATION_ERROR"
-              >计算错误</a-select-option
+            <SelectOption value="">全部</SelectOption>
+            <SelectOption value="CALCULATION_ERROR"
+              >计算错误</SelectOption
             >
-            <a-select-option value="CONCEPT_ERROR">概念错误</a-select-option>
-            <a-select-option value="CARELESS_ERROR">粗心错误</a-select-option>
-            <a-select-option value="METHOD_ERROR">方法错误</a-select-option>
-          </a-select>
-        </a-form-item>
+            <SelectOption value="CONCEPT_ERROR">概念错误</SelectOption>
+            <SelectOption value="CARELESS_ERROR">粗心错误</SelectOption>
+            <SelectOption value="METHOD_ERROR">方法错误</SelectOption>
+          </Select>
+        </FormItem>
 
-        <a-form-item label="掌握状态">
-          <a-select
+        <FormItem label="掌握状态">
+          <Select
             v-model:value="filters.masteryStatus"
             style="width: 120px"
             placeholder="全部状态"
             allow-clear
             @change="handleFilterChange"
           >
-            <a-select-option value="">全部</a-select-option>
-            <a-select-option value="pending">待复习</a-select-option>
-            <a-select-option value="reviewing">复习中</a-select-option>
-            <a-select-option value="mastered">已掌握</a-select-option>
-          </a-select>
-        </a-form-item>
+            <SelectOption value="">全部</SelectOption>
+            <SelectOption value="pending">待复习</SelectOption>
+            <SelectOption value="reviewing">复习中</SelectOption>
+            <SelectOption value="mastered">已掌握</SelectOption>
+          </Select>
+        </FormItem>
 
-        <a-form-item label="难度">
-          <a-select
+        <FormItem label="难度">
+          <Select
             v-model:value="filters.difficulty"
             style="width: 120px"
             placeholder="全部难度"
             allow-clear
             @change="handleFilterChange"
           >
-            <a-select-option value="">全部</a-select-option>
-            <a-select-option :value="1">简单</a-select-option>
-            <a-select-option :value="2">较简单</a-select-option>
-            <a-select-option :value="3">中等</a-select-option>
-            <a-select-option :value="4">较难</a-select-option>
-            <a-select-option :value="5">困难</a-select-option>
-          </a-select>
-        </a-form-item>
+            <SelectOption value="">全部</SelectOption>
+            <SelectOption :value="1">简单</SelectOption>
+            <SelectOption :value="2">较简单</SelectOption>
+            <SelectOption :value="3">中等</SelectOption>
+            <SelectOption :value="4">较难</SelectOption>
+            <SelectOption :value="5">困难</SelectOption>
+          </Select>
+        </FormItem>
 
-        <a-form-item label="关键词">
-          <a-input
+        <FormItem label="关键词">
+          <Input
             v-model:value="filters.keyword"
             style="width: 200px"
             placeholder="搜索题目内容"
@@ -162,67 +162,67 @@
             <template #suffix>
               <SearchOutlined />
             </template>
-          </a-input>
-        </a-form-item>
+          </Input>
+        </FormItem>
 
-        <a-form-item>
-          <a-button type="primary" @click="handleFilterChange">
+        <FormItem>
+          <Button type="primary" @click="handleFilterChange">
             <SearchOutlined />
             搜索
-          </a-button>
-        </a-form-item>
+          </Button>
+        </FormItem>
 
-        <a-form-item>
-          <a-button @click="resetFilters"> 重置 </a-button>
-        </a-form-item>
-      </a-form>
-    </a-card>
+        <FormItem>
+          <Button @click="resetFilters"> 重置 </Button>
+        </FormItem>
+      </Form>
+    </Card>
 
     <!-- 视图切换 -->
     <div class="view-controls">
-      <a-space>
+      <Space>
         <span class="view-label">视图模式：</span>
-        <a-radio-group v-model:value="viewMode" button-style="solid">
-          <a-radio-button value="card">
+        <RadioGroup v-model:value="viewMode" button-style="solid">
+          <RadioButton value="card">
             <AppstoreOutlined />
             卡片
-          </a-radio-button>
-          <a-radio-button value="list">
+          </RadioButton>
+          <RadioButton value="list">
             <UnorderedListOutlined />
             列表
-          </a-radio-button>
-          <a-radio-button value="table">
+          </RadioButton>
+          <RadioButton value="table">
             <TableOutlined />
             表格
-          </a-radio-button>
-        </a-radio-group>
+          </RadioButton>
+        </RadioGroup>
 
-        <a-divider type="vertical" />
+        <Divider type="vertical" />
 
         <span class="sort-label">排序：</span>
-        <a-select
+        <Select
           v-model:value="sortBy"
           style="width: 150px"
           @change="handleSortChange"
         >
-          <a-select-option value="createdAt_desc">最新创建</a-select-option>
-          <a-select-option value="createdAt_asc">最早创建</a-select-option>
-          <a-select-option value="difficulty_desc"
-            >难度从高到低</a-select-option
+          <SelectOption value="createdAt_desc">最新创建</SelectOption>
+          <SelectOption value="createdAt_asc">最早创建</SelectOption>
+          <SelectOption value="difficulty_desc"
+            >难度从高到低</SelectOption
           >
-          <a-select-option value="difficulty_asc">难度从低到高</a-select-option>
-          <a-select-option value="score_asc">得分从低到高</a-select-option>
-          <a-select-option value="score_desc">得分从高到低</a-select-option>
-        </a-select>
-      </a-space>
+          <SelectOption value="difficulty_asc">难度从低到高</SelectOption>
+          <SelectOption value="score_asc">得分从低到高</SelectOption>
+          <SelectOption value="score_desc">得分从高到低</SelectOption>
+        </Select>
+      </Space>
     </div>
 
     <!-- 数据列表 -->
-    <a-spin :spinning="loading" tip="加载中...">
+    <Spin :spinning="loading" tip="加载中...">
       <!-- 卡片视图 -->
       <div v-if="viewMode === 'card'" class="card-view">
-        <a-row :gutter="[16, 16]">
-          <a-col
+        <Row :gutter="[16, 16]">
+          <Col
             v-for="mistake in mistakes"
             :key="mistake.id"
             :xs="24"
@@ -231,7 +231,7 @@
             :lg="6"
             :xl="6"
           >
-            <a-card
+            <Card
               :bordered="false"
               hoverable
               class="mistake-card"
@@ -250,24 +250,24 @@
                     />
                   </div>
                   <div class="card-overlay">
-                    <a-tag :color="getSubjectColor(mistake.subject)">
+                    <Tag :color="getSubjectColor(mistake.subject)">
                       {{ getSubjectText(mistake.subject) }}
-                    </a-tag>
+                    </Tag>
                   </div>
                 </div>
               </template>
 
-              <a-card-meta>
+              <Card-meta>
                 <template #title>
                   <div class="card-title">
                     第 {{ mistake.questionNumber }} 题
-                    <a-tag
+                    <Tag
                       v-if="mistake.masteryStatus === 'mastered'"
                       color="success"
                       size="small"
                     >
                       已掌握
-                    </a-tag>
+                    </Tag>
                   </div>
                 </template>
                 <template #description>
@@ -275,11 +275,11 @@
                     {{ truncateText(mistake.questionContent, 60) }}
                   </div>
                 </template>
-              </a-card-meta>
+              </Card-meta>
 
               <div class="card-footer">
                 <div class="footer-item">
-                  <a-rate
+                  <Rate
                     :value="mistake.difficulty"
                     disabled
                     :count="5"
@@ -287,100 +287,100 @@
                   />
                 </div>
                 <div class="footer-item">
-                  <a-tag
+                  <Tag
                     :color="getErrorTypeColor(mistake.errorType)"
                     size="small"
                   >
                     {{ getErrorTypeText(mistake.errorType) }}
-                  </a-tag>
+                  </Tag>
                 </div>
               </div>
 
               <template #actions>
-                <a-tooltip title="查看详情">
+                <Tooltip title="查看详情">
                   <EyeOutlined @click.stop="viewMistakeDetail(mistake)" />
-                </a-tooltip>
-                <a-tooltip title="开始练习">
+                </Tooltip>
+                <Tooltip title="开始练习">
                   <EditOutlined @click.stop="practiceMistake(mistake)" />
-                </a-tooltip>
-                <a-dropdown>
+                </Tooltip>
+                <Dropdown>
                   <MoreOutlined @click.stop />
                   <template #overlay>
-                    <a-menu>
-                      <a-menu-item @click="markAsMastered(mistake)">
+                    <Menu>
+                      <MenuItem @click="markAsMastered(mistake)">
                         <CheckCircleOutlined />
                         标记为已掌握
-                      </a-menu-item>
-                      <a-menu-item @click="addToErrorBook(mistake)">
+                      </MenuItem>
+                      <MenuItem @click="addToErrorBook(mistake)">
                         <BookOutlined />
                         加入错题本
-                      </a-menu-item>
-                      <a-menu-divider />
-                      <a-menu-item danger @click="deleteMistake(mistake)">
+                      </MenuItem>
+                      <MenuDivider />
+                      <MenuItem danger @click="deleteMistake(mistake)">
                         <DeleteOutlined />
                         删除
-                      </a-menu-item>
-                    </a-menu>
+                      </MenuItem>
+                    </Menu>
                   </template>
-                </a-dropdown>
+                </Dropdown>
               </template>
-            </a-card>
-          </a-col>
-        </a-row>
+            </Card>
+          </Col>
+        </Row>
       </div>
 
       <!-- 列表视图 -->
-      <a-list
+      <List
         v-else-if="viewMode === 'list'"
         :data-source="mistakes"
         class="list-view"
         item-layout="vertical"
       >
         <template #renderItem="{ item }">
-          <a-list-item @click="viewMistakeDetail(item)">
+          <List-item @click="viewMistakeDetail(item)">
             <template #actions>
-              <a-button type="link" @click.stop="viewMistakeDetail(item)">
+              <Button type="link" @click.stop="viewMistakeDetail(item)">
                 查看详情
-              </a-button>
-              <a-button type="link" @click.stop="practiceMistake(item)">
+              </Button>
+              <Button type="link" @click.stop="practiceMistake(item)">
                 开始练习
-              </a-button>
-              <a-dropdown>
-                <a-button type="link">
+              </Button>
+              <Dropdown>
+                <Button type="link">
                   更多
                   <DownOutlined />
-                </a-button>
+                </Button>
                 <template #overlay>
-                  <a-menu>
-                    <a-menu-item @click="markAsMastered(item)">
+                  <Menu>
+                    <MenuItem @click="markAsMastered(item)">
                       标记为已掌握
-                    </a-menu-item>
-                    <a-menu-item @click="addToErrorBook(item)">
+                    </MenuItem>
+                    <MenuItem @click="addToErrorBook(item)">
                       加入错题本
-                    </a-menu-item>
-                    <a-menu-divider />
-                    <a-menu-item danger @click="deleteMistake(item)">
+                    </MenuItem>
+                    <MenuDivider />
+                    <MenuItem danger @click="deleteMistake(item)">
                       删除
-                    </a-menu-item>
-                  </a-menu>
+                    </MenuItem>
+                  </Menu>
                 </template>
-              </a-dropdown>
+              </Dropdown>
             </template>
 
-            <a-list-item-meta>
+            <List-item-meta>
               <template #title>
                 <div class="list-item-title">
-                  <a-tag :color="getSubjectColor(item.subject)">
+                  <Tag :color="getSubjectColor(item.subject)">
                     {{ getSubjectText(item.subject) }}
-                  </a-tag>
+                  </Tag>
                   <span>第 {{ item.questionNumber }} 题</span>
-                  <a-tag
+                  <Tag
                     v-if="item.masteryStatus === 'mastered'"
                     color="success"
                     size="small"
                   >
                     已掌握
-                  </a-tag>
+                  </Tag>
                 </div>
               </template>
               <template #description>
@@ -388,7 +388,7 @@
                   {{ item.questionContent }}
                 </div>
               </template>
-            </a-list-item-meta>
+            </List-item-meta>
 
             <template #extra>
               <img
@@ -400,11 +400,11 @@
             </template>
 
             <div class="list-item-footer">
-              <a-space :size="16">
+              <Space :size="16">
                 <span>
                   <StarOutlined />
                   难度:
-                  <a-rate
+                  <Rate
                     :value="item.difficulty"
                     disabled
                     :count="5"
@@ -420,14 +420,14 @@
                   {{ formatTime(item.createdAt) }}
                 </span>
                 <span> 得分: {{ item.score }} / {{ item.maxScore }} </span>
-              </a-space>
+              </Space>
             </div>
-          </a-list-item>
+          </List-item>
         </template>
-      </a-list>
+      </List>
 
       <!-- 表格视图 -->
-      <a-table
+      <Spin
         v-else
         :columns="tableColumns"
         :data-source="mistakes"
@@ -445,9 +445,9 @@
           </template>
 
           <template v-if="column.key === 'subject'">
-            <a-tag :color="getSubjectColor(record.subject)">
+            <Tag :color="getSubjectColor(record.subject)">
               {{ getSubjectText(record.subject) }}
-            </a-tag>
+            </Tag>
           </template>
 
           <template v-if="column.key === 'questionContent'">
@@ -455,13 +455,13 @@
           </template>
 
           <template v-if="column.key === 'errorType'">
-            <a-tag :color="getErrorTypeColor(record.errorType)">
+            <Tag :color="getErrorTypeColor(record.errorType)">
               {{ getErrorTypeText(record.errorType) }}
-            </a-tag>
+            </Tag>
           </template>
 
           <template v-if="column.key === 'difficulty'">
-            <a-rate
+            <Rate
               :value="record.difficulty"
               disabled
               :count="5"
@@ -478,9 +478,9 @@
           </template>
 
           <template v-if="column.key === 'masteryStatus'">
-            <a-tag :color="getMasteryStatusColor(record.masteryStatus)">
+            <Tag :color="getMasteryStatusColor(record.masteryStatus)">
               {{ getMasteryStatusText(record.masteryStatus) }}
-            </a-tag>
+            </Tag>
           </template>
 
           <template v-if="column.key === 'createdAt'">
@@ -488,63 +488,63 @@
           </template>
 
           <template v-if="column.key === 'action'">
-            <a-space>
-              <a-button
+            <Space>
+              <Button
                 type="link"
                 size="small"
                 @click.stop="viewMistakeDetail(record)"
               >
                 查看
-              </a-button>
-              <a-button
+              </Button>
+              <Button
                 type="link"
                 size="small"
                 @click.stop="practiceMistake(record)"
               >
                 练习
-              </a-button>
-              <a-dropdown>
-                <a-button type="link" size="small" @click.stop>
+              </Button>
+              <Dropdown>
+                <Button type="link" size="small" @click.stop>
                   更多
                   <DownOutlined />
-                </a-button>
+                </Button>
                 <template #overlay>
-                  <a-menu>
-                    <a-menu-item @click="markAsMastered(record)">
+                  <Menu>
+                    <MenuItem @click="markAsMastered(record)">
                       标记为已掌握
-                    </a-menu-item>
-                    <a-menu-item @click="addToErrorBook(record)">
+                    </MenuItem>
+                    <MenuItem @click="addToErrorBook(record)">
                       加入错题本
-                    </a-menu-item>
-                    <a-menu-divider />
-                    <a-menu-item danger @click="deleteMistake(record)">
+                    </MenuItem>
+                    <MenuDivider />
+                    <MenuItem danger @click="deleteMistake(record)">
                       删除
-                    </a-menu-item>
-                  </a-menu>
+                    </MenuItem>
+                  </Menu>
                 </template>
-              </a-dropdown>
-            </a-space>
+              </Dropdown>
+            </Space>
           </template>
         </template>
-      </a-table>
+      </Spin>
 
       <!-- 空状态 -->
-      <a-empty
+      <Empty
         v-if="mistakes.length === 0 && !loading"
         description="暂无错题数据"
         :image="Empty.PRESENTED_IMAGE_SIMPLE"
         style="margin: 60px 0"
       >
-        <a-button type="primary" @click="showImportModal">
+        <Button type="primary" @click="showImportModal">
           <UploadOutlined />
           导入错题
-        </a-button>
-      </a-empty>
-    </a-spin>
+        </Button>
+      </Empty>
+    </Spin>
 
     <!-- 分页 -->
     <div v-if="total > 0" class="pagination">
-      <a-pagination
+      <Pagination
         v-model:current="pagination.current"
         v-model:page-size="pagination.pageSize"
         :total="total"
@@ -557,13 +557,13 @@
     </div>
 
     <!-- 导入弹窗 -->
-    <a-modal
+    <Modal
       v-model:open="importModalVisible"
       title="导入错题"
       width="600px"
       :footer="null"
     >
-      <a-upload-dragger
+      <UploadDragger
         :file-list="fileList"
         :before-upload="beforeUpload"
         :remove="handleRemove"
@@ -574,29 +574,55 @@
         </p>
         <p class="ant-upload-text">点击或拖拽文件到此区域上传</p>
         <p class="ant-upload-hint">支持 Excel、CSV 格式，单次上传不超过 10MB</p>
-      </a-upload-dragger>
+      </UploadDragger>
 
       <div style="margin-top: 16px; text-align: right">
-        <a-space>
-          <a-button @click="importModalVisible = false"> 取消 </a-button>
-          <a-button
+        <Space>
+          <Button @click="importModalVisible = false"> 取消 </Button>
+          <Button
             type="primary"
             :loading="uploading"
             :disabled="fileList.length === 0"
             @click="handleUpload"
           >
             开始导入
-          </a-button>
-        </a-space>
+          </Button>
+        </Space>
       </div>
-    </a-modal>
+    </Modal>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { message, Modal, Empty } from 'ant-design-vue';
+import {
+  Button,
+  Card,
+  Col,
+  Divider,
+  Dropdown,
+  Empty,
+  Form,
+  Input,
+  InputNumber,
+  List,
+  Menu,
+  message,
+  Modal,
+  Pagination,
+  Radio,
+  Rate,
+  Row,
+  Select,
+  Space,
+  Spin,
+  Statistic,
+  Table,
+  Tag,
+  Tooltip,
+  Upload,
+} from 'ant-design-vue';
 import type { UploadFile } from 'ant-design-vue';
 import {
   ReloadOutlined,

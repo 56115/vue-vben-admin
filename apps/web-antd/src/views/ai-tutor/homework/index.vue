@@ -177,26 +177,22 @@ const initWebSocket = () => {
 
   socket.on('connect', () => {
     wsConnected.value = true;
-    console.log('WebSocket 已连接');
   });
 
   socket.on('disconnect', () => {
     wsConnected.value = false;
-    console.log('WebSocket 已断开');
   });
 
-  socket.on('connected', (data) => {
-    console.log('WebSocket 连接成功:', data);
+  socket.on('connected', (_data) => {
+    // connection acknowledged
   });
 
   socket.on('grading_progress', (data: { step: string; percent: number }) => {
-    console.log('批改进度:', data);
     gradingStep.value = data.step as any;
     gradingPercent.value = data.percent;
   });
 
   socket.on('grading_complete', (data: { jobId: string; result: any }) => {
-    console.log('批改完成:', data);
     gradingStep.value = 'done';
     gradingPercent.value = 100;
     result.value = data.result;

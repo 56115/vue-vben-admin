@@ -222,7 +222,10 @@ onMounted(() => {
               {{ agentDetails.description || '(无)' }}
             </DescriptionsItem>
             <DescriptionsItem label="指令">
-              <pre class="whitespace-pre-wrap text-sm bg-gray-50 p-2 rounded max-h-60 overflow-auto">{{ agentDetails.instructions }}</pre>
+              <pre
+                class="max-h-60 overflow-auto whitespace-pre-wrap rounded bg-gray-50 p-2 text-sm"
+                >{{ agentDetails.instructions }}</pre
+              >
             </DescriptionsItem>
           </Descriptions>
         </template>
@@ -246,8 +249,11 @@ onMounted(() => {
         />
       </div>
       <div v-if="testResult" class="mt-4">
-        <div class="font-bold mb-2">响应结果:</div>
-        <pre class="whitespace-pre-wrap text-sm bg-gray-50 p-3 rounded max-h-60 overflow-auto">{{ testResult }}</pre>
+        <div class="mb-2 font-bold">响应结果:</div>
+        <pre
+          class="max-h-60 overflow-auto whitespace-pre-wrap rounded bg-gray-50 p-3 text-sm"
+          >{{ testResult }}</pre
+        >
       </div>
     </Modal>
   </div>

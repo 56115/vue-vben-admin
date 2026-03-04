@@ -192,8 +192,7 @@ const showDebugPanel = ref(true); // 开发时显示，生产环境应该隐藏
 
 // ==================== Methods ====================
 
-function handleModeChange(mode: 'PARENT' | 'CHILD') {
-  console.log('Mode changed to:', mode);
+function handleModeChange(_mode: 'PARENT' | 'CHILD') {
   // 可以在这里添加额外的逻辑，如重新加载数据等
 }
 

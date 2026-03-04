@@ -274,7 +274,7 @@ async function fetchDepartments() {
 async function fetchTags() {
   try {
     const res = await requestClient.get<{ items: TagItem[] }>(
-      '/customer-tags',
+      '/customer/tag',
       {
         params: { pageSize: 100 },
       },
@@ -305,7 +305,7 @@ async function fetchPreviewCount() {
   previewLoading.value = true;
   try {
     const res = await requestClient.post<{ count: number }>(
-      '/moments/preview-customers',
+      '/messaging/moments/preview-customers',
       {
         tagIds: conditions.tagIds.length ? conditions.tagIds : undefined,
         tagLogic: conditions.tagIds.length ? conditions.tagLogic : undefined,
@@ -339,7 +339,7 @@ async function validateImportedCustomers(
   matchBy: 'phone' | 'externalId' | 'customerId',
 ): Promise<ImportPreviewResult> {
   const res = await requestClient.post<ImportPreviewResult>(
-    '/moments/preview-import',
+    '/messaging/moments/preview-import',
     {
       identifiers: ids,
       matchBy,

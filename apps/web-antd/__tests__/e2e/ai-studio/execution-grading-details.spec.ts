@@ -51,7 +51,6 @@ test.describe('AI Studio 执行详情 - 批改结果展示', () => {
     try {
       await page.waitForSelector('.ant-table-row', { timeout: 10000 });
     } catch (e) {
-      console.log('执行列表未加载或为空');
       test.skip();
       return;
     }
@@ -99,12 +98,8 @@ test.describe('AI Studio 执行详情 - 批改结果展示', () => {
         pageContent.includes('错误') ||
         pageContent.includes('题号');
 
-      console.log('页面内容包含题目信息:', hasQuestionInfo);
-
       // 验证没有 [object Object]
       expect(pageContent).not.toContain('[object Object]');
-    } else {
-      console.log('查看按钮不可见');
     }
   });
 
@@ -119,8 +114,6 @@ test.describe('AI Studio 执行详情 - 批改结果展示', () => {
     // 找到包含"作业批改"或"homework"的执行记录行
     const rows = page.locator('.ant-table-row');
     const rowCount = await rows.count();
-    console.log(`找到 ${rowCount} 行执行记录`);
-
     // 截图列表页
     await page.screenshot({
       path: 'test-results/execution-list-grading.png',
@@ -173,12 +166,8 @@ test.describe('AI Studio 执行详情 - 批改结果展示', () => {
         pageContent.includes('错误') ||
         pageContent.includes('暂无题目数据');
 
-      console.log('页面包含预期内容:', hasExpectedContent);
-
       // 验证没有 [object Object] 或 undefined
       expect(pageContent).not.toContain('[object Object]');
-    } else {
-      console.log('查看按钮不可见，跳过详情验证');
     }
   });
 });

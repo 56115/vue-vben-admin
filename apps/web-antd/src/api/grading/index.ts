@@ -92,8 +92,12 @@ export interface GradingRecord {
  * @param recordId 批改记录 ID
  * @returns 审批结果详情
  */
-export async function getApprovalResult(recordId: string): Promise<ApprovalResult> {
-  return requestClient.get(`/education/paper/grade/${recordId}/approval-result`);
+export async function getApprovalResult(
+  recordId: string,
+): Promise<ApprovalResult> {
+  return requestClient.get(
+    `/education/paper/grade/${recordId}/approval-result`,
+  );
 }
 
 /**
@@ -124,6 +128,8 @@ export async function getGradingRecords(params?: {
  * @param recordId 批改记录 ID
  * @returns 题目列表
  */
-export async function getGradingQuestions(recordId: string): Promise<GradingQuestion[]> {
+export async function getGradingQuestions(
+  recordId: string,
+): Promise<GradingQuestion[]> {
   return requestClient.get(`/education/paper/records/${recordId}/questions`);
 }

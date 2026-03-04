@@ -45,8 +45,6 @@ const activeTab = ref('config');
 const router = useRouter();
 
 const pipelineKey = route.params.key as string;
-console.log('🔑 从路由获取的 Pipeline Key:', pipelineKey);
-console.log('📍 当前完整URL:', window.location.href);
 const loading = ref(false);
 const saving = ref(false);
 const testing = ref(false);
@@ -102,17 +100,12 @@ async function fetchPipeline() {
     const data = await getPipelineByKey(pipelineKey);
     pipeline.value = data;
 
-    console.log('Pipeline 数据加载成功:', data);
-    console.log('formSchema:', data.formSchema);
-
     // 初始化配置
     if (data.runtimeConfig && Object.keys(data.runtimeConfig).length > 0) {
       config.value = { ...data.runtimeConfig };
-      console.log('使用已保存的配置:', config.value);
     } else {
       // 使用 Schema 默认值
       config.value = extractDefaults(data.formSchema);
-      console.log('使用默认配置:', config.value);
     }
   } catch (error: any) {
     console.error('加载 Pipeline 失败:', error);
@@ -172,8 +165,6 @@ async function handleTest() {
       message.error('请先修正配置参数错误');
       return;
     }
-  } else {
-    console.log('无需配置参数，跳过验证');
   }
 
   // 验证测试参数表单
@@ -189,19 +180,6 @@ async function handleTest() {
   testResult.value = null;
 
   try {
-    console.log('🚀 ========== 开始执行测试 ==========');
-    console.log('📋 Pipeline Key:', pipelineKey);
-    console.log('📦 Pipeline对象:', pipeline.value);
-    console.log('🔍 确认执行的pipeline key:', pipeline.value?.key);
-    console.log(
-      '⚙️  配置参数 (config):',
-      JSON.stringify(config.value, null, 2),
-    );
-    console.log(
-      '🧪 测试参数 (testParams):',
-      JSON.stringify(testParams.value, null, 2),
-    );
-
     // 合并配置和测试参数，并转换字段名为下划线格式
     const inputData = {
       // 转换 testParams 的驼峰式字段名为下划线格式
@@ -213,25 +191,16 @@ async function handleTest() {
       ...config.value,
     };
 
-    console.log('🔄 转换后的 inputData:', JSON.stringify(inputData, null, 2));
-
     // 构建完整的请求体
     const requestBody = {
       inputData: inputData,
       sync: true, // 同步执行
     };
 
-    console.log(
-      '📤 发送给后端的完整请求体:',
-      JSON.stringify(requestBody, null, 2),
-    );
-
     // 调用执行API
     const result = await executePipeline(pipelineKey, requestBody);
 
     testResult.value = result;
-
-    console.log('📥 后端返回的原始结果:', JSON.stringify(result, null, 2));
 
     if (result.status === 'COMPLETED') {
       message.success('测试执行成功');
@@ -274,12 +243,6 @@ async function handleImageUpload(file: File) {
       throw new Error('只能上传图片文件');
     }
 
-    console.log('📷 处理图片:', {
-      filename: file.name,
-      size: `${(file.size / 1024).toFixed(2)} KB`,
-      type: file.type,
-    });
-
     // 直接使用 Base64 编码（简单、可靠、无需权限）
     message.loading('正在处理图片...', 0);
     const base64 = await fileToBase64(file);
@@ -290,9 +253,8 @@ async function handleImageUpload(file: File) {
     message.destroy();
     message.success('✅ 图片处理成功（Base64 编码）');
 
-    console.log('✅ Base64 编码完成，长度:', base64.length);
   } catch (error: any) {
-    console.error('❌ 图片处理错误:', error);
+    console.error('图片处理错误:', error);
     message.destroy();
     message.error(error.message || '图片处理失败');
   } finally {
@@ -346,13 +308,10 @@ function handleBack() {
 }
 
 onMounted(() => {
-  console.log('🎨 Pipeline Tune Page Mounted - Vertical Flow Line Version');
-  console.log('Current Step:', currentStep.value);
   fetchPipeline();
 
   // 添加全局粘贴事件监听
   document.addEventListener('paste', handlePaste);
-  console.log('📋 Image paste enabled - You can paste images directly!');
 });
 
 onBeforeUnmount(() => {
@@ -439,13 +398,7 @@ onBeforeUnmount(() => {
                   ref="schemaFormRef"
                   v-model="config"
                   :schema="pipeline.formSchema"
-                  @validate="
-                    (valid, errors) => {
-                      if (!valid) {
-                        console.error('参数验证失败:', errors);
-                      }
-                    }
-                  "
+                  @validate="() => {}"
                 />
               </div>
               <Empty

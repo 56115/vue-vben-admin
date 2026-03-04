@@ -111,7 +111,10 @@ export async function createAiCampaign(data: CreateAiCampaignRequest) {
  * 预览匹配人群
  */
 export async function matchAudience(data: MatchAudienceRequest) {
-  return requestClient.post<MatchAudienceResponse>('/targeted-marketing/match', data);
+  return requestClient.post<MatchAudienceResponse>(
+    '/targeted-marketing/match',
+    data,
+  );
 }
 
 /**

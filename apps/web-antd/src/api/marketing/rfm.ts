@@ -184,7 +184,9 @@ export const segmentOrder: RfmSegment[] = [
  * 获取 RFM 分层分布统计
  */
 export async function getRfmSegmentDistribution() {
-  return requestClient.get<RfmSegmentDistribution[]>('/marketing/retail/rfm/segments');
+  return requestClient.get<RfmSegmentDistribution[]>(
+    '/marketing/retail/rfm/segments',
+  );
 }
 
 /**
@@ -204,14 +206,19 @@ export async function getCustomersBySegment(
  * 获取客户 RFM 档案
  */
 export async function getCustomerRfmProfile(customerId: number) {
-  return requestClient.get<CustomerRfmProfile>(`/marketing/retail/rfm/customer/${customerId}`);
+  return requestClient.get<CustomerRfmProfile>(
+    `/marketing/retail/rfm/customer/${customerId}`,
+  );
 }
 
 /**
  * 触发 RFM 批量重新计算
  */
 export async function recalculateRfm(customerIds?: number[]) {
-  return requestClient.post<BatchRfmResult>('/marketing/retail/rfm/recalculate', {
-    customerIds,
-  });
+  return requestClient.post<BatchRfmResult>(
+    '/marketing/retail/rfm/recalculate',
+    {
+      customerIds,
+    },
+  );
 }

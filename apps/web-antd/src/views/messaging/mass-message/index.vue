@@ -101,7 +101,7 @@ const previewColumns = [
 async function fetchTags() {
   try {
     const res = await requestClient.get<{ items: TagItem[] }>(
-      '/customer-tags',
+      '/customer/tag',
       {
         params: { pageSize: 100 },
       },

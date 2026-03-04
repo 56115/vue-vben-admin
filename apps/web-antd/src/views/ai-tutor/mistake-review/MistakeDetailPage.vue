@@ -640,23 +640,20 @@ async function refreshData() {
 }
 
 // 事件处理
-function handleQuestionClick(question: any) {
-  console.log('Question clicked:', question);
+function handleQuestionClick(_question: any) {
+  // question click handler
 }
 
-function handleScoreChanged(totalScore: number) {
-  console.log('Score changed:', totalScore);
+function handleScoreChanged(_totalScore: number) {
   hasUnsavedChanges.value = true;
 }
 
-function handleStepScoresSaved(steps: any[]) {
-  console.log('Step scores saved:', steps);
+function handleStepScoresSaved(_steps: any[]) {
   hasUnsavedChanges.value = false;
   message.success('步骤评分已保存');
 }
 
-function handleCorrectionSave(data: any) {
-  console.log('Correction saved:', data);
+function handleCorrectionSave(_data: any) {
   hasUnsavedChanges.value = true;
 }
 

@@ -372,13 +372,7 @@ const handleExecuteSubmit = async () => {
       `/ai-studio/pipelines/${executePipeline.value.key}/execute`,
       { inputData },
     );
-    console.log('Execute response:', response);
     message.success('流程已开始执行');
-
-    // 如果返回了执行 ID，可以跳转到执行详情页
-    if (response?.executionId) {
-      console.log('Execution ID:', response.executionId);
-    }
 
     executeVisible.value = false;
     fetchData();

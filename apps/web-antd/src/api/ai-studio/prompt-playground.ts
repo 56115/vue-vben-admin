@@ -189,7 +189,10 @@ export function createLlmTestStream(
         // 模拟逐字输出
         for (let i = 0; i < result.response.length; i += 10) {
           if (controller.signal.aborted) break;
-          const chunk = result.response.slice(i, Math.min(i + 10, result.response.length));
+          const chunk = result.response.slice(
+            i,
+            Math.min(i + 10, result.response.length),
+          );
           onEvent({
             type: LlmStreamEventType.CONTENT,
             data: { content: chunk },

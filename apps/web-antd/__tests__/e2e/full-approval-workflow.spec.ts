@@ -11,7 +11,6 @@ test.describe('审批流完整流程测试', () => {
 
     function log(step: string, status: 'success' | 'error' | 'warning', detail: string) {
       testReport.push({ step, status, detail, timestamp: new Date().toISOString() });
-      console.log(`[${status.toUpperCase()}] ${step}: ${detail}`);
     }
 
     try {

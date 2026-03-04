@@ -1,6 +1,14 @@
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue';
-import { Modal, Alert, Input, Typography, Space, Tag, Button } from 'ant-design-vue';
+import {
+  Modal,
+  Alert,
+  Input,
+  Typography,
+  Space,
+  Tag,
+  Button,
+} from 'ant-design-vue';
 import {
   ExclamationCircleOutlined,
   WarningOutlined,
@@ -155,7 +163,9 @@ const getRiskDescription = () => {
           <PlayCircleOutlined />
           <span>运行中的执行</span>
         </div>
-        <Text type="danger">{{ checkData.runningExecutions }} 个执行将被取消</Text>
+        <Text type="danger"
+          >{{ checkData.runningExecutions }} 个执行将被取消</Text
+        >
       </div>
 
       <!-- 删除影响说明 -->
@@ -175,7 +185,9 @@ const getRiskDescription = () => {
       <!-- 确认输入 -->
       <div class="confirmation-section">
         <Paragraph class="confirmation-text">
-          请输入流程标识 <Text code copyable>{{ checkData?.requiredConfirmation }}</Text> 以确认删除：
+          请输入流程标识
+          <Text code copyable>{{ checkData?.requiredConfirmation }}</Text>
+          以确认删除：
         </Paragraph>
         <Input
           v-model:value="confirmationText"
@@ -213,8 +225,8 @@ const getRiskDescription = () => {
 
 .modal-header {
   display: flex;
-  align-items: center;
   gap: 12px;
+  align-items: center;
   margin-bottom: 20px;
 }
 
@@ -226,7 +238,7 @@ const getRiskDescription = () => {
 .title {
   font-size: 18px;
   font-weight: 600;
-  color: rgba(0, 0, 0, 0.85);
+  color: rgb(0 0 0 / 85%);
 }
 
 .risk-alert {
@@ -234,16 +246,16 @@ const getRiskDescription = () => {
 }
 
 .pipeline-info {
-  background: #f5f5f5;
   padding: 16px;
-  border-radius: 8px;
   margin-bottom: 20px;
+  background: #f5f5f5;
+  border-radius: 8px;
 }
 
 .info-item {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
   margin-bottom: 8px;
 }
 
@@ -259,17 +271,17 @@ const getRiskDescription = () => {
 
 .section-title {
   display: flex;
-  align-items: center;
   gap: 8px;
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.85);
+  align-items: center;
   margin-bottom: 12px;
+  font-weight: 500;
+  color: rgb(0 0 0 / 85%);
 }
 
 .impact-list {
-  margin: 0;
   padding-left: 20px;
-  color: rgba(0, 0, 0, 0.65);
+  margin: 0;
+  color: rgb(0 0 0 / 65%);
 }
 
 .impact-list li {
@@ -277,8 +289,8 @@ const getRiskDescription = () => {
 }
 
 .confirmation-section {
-  border-top: 1px solid #f0f0f0;
   padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
 }
 
 .confirmation-text {

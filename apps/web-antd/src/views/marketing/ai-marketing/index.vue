@@ -101,7 +101,10 @@ async function handlePreviewMatch() {
     const result = await matchAudience({
       targetPersonaDescription: campaignForm.description,
       targetRules: {
-        rfmSegments: targetRules.rfmSegments && targetRules.rfmSegments.length > 0 ? targetRules.rfmSegments : undefined,
+        rfmSegments:
+          targetRules.rfmSegments && targetRules.rfmSegments.length > 0
+            ? targetRules.rfmSegments
+            : undefined,
         minMonetary: targetRules.minMonetary,
         maxRecencyDays: targetRules.maxRecencyDays,
       },
@@ -124,7 +127,9 @@ async function handlePreviewMatch() {
     }));
 
     showPreview.value = true;
-    message.success(`成功匹配 ${result.results.length} 人，分为 ${result.segments.length} 个群体`);
+    message.success(
+      `成功匹配 ${result.results.length} 人，分为 ${result.segments.length} 个群体`,
+    );
   } catch (error) {
     message.error('匹配人群失败，请稍后重试');
     console.error('Match audience error:', error);
@@ -134,7 +139,10 @@ async function handlePreviewMatch() {
 }
 
 // 生成模拟文案（实际项目中应从后端获取）
-function generateMockCopy(segmentName: string, offer: string | undefined): string {
+function generateMockCopy(
+  segmentName: string,
+  offer: string | undefined,
+): string {
   const offers = offer ? `，${offer}` : '';
   const templates: string[] = [
     `尊敬的${segmentName}，感谢您一直以来的支持！我们为您准备了专属优惠活动${offers}，期待您的参与！`,
@@ -161,7 +169,10 @@ async function handleCreateCampaign() {
         offer: campaignForm.offer,
       },
       targetRules: {
-        rfmSegments: targetRules.rfmSegments && targetRules.rfmSegments.length > 0 ? targetRules.rfmSegments : undefined,
+        rfmSegments:
+          targetRules.rfmSegments && targetRules.rfmSegments.length > 0
+            ? targetRules.rfmSegments
+            : undefined,
         minMonetary: targetRules.minMonetary,
         maxRecencyDays: targetRules.maxRecencyDays,
       },
@@ -201,9 +212,13 @@ async function handleRegenerateCopy(segmentId?: string) {
   setTimeout(() => {
     if (segmentId) {
       if (matchResult.value) {
-        const segment = matchResult.value.segments.find((s) => s.segmentId === segmentId);
+        const segment = matchResult.value.segments.find(
+          (s) => s.segmentId === segmentId,
+        );
         if (segment) {
-          const index = copyPreview.value.findIndex((c) => c.segmentId === segmentId);
+          const index = copyPreview.value.findIndex(
+            (c) => c.segmentId === segmentId,
+          );
           if (index >= 0 && copyPreview.value[index]) {
             copyPreview.value[index].textContent = generateMockCopy(
               segment.segmentName,
@@ -217,7 +232,10 @@ async function handleRegenerateCopy(segmentId?: string) {
       if (matchResult.value) {
         copyPreview.value = matchResult.value.segments.map((segment) => ({
           segmentId: segment.segmentId,
-          textContent: generateMockCopy(segment.segmentName, campaignForm.offer),
+          textContent: generateMockCopy(
+            segment.segmentName,
+            campaignForm.offer,
+          ),
           linkTitle: campaignForm.name,
           linkDesc: campaignForm.offer || '点击查看详情',
           callToAction: '立即参与',
@@ -244,7 +262,7 @@ defineOptions({ name: 'AiMarketing' });
 <template>
   <div class="p-4">
     <!-- 页面标题 -->
-    <div class="flex items-center justify-between mb-4">
+    <div class="mb-4 flex items-center justify-between">
       <h2 class="text-xl font-semibold">AI 定向营销</h2>
       <Space>
         <Button type="link" @click="goToAudiences">
@@ -263,9 +281,7 @@ defineOptions({ name: 'AiMarketing' });
     <Collapse v-model:activeKey="activeCollapseKeys" class="mb-4">
       <!-- 活动基本信息 -->
       <CollapsePanel key="campaign" header="📋 活动设置">
-        <CampaignForm
-          v-model:form-state="campaignForm"
-        />
+        <CampaignForm v-model:form-state="campaignForm" />
       </CollapsePanel>
 
       <!-- 目标人群规则 -->

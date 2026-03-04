@@ -10,6 +10,7 @@ import {
   DatePicker,
   Select,
   Space,
+  Statistic,
   message,
 } from 'ant-design-vue';
 import {
@@ -179,7 +180,7 @@ async function fetchStatistics() {
   loading.value = true;
   try {
     statistics.value = await requestClient.get<MomentStatistics>(
-      '/moments/statistics',
+      '/messaging/moments/statistics',
     );
   } catch (e) {
     console.error(e);
@@ -204,7 +205,7 @@ async function fetchInteractions() {
     const res = await requestClient.get<{
       items: InteractionRecord[];
       total: number;
-    }>('/moments/interactions', { params });
+    }>('/messaging/moments/interactions', { params });
     interactions.value = res.items || [];
     interactionsTotal.value = res.total || 0;
   } catch (e) {
@@ -218,7 +219,7 @@ async function fetchTopCustomers() {
   topCustomersLoading.value = true;
   try {
     topCustomers.value =
-      (await requestClient.get<TopCustomer[]>('/moments/top-customers', {
+      (await requestClient.get<TopCustomer[]>('/messaging/moments/top-customers', {
         params: { limit: 10 },
       })) || [];
   } catch (e) {
@@ -235,7 +236,7 @@ async function handleRetryFailed() {
       total: number;
       succeeded: number;
       failed: number;
-    }>('/moments/retry-failed');
+    }>('/messaging/moments/retry-failed');
     message.success(
       `重试完成：成功 ${res.succeeded} 条，失败 ${res.failed} 条`,
     );
@@ -251,7 +252,7 @@ async function handleSyncInteractions() {
   try {
     loading.value = true;
     const res = await requestClient.post<{ synced: number }>(
-      '/moments/sync-interactions',
+      '/messaging/moments/sync-interactions',
     );
     message.success(`已同步 ${res.synced} 个任务的互动数据`);
     fetchStatistics();
@@ -325,22 +326,22 @@ export default {
       <Col :span="6">
         <Card>
           <div class="flex items-center justify-between">
-            <a-statistic title="总点赞数" :value="statistics.totalLikes">
+            <Statistic title="总点赞数" :value="statistics.totalLikes">
               <template #prefix>
                 <LikeOutlined class="text-blue-500" />
               </template>
-            </a-statistic>
+            </Statistic>
           </div>
         </Card>
       </Col>
       <Col :span="6">
         <Card>
           <div class="flex items-center justify-between">
-            <a-statistic title="总评论数" :value="statistics.totalComments">
+            <Statistic title="总评论数" :value="statistics.totalComments">
               <template #prefix>
                 <CommentOutlined class="text-green-500" />
               </template>
-            </a-statistic>
+            </Statistic>
           </div>
         </Card>
       </Col>

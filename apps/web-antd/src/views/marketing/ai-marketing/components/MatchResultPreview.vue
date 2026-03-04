@@ -17,7 +17,10 @@ import {
   ClusterOutlined,
   EyeOutlined,
 } from '@ant-design/icons-vue';
-import type { AudienceSegment, AudienceMatchResult } from '#/api/marketing/ai-marketing';
+import type {
+  AudienceSegment,
+  AudienceMatchResult,
+} from '#/api/marketing/ai-marketing';
 
 interface Props {
   segments: AudienceSegment[];
@@ -48,7 +51,14 @@ const customerColumns = [
 
 // 获取分群颜色
 function getSegmentColor(index: number): string {
-  const colors = ['#52c41a', '#1890ff', '#722ed1', '#faad14', '#eb2f96', '#13c2c2'];
+  const colors = [
+    '#52c41a',
+    '#1890ff',
+    '#722ed1',
+    '#faad14',
+    '#eb2f96',
+    '#13c2c2',
+  ];
   return colors[index % colors.length] || '#1890ff';
 }
 
@@ -140,25 +150,34 @@ defineOptions({ name: 'MatchResultPreview' });
               <Card
                 size="small"
                 :style="{ borderLeft: `4px solid ${getSegmentColor(index)}` }"
-                class="cursor-pointer hover:shadow-md transition-shadow"
+                class="cursor-pointer transition-shadow hover:shadow-md"
                 @click="openCustomerModal(segment)"
               >
                 <div class="flex items-center justify-between">
                   <div>
-                    <Tag :color="getSegmentColor(index)">{{ segment.segmentName }}</Tag>
-                    <div class="text-gray-500 text-sm mt-1">
+                    <Tag :color="getSegmentColor(index)">{{
+                      segment.segmentName
+                    }}</Tag>
+                    <div class="mt-1 text-sm text-gray-500">
                       {{ segment.characteristics }}
                     </div>
                   </div>
                   <div class="text-right">
-                    <div class="text-2xl font-bold" :style="{ color: getSegmentColor(index) }">
+                    <div
+                      class="text-2xl font-bold"
+                      :style="{ color: getSegmentColor(index) }"
+                    >
                       {{ segment.memberCount }}
                     </div>
-                    <div class="text-gray-400 text-xs">人</div>
+                    <div class="text-xs text-gray-400">人</div>
                   </div>
                 </div>
                 <div class="mt-2 text-right">
-                  <Button type="link" size="small" @click.stop="openCustomerModal(segment)">
+                  <Button
+                    type="link"
+                    size="small"
+                    @click.stop="openCustomerModal(segment)"
+                  >
                     <EyeOutlined /> 查看客户
                   </Button>
                 </div>
@@ -168,7 +187,7 @@ defineOptions({ name: 'MatchResultPreview' });
         </div>
       </div>
 
-      <Empty v-else description='点击「预览匹配人群」查看匹配结果' />
+      <Empty v-else description="点击「预览匹配人群」查看匹配结果" />
     </Spin>
 
     <!-- 客户列表弹窗 -->
@@ -181,7 +200,9 @@ defineOptions({ name: 'MatchResultPreview' });
     >
       <Table
         :columns="customerColumns"
-        :data-source="selectedSegment ? getSegmentCustomers(selectedSegment.segmentId) : []"
+        :data-source="
+          selectedSegment ? getSegmentCustomers(selectedSegment.segmentId) : []
+        "
         :pagination="{ pageSize: 10 }"
         row-key="customerId"
         size="small"

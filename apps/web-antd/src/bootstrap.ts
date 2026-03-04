@@ -16,6 +16,43 @@ import { initSetupVbenForm } from './adapter/form';
 import App from './app.vue';
 import { router } from './router';
 
+// 导入需要全局注册的 Ant Design Vue 组件
+import {
+  Alert,
+  Breadcrumb,
+  Button,
+  Card,
+  Checkbox,
+  Col,
+  Descriptions,
+  Divider,
+  Dropdown,
+  Empty,
+  Form,
+  Input,
+  InputNumber,
+  List,
+  Menu,
+  Modal,
+  Pagination,
+  Radio,
+  Rate,
+  Result,
+  Row,
+  Select,
+  Space,
+  Spin,
+  Statistic,
+  Switch,
+  Table,
+  Tabs,
+  Tag,
+  Timeline,
+  Tooltip,
+  Tree,
+  Upload,
+} from 'ant-design-vue';
+
 async function bootstrap(namespace: string) {
   // 初始化组件适配器
   await initComponentAdapter();
@@ -33,6 +70,53 @@ async function bootstrap(namespace: string) {
   // });
 
   const app = createApp(App);
+
+  // 全局注册常用的 Ant Design Vue 组件（支持 a- 前缀）
+  app.component('AAlert', Alert);
+  app.component('AButton', Button);
+  app.component('ABreadcrumb', Breadcrumb);
+  app.component('ABreadcrumbItem', Breadcrumb.Item);
+  app.component('ACard', Card);
+  app.component('ACheckbox', Checkbox);
+  app.component('ACheckboxGroup', Checkbox.Group);
+  app.component('ACol', Col);
+  app.component('ADescriptions', Descriptions);
+  app.component('ADescriptionsItem', Descriptions.Item);
+  app.component('ADivider', Divider);
+  app.component('ADropdown', Dropdown);
+  app.component('AEmpty', Empty);
+  app.component('AForm', Form);
+  app.component('AFormItem', Form.Item);
+  app.component('AInput', Input);
+  app.component('AInputNumber', InputNumber);
+  app.component('AList', List);
+  app.component('AListItem', List.Item);
+  app.component('AListItemMeta', List.Item.Meta);
+  app.component('AMenu', Menu);
+  app.component('AMenuItem', Menu.Item);
+  app.component('AModal', Modal);
+  app.component('APagination', Pagination);
+  app.component('ARadio', Radio);
+  app.component('ARadioButton', Radio.Button);
+  app.component('ARadioGroup', Radio.Group);
+  app.component('ARate', Rate);
+  app.component('AResult', Result);
+  app.component('ARow', Row);
+  app.component('ASelect', Select);
+  app.component('ASelectOption', Select.Option);
+  app.component('ASpace', Space);
+  app.component('ASpin', Spin);
+  app.component('AStatistic', Statistic);
+  app.component('ASwitch', Switch);
+  app.component('ATable', Table);
+  app.component('ATabPane', Tabs.TabPane);
+  app.component('ATabs', Tabs);
+  app.component('ATag', Tag);
+  app.component('ATimeline', Timeline);
+  app.component('ATimelineItem', Timeline.Item);
+  app.component('ATooltip', Tooltip);
+  app.component('ATree', Tree);
+  app.component('AUpload', Upload);
 
   // 注册v-loading指令
   registerLoadingDirective(app, {

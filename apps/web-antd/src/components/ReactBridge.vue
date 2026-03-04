@@ -21,7 +21,7 @@ onMounted(() => {
       // 渲染 VibeKanbanWebCompanion 组件
       root.render(createElement(VibeKanbanWebCompanion));
 
-      console.log('[ReactBridge] VibeKanbanWebCompanion mounted successfully');
+      // ReactBridge mounted successfully
     } catch (error) {
       console.warn('[ReactBridge] Failed to mount React component:', error);
     }
@@ -34,7 +34,7 @@ onUnmounted(() => {
     try {
       root.unmount();
       root = null;
-      console.log('[ReactBridge] VibeKanbanWebCompanion unmounted');
+      // ReactBridge unmounted
     } catch (error) {
       console.warn('[ReactBridge] Failed to unmount React component:', error);
     }

@@ -8,6 +8,8 @@ import {
   Progress,
   Select,
   Tag,
+  Button,
+  Statistic,
   message,
 } from 'ant-design-vue';
 import {
@@ -322,9 +324,9 @@ export default {
     :loading="loading"
   >
     <template #actions>
-      <a-button type="primary" @click="refresh">
+      <Button type="primary" @click="refresh">
         <ReloadOutlined /> 刷新
-      </a-button>
+      </Button>
     </template>
 
     <!-- 统计卡片 - 第一行 -->
@@ -420,7 +422,7 @@ export default {
         <Card title="客户价值分析">
           <Row :gutter="16" class="mb-4">
             <Col :span="8">
-              <a-statistic
+              <Statistic
                 title="总消费金额"
                 :value="valueAnalysis?.totalValue || 0"
                 prefix="¥"
@@ -428,7 +430,7 @@ export default {
               />
             </Col>
             <Col :span="8">
-              <a-statistic
+              <Statistic
                 title="平均消费"
                 :value="valueAnalysis?.avgOrderValue || 0"
                 prefix="¥"
@@ -436,7 +438,7 @@ export default {
               />
             </Col>
             <Col :span="8">
-              <a-statistic
+              <Statistic
                 title="平均订单数"
                 :value="valueAnalysis?.avgOrderCount || 0"
                 :precision="1"

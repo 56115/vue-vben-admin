@@ -91,7 +91,6 @@ export const useUserModeStore = defineStore('userMode', () => {
     config.value = { ...MODE_PRESETS[mode] };
     saveToStorage();
 
-    console.log(`[UserMode] Switched to ${mode} mode`);
   }
 
   /**
@@ -159,7 +158,6 @@ export const useUserModeStore = defineStore('userMode', () => {
         currentMode.value = data.mode || 'PARENT';
         config.value = data.config || MODE_PRESETS[currentMode.value];
 
-        console.log(`[UserMode] Loaded from storage: ${currentMode.value} mode`);
       }
     } catch (error) {
       console.error('[UserMode] Failed to load from storage:', error);
@@ -175,7 +173,6 @@ export const useUserModeStore = defineStore('userMode', () => {
   function clearStorage() {
     try {
       localStorage.removeItem(STORAGE_KEY);
-      console.log('[UserMode] Storage cleared');
     } catch (error) {
       console.error('[UserMode] Failed to clear storage:', error);
     }

@@ -304,13 +304,6 @@ const fetchCostData = async () => {
       },
     });
 
-    console.log('API Response:', JSON.stringify(response, null, 2));
-    console.log(
-      'Overview totalTokens type:',
-      typeof response.overview?.totalTokens,
-    );
-    console.log('Overview totalTokens value:', response.overview?.totalTokens);
-
     if (response.overview) {
       overview.value = response.overview;
     }
@@ -375,7 +368,6 @@ const fetchCostData = async () => {
 // 导出报告
 const exportReport = async () => {
   // TODO: 实现导出功能
-  console.log('Export cost report');
 };
 
 // 处理时间范围变化

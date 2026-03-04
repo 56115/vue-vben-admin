@@ -349,8 +349,6 @@ test.describe('审批流 - 完整 E2E 测试', () => {
 
     // 验证 URL 已重定向到新路由
     expect(page.url()).toContain('/approval/paper-grading');
-    console.log('✓ 旧路由成功重定向到新路由');
-
     // 验证页面正常加载
     await taskListPage.waitForTasksToLoad();
     await expect(taskListPage.taskTable).toBeVisible();
@@ -370,20 +368,14 @@ test.describe('审批流 - 完整 E2E 测试', () => {
 
     // 4. 验证有任务（如果有测试数据）
     const taskCount = await taskListPage.getTaskCount();
-    console.log(`✓ 找到 ${taskCount} 个审批任务`);
-
     // 5. 验证统计卡片
     const pendingCount = await taskListPage.getPendingCount();
-    console.log(`✓ 待审批数量: ${pendingCount}`);
-
     expect(pendingCount).toBeGreaterThanOrEqual(0);
   });
 
   test('2. 审批统计 - 应正确显示统计数据', async ({ page }) => {
     // 1. 通过 API 获取统计数据
     const apiStats = await getApprovalTasksFromAPI();
-    console.log('API 统计数据:', apiStats);
-
     // 2. 导航到页面
     await taskListPage.goto();
     await taskListPage.waitForTasksToLoad();
@@ -391,9 +383,6 @@ test.describe('审批流 - 完整 E2E 测试', () => {
     // 3. 获取页面显示的统计
     const pendingCount = await taskListPage.getPendingCount();
     const todayApprovedCount = await taskListPage.getTodayApprovedCount();
-
-    console.log(`页面统计 - 待审批: ${pendingCount}, 今日已审批: ${todayApprovedCount}`);
-    console.log(`API 统计 - 待审批: ${apiStats.pending}, 今日已审批: ${apiStats.todayApproved}`);
 
     // 4. 验证数据一致性
     expect(pendingCount).toBe(apiStats.pending);
@@ -416,7 +405,6 @@ test.describe('审批流 - 完整 E2E 测试', () => {
     const afterRefreshCount = await taskListPage.getTaskCount();
 
     // 5. 验证数据加载
-    console.log(`刷新前: ${initialCount} 个任务, 刷新后: ${afterRefreshCount} 个任务`);
     expect(afterRefreshCount).toBeGreaterThanOrEqual(0);
   });
 
@@ -427,14 +415,10 @@ test.describe('审批流 - 完整 E2E 测试', () => {
 
     // 2. 查看全部任务
     const allTasksCount = await taskListPage.getTaskCount();
-    console.log(`全部任务: ${allTasksCount}`);
-
     // 3. 筛选待审批任务
     await taskListPage.filterByStatus('PENDING');
     await taskListPage.waitForTasksToLoad();
     const pendingTasksCount = await taskListPage.getTaskCount();
-    console.log(`待审批任务: ${pendingTasksCount}`);
-
     // 4. 验证筛选结果
     expect(pendingTasksCount).toBeGreaterThanOrEqual(0);
   });
@@ -520,7 +504,6 @@ test.describe('审批流 - 完整 E2E 测试', () => {
     await expect(taskListPage.taskTable).toBeVisible();
     await expect(taskListPage.pendingCountCard).toBeVisible();
 
-    console.log('✓ 移动端显示正常');
   });
 
   test('8. 错误处理 - 应正确处理网络错误', async ({ page }) => {
@@ -566,6 +549,5 @@ test.describe('审批流 - 权限测试', () => {
     // （实际行为取决于应用的权限处理）
     await page.waitForLoadState('networkidle');
 
-    console.log('✓ 无权限访问被正确处理');
   });
 });

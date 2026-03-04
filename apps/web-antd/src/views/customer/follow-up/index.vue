@@ -197,7 +197,9 @@ const activeTab = ref('dashboard');
 
 async function fetchStats() {
   try {
-    stats.value = await requestClient.get<FollowUpStats>('/customer/follow-up/stats');
+    stats.value = await requestClient.get<FollowUpStats>(
+      '/customer/follow-up/stats',
+    );
   } catch (e) {
     console.error(e);
   }
@@ -205,8 +207,9 @@ async function fetchStats() {
 
 async function fetchTodayData() {
   try {
-    todayData.value =
-      await requestClient.get<TodayFollowUp>('/customer/follow-up/today');
+    todayData.value = await requestClient.get<TodayFollowUp>(
+      '/customer/follow-up/today',
+    );
   } catch (e) {
     console.error(e);
   }
