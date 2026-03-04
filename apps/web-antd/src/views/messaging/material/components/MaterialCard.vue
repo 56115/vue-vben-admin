@@ -27,11 +27,11 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  click: [material: MaterialItem];
-  select: [material: MaterialItem, selected: boolean];
-  edit: [material: MaterialItem];
-  delete: [material: MaterialItem];
-  use: [material: MaterialItem];
+  (e: 'click', material: MaterialItem): void;
+  (e: 'select', material: MaterialItem, selected: boolean): void;
+  (e: 'edit', material: MaterialItem): void;
+  (e: 'delete', material: MaterialItem): void;
+  (e: 'use', material: MaterialItem): void;
 }>();
 
 // 类型配置
@@ -62,10 +62,17 @@ const typeColors: Record<MaterialType, string> = {
   MIXED: '#13c2c2',
 };
 
-const statusConfig: Record<MaterialStatus, { label: string; color: string; icon: any }> = {
+const statusConfig: Record<
+  MaterialStatus,
+  { label: string; color: string; icon: any }
+> = {
   DRAFT: { label: '草稿', color: '#bfbfbf', icon: ClockCircleOutlined },
   ACTIVE: { label: '启用', color: '#52c41a', icon: CheckCircleOutlined },
-  ARCHIVED: { label: '归档', color: '#8c8c8c', icon: ExclamationCircleOutlined },
+  ARCHIVED: {
+    label: '归档',
+    color: '#8c8c8c',
+    icon: ExclamationCircleOutlined,
+  },
 };
 
 // 计算属性
@@ -171,11 +178,7 @@ function handleMenuClick({ key }: { key: string }) {
     @click="handleClick"
   >
     <!-- 选择框 -->
-    <div
-      v-if="selectionMode"
-      class="material-card__checkbox"
-      @click.stop
-    >
+    <div v-if="selectionMode" class="material-card__checkbox" @click.stop>
       <Checkbox :checked="selected" @change="handleSelect" />
     </div>
 
@@ -218,11 +221,7 @@ function handleMenuClick({ key }: { key: string }) {
 
       <!-- 标签 -->
       <div v-if="material.tags?.length" class="material-tags">
-        <Tag
-          v-for="tag in material.tags.slice(0, 3)"
-          :key="tag"
-          size="small"
-        >
+        <Tag v-for="tag in material.tags.slice(0, 3)" :key="tag" size="small">
           {{ tag }}
         </Tag>
         <span v-if="material.tags.length > 3" class="tag-more">
@@ -265,7 +264,12 @@ function handleMenuClick({ key }: { key: string }) {
             { key: 'edit', label: '编辑', icon: EditOutlined },
             { key: 'use', label: '使用', icon: SendOutlined },
             { type: 'divider' },
-            { key: 'delete', label: '删除', icon: DeleteOutlined, danger: true },
+            {
+              key: 'delete',
+              label: '删除',
+              icon: DeleteOutlined,
+              danger: true,
+            },
           ],
           onClick: handleMenuClick,
         }"
@@ -299,12 +303,10 @@ function handleMenuClick({ key }: { key: string }) {
     <!-- 名称和内容 -->
     <div class="list-col list-col--name">
       <div class="name-row">
-        <span class="name-text" :title="material.name">{{ material.name }}</span>
-        <Tag
-          size="small"
-          :color="statusColor"
-          class="status-tag"
-        >
+        <span class="name-text" :title="material.name">{{
+          material.name
+        }}</span>
+        <Tag size="small" :color="statusColor" class="status-tag">
           {{ statusConfig[material.status].label }}
         </Tag>
       </div>
@@ -373,13 +375,13 @@ function handleMenuClick({ key }: { key: string }) {
 }
 
 .material-card:hover {
+  box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .material-card--selected {
   border-color: #1890ff;
-  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  box-shadow: 0 0 0 2px rgb(24 144 255 / 20%);
 }
 
 .material-card--selection {
@@ -397,26 +399,26 @@ function handleMenuClick({ key }: { key: string }) {
   position: absolute;
   top: 8px;
   right: 8px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  width: 20px;
+  height: 20px;
   font-size: 12px;
-  z-index: 10;
+  color: white;
+  border-radius: 50%;
 }
 
 .material-card__preview {
-  height: 120px;
-  background: #f5f5f5;
-  border-radius: 4px 4px 0 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  height: 120px;
   margin: -24px -24px 16px;
+  overflow: hidden;
+  background: #f5f5f5;
+  border-radius: 4px 4px 0 0;
 }
 
 .preview-image {
@@ -439,23 +441,23 @@ function handleMenuClick({ key }: { key: string }) {
 }
 
 .material-name {
-  font-size: 14px;
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.85);
   margin: 0 0 8px;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgb(0 0 0 / 85%);
   white-space: nowrap;
 }
 
 .material-preview {
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
+  height: 18px;
   margin: 0 0 8px;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 12px;
+  color: rgb(0 0 0 / 45%);
   white-space: nowrap;
-  height: 18px;
 }
 
 .material-tags {
@@ -464,21 +466,21 @@ function handleMenuClick({ key }: { key: string }) {
 
 .tag-more {
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
+  color: rgb(0 0 0 / 45%);
 }
 
 .material-stats {
   display: flex;
-  align-items: center;
   gap: 16px;
+  align-items: center;
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
+  color: rgb(0 0 0 / 45%);
 }
 
 .stat-item {
   display: flex;
-  align-items: center;
   gap: 4px;
+  align-items: center;
 }
 
 .stat-time {
@@ -487,8 +489,8 @@ function handleMenuClick({ key }: { key: string }) {
 
 .material-card__actions {
   position: absolute;
-  bottom: 12px;
   right: 12px;
+  bottom: 12px;
   display: flex;
   gap: 4px;
   opacity: 0;
@@ -500,20 +502,20 @@ function handleMenuClick({ key }: { key: string }) {
 }
 
 .action-btn {
-  width: 28px;
-  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  color: rgb(0 0 0 / 45%);
   cursor: pointer;
-  color: rgba(0, 0, 0, 0.45);
+  border-radius: 4px;
   transition: all 0.3s;
 }
 
 .action-btn:hover {
-  background: #f5f5f5;
   color: #1890ff;
+  background: #f5f5f5;
 }
 
 .action-btn--danger:hover {
@@ -525,9 +527,9 @@ function handleMenuClick({ key }: { key: string }) {
   display: flex;
   align-items: center;
   padding: 12px 16px;
+  cursor: pointer;
   background: white;
   border-bottom: 1px solid #f0f0f0;
-  cursor: pointer;
   transition: background 0.3s;
 }
 
@@ -544,13 +546,13 @@ function handleMenuClick({ key }: { key: string }) {
 }
 
 .list-col--checkbox {
-  width: 40px;
   flex-shrink: 0;
+  width: 40px;
 }
 
 .list-col--type {
-  width: 40px;
   flex-shrink: 0;
+  width: 40px;
   font-size: 20px;
   text-align: center;
 }
@@ -562,69 +564,69 @@ function handleMenuClick({ key }: { key: string }) {
 
 .name-row {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
   margin-bottom: 4px;
 }
 
 .name-text {
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.85);
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: 500;
+  color: rgb(0 0 0 / 85%);
   white-space: nowrap;
 }
 
 .status-tag {
-  font-size: 12px;
   padding: 0 4px;
   margin: 0;
+  font-size: 12px;
 }
 
 .preview-text {
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
+  margin-bottom: 4px;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 12px;
+  color: rgb(0 0 0 / 45%);
   white-space: nowrap;
-  margin-bottom: 4px;
 }
 
 .tags-row {
   display: flex;
-  align-items: center;
   gap: 4px;
+  align-items: center;
 }
 
 .list-col--category {
-  width: 120px;
   flex-shrink: 0;
-  color: rgba(0, 0, 0, 0.65);
+  width: 120px;
   font-size: 14px;
+  color: rgb(0 0 0 / 65%);
 }
 
 .list-col--stats {
-  width: 120px;
-  flex-shrink: 0;
   display: flex;
+  flex-shrink: 0;
   gap: 16px;
+  width: 120px;
   font-size: 14px;
-  color: rgba(0, 0, 0, 0.45);
+  color: rgb(0 0 0 / 45%);
 }
 
 .list-col--time {
-  width: 100px;
   flex-shrink: 0;
+  width: 100px;
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
+  color: rgb(0 0 0 / 45%);
 }
 
 .list-col--actions {
-  width: 100px;
-  flex-shrink: 0;
   display: flex;
-  justify-content: flex-end;
+  flex-shrink: 0;
   gap: 4px;
+  justify-content: flex-end;
+  width: 100px;
   opacity: 0;
   transition: opacity 0.3s;
 }

@@ -33,7 +33,12 @@ import {
 } from '@ant-design/icons-vue';
 import { requestClient } from '#/api/request';
 import AIAssistant from './AIAssistant.vue';
-import type { MaterialItem, VersionItem, UsageRecord, SimilarMaterial } from '../types';
+import type {
+  MaterialItem,
+  VersionItem,
+  UsageRecord,
+  SimilarMaterial,
+} from '../types';
 
 const props = defineProps<{
   visible: boolean;
@@ -41,11 +46,11 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  'update:visible': [visible: boolean];
-  edit: [material: MaterialItem];
-  delete: [material: MaterialItem];
-  use: [material: MaterialItem];
-};
+  (e: 'update:visible', visible: boolean): void;
+  (e: 'edit', material: MaterialItem): void;
+  (e: 'delete', material: MaterialItem): void;
+  (e: 'use', material: MaterialItem): void;
+}>();
 
 // 本地状态
 const activeTab = ref('overview');
@@ -87,10 +92,17 @@ const typeColors: Record<string, string> = {
   MIXED: '#13c2c2',
 };
 
-const statusConfig: Record<string, { label: string; color: string; icon: any }> = {
+const statusConfig: Record<
+  string,
+  { label: string; color: string; icon: any }
+> = {
   DRAFT: { label: '草稿', color: '#bfbfbf', icon: ClockCircleOutlined },
   ACTIVE: { label: '启用', color: '#52c41a', icon: CheckCircleOutlined },
-  ARCHIVED: { label: '归档', color: '#8c8c8c', icon: ExclamationCircleOutlined },
+  ARCHIVED: {
+    label: '归档',
+    color: '#8c8c8c',
+    icon: ExclamationCircleOutlined,
+  },
 };
 
 // 计算属性
@@ -128,7 +140,7 @@ async function fetchVersions() {
   loading.value.versions = true;
   try {
     const res = await requestClient.get<VersionItem[]>(
-      `/messaging/material/${props.material.id}/versions`
+      `/messaging/material/${props.material.id}/versions`,
     );
     versions.value = res || [];
   } catch (e) {
@@ -159,7 +171,7 @@ async function fetchSimilarMaterials() {
   loading.value.similar = true;
   try {
     const res = await requestClient.get<SimilarMaterial[]>(
-      `/messaging/material/${props.material.id}/similar`
+      `/messaging/material/${props.material.id}/similar`,
     );
     similarMaterials.value = res || [];
   } catch (e) {
@@ -174,7 +186,7 @@ async function restoreVersion(version: number) {
   try {
     await requestClient.post(
       `/messaging/material/${props.material.id}/versions/${version}/restore`,
-      { reason: '从版本历史恢复' }
+      { reason: '从版本历史恢复' },
     );
     message.success('版本恢复成功');
     fetchVersions();
@@ -200,14 +212,17 @@ watch(activeTab, (tab) => {
 });
 
 // 监听显示状态
-watch(() => props.visible, (visible) => {
-  if (visible) {
-    activeTab.value = 'overview';
-    versions.value = [];
-    usageRecords.value = [];
-    similarMaterials.value = [];
-  }
-});
+watch(
+  () => props.visible,
+  (visible) => {
+    if (visible) {
+      activeTab.value = 'overview';
+      versions.value = [];
+      usageRecords.value = [];
+      similarMaterials.value = [];
+    }
+  },
+);
 
 // 处理应用标签
 async function handleApplyTags(tags: string[]) {
@@ -219,7 +234,9 @@ async function handleApplyTags(tags: string[]) {
     });
     message.success('标签已应用');
     // 刷新素材数据
-    const res = await requestClient.get<MaterialItem>(`/messaging/material/${props.material.id}`);
+    const res = await requestClient.get<MaterialItem>(
+      `/messaging/material/${props.material.id}`,
+    );
     if (props.material) {
       Object.assign(props.material, res);
     }
@@ -230,17 +247,15 @@ async function handleApplyTags(tags: string[]) {
 </script>
 
 <template>
-  <Drawer
-    :visible="visible"
-    :width="560"
-    :closable="false"
-    @close="close"
-  >
+  <Drawer :visible="visible" :width="560" :closable="false" @close="close">
     <template v-if="material">
       <!-- 头部 -->
       <div class="drawer-header">
         <div class="header-main">
-          <div class="material-icon" :style="{ color: typeColors[material.type] }">
+          <div
+            class="material-icon"
+            :style="{ color: typeColors[material.type] }"
+          >
             <component :is="TypeIcon" />
           </div>
           <div class="header-info">
@@ -258,9 +273,7 @@ async function handleApplyTags(tags: string[]) {
           <Button type="primary" @click="handleUse">
             <SendOutlined /> 使用
           </Button>
-          <Button @click="handleEdit">
-            <EditOutlined /> 编辑
-          </Button>
+          <Button @click="handleEdit"> <EditOutlined /> 编辑 </Button>
         </div>
       </div>
 
@@ -276,11 +289,16 @@ async function handleApplyTags(tags: string[]) {
             >
               <img :src="material.mediaUrls[0]" :alt="material.name" />
             </div>
-            <div v-else-if="material.type === 'TEXT'" class="preview-text-large">
+            <div
+              v-else-if="material.type === 'TEXT'"
+              class="preview-text-large"
+            >
               {{ material.content || '无内容' }}
             </div>
             <div v-else-if="material.type === 'LINK'" class="preview-link">
-              <a :href="material.linkUrl" target="_blank">{{ material.linkUrl }}</a>
+              <a :href="material.linkUrl" target="_blank">{{
+                material.linkUrl
+              }}</a>
               <p v-if="material.linkTitle">{{ material.linkTitle }}</p>
             </div>
             <div v-else class="preview-placeholder">
@@ -295,7 +313,9 @@ async function handleApplyTags(tags: string[]) {
             <div class="info-grid">
               <div class="info-item">
                 <span class="info-label">分类</span>
-                <span class="info-value">{{ material.categoryName || '未分类' }}</span>
+                <span class="info-value">{{
+                  material.categoryName || '未分类'
+                }}</span>
               </div>
               <div class="info-item">
                 <span class="info-label">创建者</span>
@@ -303,11 +323,15 @@ async function handleApplyTags(tags: string[]) {
               </div>
               <div class="info-item">
                 <span class="info-label">创建时间</span>
-                <span class="info-value">{{ formatDate(material.createdAt) }}</span>
+                <span class="info-value">{{
+                  formatDate(material.createdAt)
+                }}</span>
               </div>
               <div class="info-item">
                 <span class="info-label">更新时间</span>
-                <span class="info-value">{{ formatDate(material.updatedAt) }}</span>
+                <span class="info-value">{{
+                  formatDate(material.updatedAt)
+                }}</span>
               </div>
             </div>
           </div>
@@ -358,7 +382,9 @@ async function handleApplyTags(tags: string[]) {
           <Timeline v-else>
             <TimelineItem v-for="record in usageRecords" :key="record.id">
               <p>{{ record.materialName }}</p>
-              <p class="text-gray-400">{{ record.usageType }} - {{ formatDate(record.createdAt) }}</p>
+              <p class="text-gray-400">
+                {{ record.usageType }} - {{ formatDate(record.createdAt) }}
+              </p>
             </TimelineItem>
           </Timeline>
         </TabPane>
@@ -379,15 +405,23 @@ async function handleApplyTags(tags: string[]) {
               <div class="version-header">
                 <span class="version-number">v{{ version.version }}</span>
                 <Tag v-if="index === 0" color="blue">当前</Tag>
-                <span class="version-time">{{ formatDate(version.createdAt) }}</span>
+                <span class="version-time">{{
+                  formatDate(version.createdAt)
+                }}</span>
               </div>
               <div class="version-info">
                 <p>{{ version.changeSummary || '内容更新' }}</p>
-                <p class="version-author">by {{ version.createdByName || '用户' + version.createdBy }}</p>
+                <p class="version-author">
+                  by {{ version.createdByName || '用户' + version.createdBy }}
+                </p>
               </div>
               <div v-if="index > 0" class="version-actions">
                 <Tooltip title="恢复此版本">
-                  <Button type="link" size="small" @click="restoreVersion(version.version)">
+                  <Button
+                    type="link"
+                    size="small"
+                    @click="restoreVersion(version.version)"
+                  >
                     <ReloadOutlined /> 恢复
                   </Button>
                 </Tooltip>
@@ -408,7 +442,10 @@ async function handleApplyTags(tags: string[]) {
               :key="item.id"
               class="similar-item"
             >
-              <div class="similar-icon" :style="{ color: typeColors[item.type] }">
+              <div
+                class="similar-icon"
+                :style="{ color: typeColors[item.type] }"
+              >
                 <component :is="typeIcons[item.type] || FileTextOutlined" />
               </div>
               <div class="similar-info">
@@ -439,8 +476,8 @@ async function handleApplyTags(tags: string[]) {
 <style scoped>
 .drawer-header {
   padding-bottom: 16px;
-  border-bottom: 1px solid #f0f0f0;
   margin-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .header-main {
@@ -450,15 +487,15 @@ async function handleApplyTags(tags: string[]) {
 }
 
 .material-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  background: #f5f5f5;
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
+  width: 48px;
+  height: 48px;
   font-size: 24px;
-  flex-shrink: 0;
+  background: #f5f5f5;
+  border-radius: 8px;
 }
 
 .header-info {
@@ -467,23 +504,23 @@ async function handleApplyTags(tags: string[]) {
 }
 
 .material-title {
-  font-size: 18px;
-  font-weight: 600;
   margin: 0 0 8px;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 18px;
+  font-weight: 600;
   white-space: nowrap;
 }
 
 .header-meta {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
 }
 
 .type-label {
-  color: rgba(0, 0, 0, 0.45);
   font-size: 13px;
+  color: rgb(0 0 0 / 45%);
 }
 
 .header-actions {
@@ -496,14 +533,14 @@ async function handleApplyTags(tags: string[]) {
 }
 
 .preview-section {
-  background: #f5f5f5;
-  border-radius: 8px;
-  padding: 24px;
-  margin-bottom: 24px;
-  min-height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 200px;
+  padding: 24px;
+  margin-bottom: 24px;
+  background: #f5f5f5;
+  border-radius: 8px;
 }
 
 .preview-image-large {
@@ -519,13 +556,13 @@ async function handleApplyTags(tags: string[]) {
 }
 
 .preview-text-large {
-  font-size: 14px;
-  line-height: 1.6;
-  color: rgba(0, 0, 0, 0.85);
-  white-space: pre-wrap;
-  word-break: break-word;
   max-height: 300px;
   overflow-y: auto;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgb(0 0 0 / 85%);
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .preview-link {
@@ -538,14 +575,14 @@ async function handleApplyTags(tags: string[]) {
 }
 
 .preview-placeholder {
-  text-align: center;
-  color: rgba(0, 0, 0, 0.45);
   font-size: 48px;
+  color: rgb(0 0 0 / 45%);
+  text-align: center;
 }
 
 .preview-placeholder p {
-  font-size: 14px;
   margin-top: 8px;
+  font-size: 14px;
 }
 
 .info-section,
@@ -559,10 +596,10 @@ async function handleApplyTags(tags: string[]) {
 .stats-section h4,
 .tags-section h4,
 .desc-section h4 {
+  margin-bottom: 12px;
   font-size: 14px;
   font-weight: 600;
-  color: rgba(0, 0, 0, 0.85);
-  margin-bottom: 12px;
+  color: rgb(0 0 0 / 85%);
 }
 
 .info-grid {
@@ -579,12 +616,12 @@ async function handleApplyTags(tags: string[]) {
 
 .info-label {
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
+  color: rgb(0 0 0 / 45%);
 }
 
 .info-value {
   font-size: 14px;
-  color: rgba(0, 0, 0, 0.85);
+  color: rgb(0 0 0 / 85%);
 }
 
 .stats-grid {
@@ -594,29 +631,29 @@ async function handleApplyTags(tags: string[]) {
 }
 
 .stat-card {
+  padding: 16px;
+  text-align: center;
   background: #f6ffed;
   border: 1px solid #b7eb8f;
   border-radius: 8px;
-  padding: 16px;
-  text-align: center;
 }
 
 .stat-icon {
+  margin-bottom: 8px;
   font-size: 24px;
   color: #52c41a;
-  margin-bottom: 8px;
 }
 
 .stat-value {
+  margin-bottom: 4px;
   font-size: 24px;
   font-weight: 600;
-  color: rgba(0, 0, 0, 0.85);
-  margin-bottom: 4px;
+  color: rgb(0 0 0 / 85%);
 }
 
 .stat-label {
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
+  color: rgb(0 0 0 / 45%);
 }
 
 .tags-list {
@@ -628,7 +665,7 @@ async function handleApplyTags(tags: string[]) {
 .desc-section p {
   font-size: 14px;
   line-height: 1.6;
-  color: rgba(0, 0, 0, 0.65);
+  color: rgb(0 0 0 / 65%);
   white-space: pre-wrap;
 }
 
@@ -646,9 +683,9 @@ async function handleApplyTags(tags: string[]) {
 
 .version-item {
   padding: 12px;
+  background: white;
   border: 1px solid #f0f0f0;
   border-radius: 8px;
-  background: white;
 }
 
 .version-item.is-current {
@@ -658,20 +695,20 @@ async function handleApplyTags(tags: string[]) {
 
 .version-header {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
   margin-bottom: 8px;
 }
 
 .version-number {
-  font-weight: 600;
   font-size: 14px;
+  font-weight: 600;
 }
 
 .version-time {
   margin-left: auto;
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
+  color: rgb(0 0 0 / 45%);
 }
 
 .version-info p {
@@ -680,14 +717,14 @@ async function handleApplyTags(tags: string[]) {
 }
 
 .version-author {
-  color: rgba(0, 0, 0, 0.45);
-  font-size: 12px;
   margin-top: 4px;
+  font-size: 12px;
+  color: rgb(0 0 0 / 45%);
 }
 
 .version-actions {
-  margin-top: 8px;
   padding-top: 8px;
+  margin-top: 8px;
   border-top: 1px dashed #f0f0f0;
 }
 
@@ -699,20 +736,20 @@ async function handleApplyTags(tags: string[]) {
 
 .similar-item {
   display: flex;
-  align-items: center;
   gap: 12px;
+  align-items: center;
   padding: 12px;
   border: 1px solid #f0f0f0;
   border-radius: 8px;
 }
 
 .similar-icon {
-  font-size: 24px;
-  width: 40px;
-  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
   background: #f5f5f5;
   border-radius: 8px;
 }
@@ -731,16 +768,16 @@ async function handleApplyTags(tags: string[]) {
 .similar-info p {
   margin: 0;
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
+  color: rgb(0 0 0 / 45%);
 }
 
 .drawer-footer {
   position: absolute;
+  right: 0;
   bottom: 0;
   left: 0;
-  right: 0;
   padding: 16px 24px;
-  border-top: 1px solid #f0f0f0;
   background: white;
+  border-top: 1px solid #f0f0f0;
 }
 </style>

@@ -22,15 +22,19 @@ import {
   ArrowRightOutlined,
 } from '@ant-design/icons-vue';
 import { requestClient } from '#/api/request';
-import type { MaterialItem, SimilarMaterial, RecommendedMaterial } from '../types';
+import type {
+  MaterialItem,
+  SimilarMaterial,
+  RecommendedMaterial,
+} from '../types';
 
 const props = defineProps<{
   material: MaterialItem | null;
 }>();
 
 const emit = defineEmits<{
-  view: [material: SimilarMaterial | RecommendedMaterial];
-  applyTags: [tags: string[]];
+  (e: 'view', material: SimilarMaterial | RecommendedMaterial): void;
+  (e: 'applyTags', tags: string[]): void;
 }>();
 
 const loading = ref({
@@ -44,13 +48,17 @@ const similarMaterials = ref<SimilarMaterial[]>([]);
 const recommendedMaterials = ref<RecommendedMaterial[]>([]);
 
 // 监听素材变化
-watch(() => props.material, (material) => {
-  if (material) {
-    generatedTags.value = [];
-    similarMaterials.value = [];
-    recommendedMaterials.value = [];
-  }
-}, { immediate: true });
+watch(
+  () => props.material,
+  (material) => {
+    if (material) {
+      generatedTags.value = [];
+      similarMaterials.value = [];
+      recommendedMaterials.value = [];
+    }
+  },
+  { immediate: true },
+);
 
 // 自动生成标签
 async function autoGenerateTags() {
@@ -60,7 +68,7 @@ async function autoGenerateTags() {
   try {
     const res = await requestClient.post<{ tags: string[] }>(
       `/messaging/material/${props.material.id}/auto-tag`,
-      { maxTags: 5, overwrite: false }
+      { maxTags: 5, overwrite: false },
     );
     generatedTags.value = res.tags || [];
     message.success('标签生成成功');
@@ -79,7 +87,7 @@ async function detectSimilar() {
   try {
     const res = await requestClient.get<SimilarMaterial[]>(
       `/messaging/material/${props.material.id}/similar`,
-      { params: { limit: 5 } }
+      { params: { limit: 5 } },
     );
     similarMaterials.value = res || [];
   } catch (e) {
@@ -97,7 +105,7 @@ async function fetchRecommendations() {
   try {
     const res = await requestClient.get<RecommendedMaterial[]>(
       `/messaging/material/${props.material.id}/recommendations`,
-      { params: { limit: 5 } }
+      { params: { limit: 5 } },
     );
     recommendedMaterials.value = res || [];
   } catch (e) {
@@ -280,7 +288,7 @@ function getSimilarityColor(score: number): string {
 }
 
 .ai-assistant :deep(.ant-card-head) {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgb(255 255 255 / 20%);
 }
 
 .ai-assistant :deep(.ant-card-head-title) {
@@ -289,17 +297,17 @@ function getSimilarityColor(score: number): string {
 
 .ai-title {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
   font-size: 14px;
 }
 
 .ai-tabs :deep(.ant-tabs-nav::before) {
-  border-bottom-color: rgba(255, 255, 255, 0.2);
+  border-bottom-color: rgb(255 255 255 / 20%);
 }
 
 .ai-tabs :deep(.ant-tabs-tab) {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgb(255 255 255 / 70%);
 }
 
 .ai-tabs :deep(.ant-tabs-tab-active) {
@@ -315,9 +323,9 @@ function getSimilarityColor(score: number): string {
 }
 
 .ai-desc {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 12px;
   margin-bottom: 12px;
+  font-size: 12px;
+  color: rgb(255 255 255 / 80%);
 }
 
 .mt-4 {
@@ -325,9 +333,9 @@ function getSimilarityColor(score: number): string {
 }
 
 .tag-result {
-  margin-top: 16px;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.1);
+  margin-top: 16px;
+  background: rgb(255 255 255 / 10%);
   border-radius: 8px;
 }
 
@@ -339,14 +347,15 @@ function getSimilarityColor(score: number): string {
 }
 
 .generated-tag {
-  animation: fadeIn 0.3s ease;
+  animation: fade-in 0.3s ease;
 }
 
-@keyframes fadeIn {
+@keyframes fade-in {
   from {
     opacity: 0;
     transform: translateY(-8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -364,16 +373,16 @@ function getSimilarityColor(score: number): string {
   align-items: center;
   justify-content: space-between;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
   margin-bottom: 8px;
   cursor: pointer;
+  background: rgb(255 255 255 / 10%);
+  border-radius: 8px;
   transition: all 0.3s;
 }
 
 .similar-item:hover,
 .recommend-item:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgb(255 255 255 / 20%);
 }
 
 .similar-info {
@@ -383,13 +392,13 @@ function getSimilarityColor(score: number): string {
 }
 
 .similar-name {
-  color: white;
   font-weight: 500;
+  color: white;
 }
 
 .similar-reason {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgb(255 255 255 / 70%);
 }
 
 .recommend-main {
@@ -399,16 +408,16 @@ function getSimilarityColor(score: number): string {
 }
 
 .recommend-name {
-  color: white;
   font-weight: 500;
+  color: white;
 }
 
 .recommend-meta {
   display: flex;
-  align-items: center;
   gap: 8px;
-  color: rgba(255, 255, 255, 0.7);
+  align-items: center;
   font-size: 12px;
+  color: rgb(255 255 255 / 70%);
 }
 
 .recommend-score {
@@ -416,6 +425,6 @@ function getSimilarityColor(score: number): string {
 }
 
 :deep(.ant-empty-description) {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgb(255 255 255 / 60%);
 }
 </style>

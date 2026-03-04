@@ -27,8 +27,8 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  'update:visible': [visible: boolean];
-  success: [];
+  (e: 'update:visible', visible: boolean): void;
+  (e: 'success'): void;
 }>();
 
 const activeTab = ref('import');
@@ -84,9 +84,13 @@ async function handleImport(file: File) {
       }
     }, 200);
 
-    const res = await requestClient.post('/messaging/material/import', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    const res = await requestClient.post(
+      '/messaging/material/import',
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      },
+    );
 
     clearInterval(progressInterval);
     importProgress.value = 100;
@@ -119,9 +123,7 @@ async function handleExport() {
   exportLoading.value = true;
 
   try {
-    const params = props.selectedIds?.length
-      ? { ids: props.selectedIds }
-      : {};
+    const params = props.selectedIds?.length ? { ids: props.selectedIds } : {};
 
     const res = await requestClient.post('/messaging/material/export', params, {
       responseType: 'blob',
@@ -199,16 +201,29 @@ const importColumns = [
               <UploadOutlined />
             </p>
             <p class="ant-upload-text">点击或拖拽文件到此区域上传</p>
-            <p class="ant-upload-hint">支持 .xlsx, .xls 格式，文件大小不超过 10MB</p>
+            <p class="ant-upload-hint">
+              支持 .xlsx, .xls 格式，文件大小不超过 10MB
+            </p>
           </Upload.Dragger>
 
           <!-- 导入进度 -->
-          <div v-if="importLoading || importProgress > 0" class="import-progress">
+          <div
+            v-if="importLoading || importProgress > 0"
+            class="import-progress"
+          >
             <Progress
               :percent="importProgress"
-              :status="importLoading ? 'active' : importResult?.failed ? 'exception' : 'success'"
+              :status="
+                importLoading
+                  ? 'active'
+                  : importResult?.failed
+                    ? 'exception'
+                    : 'success'
+              "
             />
-            <p v-if="importLoading" class="progress-text">正在导入，请稍候...</p>
+            <p v-if="importLoading" class="progress-text">
+              正在导入，请稍候...
+            </p>
           </div>
 
           <!-- 导入结果 -->
@@ -235,7 +250,9 @@ const importColumns = [
             <Table
               v-if="importResult.errors?.length"
               :columns="importColumns"
-              :data-source="importResult.errors.map((e, i) => ({ row: i + 1, error: e }))"
+              :data-source="
+                importResult.errors.map((e, i) => ({ row: i + 1, error: e }))
+              "
               size="small"
               class="error-table"
             />
@@ -247,9 +264,11 @@ const importColumns = [
       <TabPane key="export" tab="导出素材">
         <div class="export-section">
           <Alert
-            :message="selectedIds?.length
-              ? `将导出选中的 ${selectedIds.length} 个素材`
-              : '将导出所有素材（根据当前筛选条件）'"
+            :message="
+              selectedIds?.length
+                ? `将导出选中的 ${selectedIds.length} 个素材`
+                : '将导出所有素材（根据当前筛选条件）'
+            "
             type="info"
             show-icon
             class="mb-4"
@@ -293,21 +312,21 @@ const importColumns = [
 }
 
 .template-download {
-  margin-bottom: 16px;
   display: flex;
   align-items: center;
+  margin-bottom: 16px;
 }
 
 .template-download .label {
-  color: rgba(0, 0, 0, 0.65);
+  color: rgb(0 0 0 / 65%);
 }
 
 .upload-area {
+  padding: 32px;
+  text-align: center;
   background: #fafafa;
   border: 2px dashed #d9d9d9;
   border-radius: 8px;
-  padding: 32px;
-  text-align: center;
   transition: border-color 0.3s;
 }
 
@@ -320,9 +339,9 @@ const importColumns = [
 }
 
 .progress-text {
-  text-align: center;
-  color: rgba(0, 0, 0, 0.45);
   margin-top: 8px;
+  color: rgb(0 0 0 / 45%);
+  text-align: center;
 }
 
 .import-result {
@@ -344,29 +363,29 @@ const importColumns = [
 }
 
 .error-table {
-  margin-top: 16px;
   max-height: 200px;
+  margin-top: 16px;
   overflow-y: auto;
 }
 
 .export-info {
+  padding: 16px;
+  margin-bottom: 24px;
   background: #f6ffed;
   border: 1px solid #b7eb8f;
   border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 24px;
 }
 
 .export-info h4 {
   margin: 0 0 12px;
   font-size: 14px;
-  color: rgba(0, 0, 0, 0.85);
+  color: rgb(0 0 0 / 85%);
 }
 
 .export-info ul {
-  margin: 0;
   padding-left: 20px;
-  color: rgba(0, 0, 0, 0.65);
+  margin: 0;
+  color: rgb(0 0 0 / 65%);
 }
 
 .export-info li {
@@ -375,7 +394,7 @@ const importColumns = [
 
 .export-actions {
   display: flex;
-  justify-content: flex-end;
   gap: 12px;
+  justify-content: flex-end;
 }
 </style>

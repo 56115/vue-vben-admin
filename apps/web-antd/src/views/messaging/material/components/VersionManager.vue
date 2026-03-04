@@ -32,8 +32,8 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  'update:visible': [visible: boolean];
-  restored: [];
+  (e: 'update:visible', visible: boolean): void;
+  (e: 'restored'): void;
 }>();
 
 const versions = ref<VersionItem[]>([]);
@@ -44,14 +44,17 @@ const versionDetail = ref<VersionItem | null>(null);
 const detailVisible = ref(false);
 
 // 监听显示状态
-watch(() => props.visible, (visible) => {
-  if (visible && props.material) {
-    fetchVersions();
-  } else {
-    compareMode.value = false;
-    selectedVersions.value = [];
-  }
-});
+watch(
+  () => props.visible,
+  (visible) => {
+    if (visible && props.material) {
+      fetchVersions();
+    } else {
+      compareMode.value = false;
+      selectedVersions.value = [];
+    }
+  },
+);
 
 // 获取版本历史
 async function fetchVersions() {
@@ -60,7 +63,7 @@ async function fetchVersions() {
   loading.value = true;
   try {
     const res = await requestClient.get<VersionItem[]>(
-      `/messaging/material/${props.material.id}/versions`
+      `/messaging/material/${props.material.id}/versions`,
     );
     versions.value = res || [];
   } catch (e) {
@@ -77,7 +80,7 @@ async function restoreVersion(version: number) {
   try {
     await requestClient.post(
       `/messaging/material/${props.material.id}/versions/${version}/restore`,
-      { reason: '从版本历史恢复' }
+      { reason: '从版本历史恢复' },
     );
     message.success('版本恢复成功');
     emit('restored');
@@ -135,12 +138,7 @@ function closeDetail() {
 </script>
 
 <template>
-  <Drawer
-    :visible="visible"
-    title="版本历史"
-    width="480px"
-    @close="close"
-  >
+  <Drawer :visible="visible" title="版本历史" width="480px" @close="close">
     <Spin :spinning="loading">
       <!-- 对比模式工具栏 -->
       <div v-if="compareMode" class="compare-toolbar">
@@ -198,13 +196,17 @@ function closeDetail() {
                     {{ getChangeTypeConfig(item.changeType).label }}
                   </Tag>
                   <Tag v-if="index === 0" color="blue" size="small">当前</Tag>
-                  <span class="version-time">{{ new Date(item.createdAt).toLocaleString() }}</span>
+                  <span class="version-time">{{
+                    new Date(item.createdAt).toLocaleString()
+                  }}</span>
                 </div>
               </template>
 
               <template #description>
                 <div class="version-info">
-                  <p class="change-summary">{{ item.changeSummary || '内容更新' }}</p>
+                  <p class="change-summary">
+                    {{ item.changeSummary || '内容更新' }}
+                  </p>
                   <p class="version-author">
                     <EditOutlined />
                     {{ item.createdByName || `用户${item.createdBy}` }}
@@ -267,11 +269,15 @@ function closeDetail() {
         </div>
         <div class="detail-item">
           <span class="label">创建时间：</span>
-          <span class="value">{{ new Date(versionDetail.createdAt).toLocaleString() }}</span>
+          <span class="value">{{
+            new Date(versionDetail.createdAt).toLocaleString()
+          }}</span>
         </div>
         <div class="detail-item">
           <span class="label">创建者：</span>
-          <span class="value">{{ versionDetail.createdByName || `用户${versionDetail.createdBy}` }}</span>
+          <span class="value">{{
+            versionDetail.createdByName || `用户${versionDetail.createdBy}`
+          }}</span>
         </div>
         <div class="detail-item">
           <span class="label">变更说明：</span>
@@ -292,26 +298,26 @@ function closeDetail() {
 <style scoped>
 .action-bar,
 .compare-toolbar {
-  margin-bottom: 16px;
   padding-bottom: 16px;
+  margin-bottom: 16px;
   border-bottom: 1px solid #f0f0f0;
 }
 
 .compare-toolbar {
   display: flex;
-  align-items: center;
   gap: 12px;
+  align-items: center;
 }
 
 .compare-hint {
-  color: rgba(0, 0, 0, 0.65);
+  color: rgb(0 0 0 / 65%);
 }
 
 .version-list :deep(.ant-list-item) {
   padding: 16px;
-  border-radius: 8px;
   margin-bottom: 8px;
   border: 1px solid #f0f0f0;
+  border-radius: 8px;
   transition: all 0.3s;
 }
 
@@ -326,25 +332,25 @@ function closeDetail() {
 
 .version-list :deep(.ant-list-item).is-selected {
   border-color: #1890ff;
-  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+  box-shadow: 0 0 0 2px rgb(24 144 255 / 20%);
 }
 
 .version-header {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
   margin-bottom: 4px;
 }
 
 .version-number {
-  font-weight: 600;
   font-size: 14px;
+  font-weight: 600;
 }
 
 .version-time {
   margin-left: auto;
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
+  color: rgb(0 0 0 / 45%);
 }
 
 .version-info {
@@ -353,13 +359,13 @@ function closeDetail() {
 
 .change-summary {
   margin: 0 0 4px;
-  color: rgba(0, 0, 0, 0.65);
+  color: rgb(0 0 0 / 65%);
 }
 
 .version-author {
   margin: 0;
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
+  color: rgb(0 0 0 / 45%);
 }
 
 .version-author :deep(.anticon) {
@@ -376,27 +382,27 @@ function closeDetail() {
 
 .detail-item .label {
   display: block;
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
   margin-bottom: 4px;
+  font-size: 12px;
+  color: rgb(0 0 0 / 45%);
 }
 
 .detail-item .value {
   font-size: 14px;
-  color: rgba(0, 0, 0, 0.85);
+  color: rgb(0 0 0 / 85%);
 }
 
 .change-desc {
-  margin: 8px 0 0;
   padding: 12px;
+  margin: 8px 0 0;
+  color: rgb(0 0 0 / 65%);
   background: #f5f5f5;
   border-radius: 4px;
-  color: rgba(0, 0, 0, 0.65);
 }
 
 .content-preview {
-  margin-top: 8px;
   padding: 16px;
+  margin-top: 8px;
   background: #f6ffed;
   border: 1px solid #b7eb8f;
   border-radius: 8px;
@@ -410,8 +416,8 @@ function closeDetail() {
 
 .content-preview p {
   margin: 0;
-  color: rgba(0, 0, 0, 0.65);
+  color: rgb(0 0 0 / 65%);
+  overflow-wrap: break-word;
   white-space: pre-wrap;
-  word-break: break-word;
 }
 </style>

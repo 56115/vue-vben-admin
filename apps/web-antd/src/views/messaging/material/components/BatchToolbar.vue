@@ -19,13 +19,13 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  clear: [];
-  delete: [];
-  changeCategory: [categoryId: number];
-  addTags: [tags: string[]];
-  removeTags: [tags: string[]];
-  changeStatus: [status: MaterialStatus];
-  export: [];
+  (e: 'clear'): void;
+  (e: 'delete'): void;
+  (e: 'changeCategory', categoryId: number): void;
+  (e: 'addTags', tags: string[]): void;
+  (e: 'removeTags', tags: string[]): void;
+  (e: 'changeStatus', status: MaterialStatus): void;
+  (e: 'export'): void;
 }>();
 
 const isVisible = computed(() => props.selectedCount > 0);
@@ -61,7 +61,7 @@ const categoryMenuItems = computed(() => {
   }
 
   // 只添加顶级分类和一级子分类，避免菜单过长
-  const topCategories = props.categories.filter(c => c.parentId === null);
+  const topCategories = props.categories.filter((c) => c.parentId === null);
   addCategories(topCategories, 0);
 
   return items;
@@ -74,10 +74,26 @@ const tagMenuItems = [
     label: '添加标签',
     icon: () => h(TagOutlined),
     children: [
-      { key: 'add-产品', label: '产品', onClick: () => emit('addTags', ['产品']) },
-      { key: 'add-活动', label: '活动', onClick: () => emit('addTags', ['活动']) },
-      { key: 'add-节日', label: '节日', onClick: () => emit('addTags', ['节日']) },
-      { key: 'add-促销', label: '促销', onClick: () => emit('addTags', ['促销']) },
+      {
+        key: 'add-产品',
+        label: '产品',
+        onClick: () => emit('addTags', ['产品']),
+      },
+      {
+        key: 'add-活动',
+        label: '活动',
+        onClick: () => emit('addTags', ['活动']),
+      },
+      {
+        key: 'add-节日',
+        label: '节日',
+        onClick: () => emit('addTags', ['节日']),
+      },
+      {
+        key: 'add-促销',
+        label: '促销',
+        onClick: () => emit('addTags', ['促销']),
+      },
     ],
   },
   {
@@ -85,10 +101,26 @@ const tagMenuItems = [
     label: '移除标签',
     icon: () => h(TagOutlined),
     children: [
-      { key: 'remove-产品', label: '产品', onClick: () => emit('removeTags', ['产品']) },
-      { key: 'remove-活动', label: '活动', onClick: () => emit('removeTags', ['活动']) },
-      { key: 'remove-节日', label: '节日', onClick: () => emit('removeTags', ['节日']) },
-      { key: 'remove-促销', label: '促销', onClick: () => emit('removeTags', ['促销']) },
+      {
+        key: 'remove-产品',
+        label: '产品',
+        onClick: () => emit('removeTags', ['产品']),
+      },
+      {
+        key: 'remove-活动',
+        label: '活动',
+        onClick: () => emit('removeTags', ['活动']),
+      },
+      {
+        key: 'remove-节日',
+        label: '节日',
+        onClick: () => emit('removeTags', ['节日']),
+      },
+      {
+        key: 'remove-促销',
+        label: '促销',
+        onClick: () => emit('removeTags', ['促销']),
+      },
     ],
   },
 ];
@@ -202,32 +234,32 @@ function handleDelete() {
   position: fixed;
   bottom: 24px;
   left: 50%;
-  transform: translateX(-50%);
   z-index: 1000;
+  min-width: 600px;
+  padding: 12px 20px;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  padding: 12px 20px;
-  min-width: 600px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+  transform: translateX(-50%);
 }
 
 .batch-toolbar__content {
   display: flex;
+  gap: 16px;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
 }
 
 .count-tag {
-  font-size: 14px;
   padding: 4px 12px;
+  font-size: 14px;
 }
 
 .divider {
   width: 1px;
   height: 20px;
-  background: #e8e8e8;
   margin: 0 4px;
+  background: #e8e8e8;
 }
 
 /* 动画 */

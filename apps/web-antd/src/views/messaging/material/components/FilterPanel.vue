@@ -20,12 +20,12 @@ import type { MaterialFilters, CategoryItem } from '../types';
 const props = defineProps<{
   filters: MaterialFilters;
   categories: CategoryItem[];
-};
+}>();
 
 const emit = defineEmits<{
-  update: [filters: MaterialFilters];
-  search: [];
-  reset: [];
+  (e: 'update', filters: MaterialFilters): void;
+  (e: 'search'): void;
+  (e: 'reset'): void;
 }>();
 
 // 本地状态
@@ -37,7 +37,7 @@ watch(
   (newFilters) => {
     Object.assign(localFilters, newFilters);
   },
-  { deep: true }
+  { deep: true },
 );
 
 // 常量
@@ -272,11 +272,11 @@ function handleSortChange(value: string) {
 
 <style scoped>
 .filter-panel {
+  padding: 16px;
+  margin-bottom: 16px;
   background: #f6ffed;
   border: 1px solid #b7eb8f;
   border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 16px;
 }
 
 .filter-row {
@@ -287,16 +287,16 @@ function handleSortChange(value: string) {
 }
 
 .filter-tags {
-  margin-top: 12px;
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
   gap: 8px;
+  align-items: center;
+  margin-top: 12px;
 }
 
 .filter-label {
-  color: rgba(0, 0, 0, 0.65);
   font-size: 13px;
+  color: rgb(0 0 0 / 65%);
 }
 
 .clickable-tag {
@@ -309,25 +309,25 @@ function handleSortChange(value: string) {
 }
 
 .filter-advanced {
-  margin-top: 12px;
   padding-top: 12px;
+  margin-top: 12px;
   border-top: 1px dashed #d9f7be;
 }
 
 .advanced-row {
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
   gap: 8px;
+  align-items: center;
 }
 
 .range-separator {
-  color: rgba(0, 0, 0, 0.45);
+  color: rgb(0 0 0 / 45%);
 }
 
 .sort-indicator {
   float: right;
-  color: #1890ff;
   font-weight: bold;
+  color: #1890ff;
 }
 </style>
