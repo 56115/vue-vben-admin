@@ -14,7 +14,11 @@
  */
 
 import { expect, test } from '@playwright/test';
-import { getAdminToken, getPiniaAccessStoreData, getPiniaUserStoreData } from './test-auth';
+import {
+  getAdminToken,
+  getPiniaAccessStoreData,
+  getPiniaUserStoreData,
+} from './test-auth';
 
 // 测试配置
 const BASE_URL = 'http://localhost:5666';
@@ -26,13 +30,19 @@ const API_BASE_URL = 'http://localhost:3000/api';
 async function setupAuth(page: any) {
   const token = getAdminToken();
 
-  await page.addInitScript((data: any) => {
-    localStorage.setItem('VBEN_ACCESS_STORE', JSON.stringify(data.accessStore));
-    localStorage.setItem('VBEN_USER_STORE', JSON.stringify(data.userStore));
-  }, {
-    accessStore: getPiniaAccessStoreData(token),
-    userStore: getPiniaUserStoreData(),
-  });
+  await page.addInitScript(
+    (data: any) => {
+      localStorage.setItem(
+        'VBEN_ACCESS_STORE',
+        JSON.stringify(data.accessStore),
+      );
+      localStorage.setItem('VBEN_USER_STORE', JSON.stringify(data.userStore));
+    },
+    {
+      accessStore: getPiniaAccessStoreData(token),
+      userStore: getPiniaUserStoreData(),
+    },
+  );
 }
 
 /**
@@ -40,80 +50,86 @@ async function setupAuth(page: any) {
  */
 async function mockMaterialApi(page: any) {
   // Mock 素材列表
-  await page.route(`${API_BASE_URL}/messaging/material*`, async (route: any) => {
-    await route.fulfill({
-      status: 200,
-      contentType: 'application/json',
-      body: JSON.stringify({
-        items: [
+  await page.route(
+    `${API_BASE_URL}/messaging/material*`,
+    async (route: any) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          items: [
+            {
+              id: 1,
+              name: '测试文本素材',
+              description: '这是一个测试素材',
+              type: 'TEXT',
+              content: '测试内容文本',
+              categoryId: null,
+              categoryName: null,
+              tags: ['测试', '产品'],
+              viewCount: 10,
+              usageCount: 5,
+              likeCount: 3,
+              status: 'ACTIVE',
+              isPublic: true,
+              createdBy: 1,
+              createdAt: '2025-01-15T10:00:00Z',
+              updatedAt: '2025-01-15T10:00:00Z',
+            },
+            {
+              id: 2,
+              name: '图片素材示例',
+              description: '图片测试',
+              type: 'IMAGE',
+              content: null,
+              mediaUrls: ['https://example.com/test.jpg'],
+              categoryId: 1,
+              categoryName: '产品图片',
+              tags: ['图片', '展示'],
+              viewCount: 25,
+              usageCount: 12,
+              likeCount: 8,
+              status: 'ACTIVE',
+              isPublic: true,
+              createdBy: 1,
+              createdAt: '2025-01-14T09:00:00Z',
+              updatedAt: '2025-01-14T09:00:00Z',
+            },
+          ],
+          total: 2,
+        }),
+      });
+    },
+  );
+
+  // Mock 分类树
+  await page.route(
+    `${API_BASE_URL}/messaging/material/categories/tree`,
+    async (route: any) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
           {
             id: 1,
-            name: '测试文本素材',
-            description: '这是一个测试素材',
-            type: 'TEXT',
-            content: '测试内容文本',
-            categoryId: null,
-            categoryName: null,
-            tags: ['测试', '产品'],
-            viewCount: 10,
-            usageCount: 5,
-            likeCount: 3,
-            status: 'ACTIVE',
-            isPublic: true,
-            createdBy: 1,
-            createdAt: '2025-01-15T10:00:00Z',
-            updatedAt: '2025-01-15T10:00:00Z',
+            name: '产品图片',
+            parentId: null,
+            sort: 1,
+            materialCount: 5,
+            children: [],
           },
           {
             id: 2,
-            name: '图片素材示例',
-            description: '图片测试',
-            type: 'IMAGE',
-            content: null,
-            mediaUrls: ['https://example.com/test.jpg'],
-            categoryId: 1,
-            categoryName: '产品图片',
-            tags: ['图片', '展示'],
-            viewCount: 25,
-            usageCount: 12,
-            likeCount: 8,
-            status: 'ACTIVE',
-            isPublic: true,
-            createdBy: 1,
-            createdAt: '2025-01-14T09:00:00Z',
-            updatedAt: '2025-01-14T09:00:00Z',
+            name: '营销文案',
+            parentId: null,
+            sort: 2,
+            materialCount: 3,
+            children: [],
           },
-        ],
-        total: 2,
-      }),
-    });
-  });
-
-  // Mock 分类树
-  await page.route(`${API_BASE_URL}/messaging/material/categories/tree`, async (route: any) => {
-    await route.fulfill({
-      status: 200,
-      contentType: 'application/json',
-      body: JSON.stringify([
-        {
-          id: 1,
-          name: '产品图片',
-          parentId: null,
-          sort: 1,
-          materialCount: 5,
-          children: [],
-        },
-        {
-          id: 2,
-          name: '营销文案',
-          parentId: null,
-          sort: 2,
-          materialCount: 3,
-          children: [],
-        },
-      ]),
-    });
-  });
+        ]),
+      });
+    },
+  );
 }
 
 test.describe('素材库页面', () => {
@@ -143,10 +159,14 @@ test.describe('素材库页面', () => {
     await expect(cards).toHaveCount(2);
 
     // 验证第一个素材的名称
-    await expect(page.locator('.material-name').first()).toContainText('测试文本素材');
+    await expect(page.locator('.material-name').first()).toContainText(
+      '测试文本素材',
+    );
 
     // 验证素材类型标签
-    await expect(page.locator('.material-card').first()).toContainText('测试内容文本');
+    await expect(page.locator('.material-card').first()).toContainText(
+      '测试内容文本',
+    );
   });
 
   test('网格/列表视图切换', async ({ page }) => {
@@ -170,7 +190,9 @@ test.describe('素材库页面', () => {
     await page.click('text=批量选择');
 
     // 验证选择框出现
-    await expect(page.locator('.material-card__checkbox').first()).toBeVisible();
+    await expect(
+      page.locator('.material-card__checkbox').first(),
+    ).toBeVisible();
 
     // 选择第一个素材
     await page.locator('.material-card__checkbox').first().click();
@@ -185,7 +207,9 @@ test.describe('素材库页面', () => {
     await expect(page.locator('.filter-panel')).toBeVisible();
 
     // 验证搜索框
-    await expect(page.locator('input[placeholder="搜索素材名称/内容"]')).toBeVisible();
+    await expect(
+      page.locator('input[placeholder="搜索素材名称/内容"]'),
+    ).toBeVisible();
 
     // 验证类型筛选
     await expect(page.locator('.filter-row .ant-select').first()).toBeVisible();
@@ -241,7 +265,9 @@ test.describe('素材库页面', () => {
     await expect(page.locator('.ant-modal-title')).toContainText('新建素材');
 
     // 验证表单字段
-    await expect(page.locator('input[placeholder="输入素材名称"]')).toBeVisible();
+    await expect(
+      page.locator('input[placeholder="输入素材名称"]'),
+    ).toBeVisible();
 
     // 关闭弹窗
     await page.click('.ant-modal-close');

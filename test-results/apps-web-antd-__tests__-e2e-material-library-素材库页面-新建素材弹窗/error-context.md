@@ -2,67 +2,67 @@
 
 ```yaml
 - generic [ref=e4]:
-  - generic [ref=e5]:
-    - generic [ref=e6]:
-      - generic [ref=e7]:
-        - generic:
-          - button [ref=e8] [cursor=pointer]:
-            - img [ref=e10]
-          - button [ref=e12] [cursor=pointer]
-          - button [ref=e14] [cursor=pointer]
-          - button [ref=e16] [cursor=pointer]
-          - button [ref=e18] [cursor=pointer]
-          - button [ref=e20] [cursor=pointer]
-          - button [ref=e22] [cursor=pointer]
-        - button [ref=e24] [cursor=pointer]:
-          - img [ref=e25]
-      - button [ref=e31] [cursor=pointer]:
-        - img [ref=e32]
-    - button [ref=e35] [cursor=pointer]:
-      - img [ref=e36]
-    - button "light" [ref=e41] [cursor=pointer]:
-      - img [ref=e42]
-  - generic [ref=e50]:
-    - img "Vben Admin Antd" [ref=e51]
-    - paragraph [ref=e52]: Vben Admin Antd
-  - generic [ref=e56]:
-    - img "87667-SVG8" [ref=e57]
-    - generic [ref=e361]: 开箱即用的大型中后台管理系统
-    - generic [ref=e362]: 工程化、高性能、跨组件库的前端模版
-  - generic [ref=e363]:
-    - generic [ref=e364]:
-      - generic [ref=e365]:
-        - heading "欢迎回来 👋🏻" [level=2] [ref=e366]
-        - paragraph [ref=e367]:
-          - generic [ref=e368]: 请输入您的帐户信息以开始管理您的项目
-      - generic [ref=e370]:
-        - textbox "请输入用户名" [ref=e374]
-        - generic [ref=e378]:
-          - textbox "密码" [ref=e379]
-          - img [ref=e381] [cursor=pointer]
-      - generic [ref=e386]:
-        - generic [ref=e388]:
-          - checkbox "记住账号" [ref=e389] [cursor=pointer]
-          - generic [ref=e390] [cursor=pointer]: 记住账号
-        - generic [ref=e391] [cursor=pointer]: 忘记密码?
-      - button "login" [ref=e392] [cursor=pointer]: 登录
-      - generic [ref=e393]:
-        - button "手机号登录" [ref=e394] [cursor=pointer]
-        - button "扫码登录" [ref=e395] [cursor=pointer]
-      - generic [ref=e396]:
-        - generic [ref=e399]: 其他登录方式
-        - generic [ref=e401]:
-          - button [ref=e402] [cursor=pointer]:
-            - img [ref=e403]
-          - button [ref=e406] [cursor=pointer]:
-            - img [ref=e407]
-          - button [ref=e418] [cursor=pointer]:
-            - img [ref=e419]
-          - button [ref=e421] [cursor=pointer]:
-            - img [ref=e422]
-      - generic [ref=e427]: 还没有账号? 创建账号
-    - generic [ref=e429]:
-      - text: Copyright © 2024
-      - link "Vben" [ref=e430] [cursor=pointer]:
-        - /url: https://www.vben.pro
+    - generic [ref=e5]:
+        - generic [ref=e6]:
+            - generic [ref=e7]:
+                - generic:
+                    - button [ref=e8] [cursor=pointer]:
+                        - img [ref=e10]
+                    - button [ref=e12] [cursor=pointer]
+                    - button [ref=e14] [cursor=pointer]
+                    - button [ref=e16] [cursor=pointer]
+                    - button [ref=e18] [cursor=pointer]
+                    - button [ref=e20] [cursor=pointer]
+                    - button [ref=e22] [cursor=pointer]
+                - button [ref=e24] [cursor=pointer]:
+                    - img [ref=e25]
+            - button [ref=e31] [cursor=pointer]:
+                - img [ref=e32]
+        - button [ref=e35] [cursor=pointer]:
+            - img [ref=e36]
+        - button "light" [ref=e41] [cursor=pointer]:
+            - img [ref=e42]
+    - generic [ref=e50]:
+        - img "Vben Admin Antd" [ref=e51]
+        - paragraph [ref=e52]: Vben Admin Antd
+    - generic [ref=e56]:
+        - img "87667-SVG8" [ref=e57]
+        - generic [ref=e361]: 开箱即用的大型中后台管理系统
+        - generic [ref=e362]: 工程化、高性能、跨组件库的前端模版
+    - generic [ref=e363]:
+        - generic [ref=e364]:
+            - generic [ref=e365]:
+                - heading "欢迎回来 👋🏻" [level=2] [ref=e366]
+                - paragraph [ref=e367]:
+                    - generic [ref=e368]: 请输入您的帐户信息以开始管理您的项目
+            - generic [ref=e370]:
+                - textbox "请输入用户名" [ref=e374]
+                - generic [ref=e378]:
+                    - textbox "密码" [ref=e379]
+                    - img [ref=e381] [cursor=pointer]
+            - generic [ref=e386]:
+                - generic [ref=e388]:
+                    - checkbox "记住账号" [ref=e389] [cursor=pointer]
+                    - generic [ref=e390] [cursor=pointer]: 记住账号
+                - generic [ref=e391] [cursor=pointer]: 忘记密码?
+            - button "login" [ref=e392] [cursor=pointer]: 登录
+            - generic [ref=e393]:
+                - button "手机号登录" [ref=e394] [cursor=pointer]
+                - button "扫码登录" [ref=e395] [cursor=pointer]
+            - generic [ref=e396]:
+                - generic [ref=e399]: 其他登录方式
+                - generic [ref=e401]:
+                    - button [ref=e402] [cursor=pointer]:
+                        - img [ref=e403]
+                    - button [ref=e406] [cursor=pointer]:
+                        - img [ref=e407]
+                    - button [ref=e418] [cursor=pointer]:
+                        - img [ref=e419]
+                    - button [ref=e421] [cursor=pointer]:
+                        - img [ref=e422]
+            - generic [ref=e427]: 还没有账号? 创建账号
+        - generic [ref=e429]:
+            - text: Copyright © 2024
+            - link "Vben" [ref=e430] [cursor=pointer]:
+                - /url: https://www.vben.pro
 ```

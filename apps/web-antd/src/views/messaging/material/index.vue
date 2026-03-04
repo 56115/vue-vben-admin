@@ -571,7 +571,7 @@ onMounted(() => {
 .material-library {
   height: 100%;
   padding: 16px;
-  background: #f5f5f5;
+  background: var(--background-mute, #f5f5f5);
 }
 
 .material-layout {
@@ -611,7 +611,7 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: white;
+  background: var(--component-background, white);
   padding: 12px 16px;
   border-radius: 8px;
 }
@@ -651,7 +651,7 @@ onMounted(() => {
 
 .pagination-bar {
   padding: 16px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--border-color, #f0f0f0);
   display: flex;
   justify-content: flex-end;
 }

@@ -380,7 +380,7 @@ function handleMenuClick({ key }: { key: string }) {
 }
 
 .material-card--selected {
-  border-color: #1890ff;
+  border-color: var(--primary-color, #1890ff);
   box-shadow: 0 0 0 2px rgb(24 144 255 / 20%);
 }
 
@@ -417,7 +417,7 @@ function handleMenuClick({ key }: { key: string }) {
   height: 120px;
   margin: -24px -24px 16px;
   overflow: hidden;
-  background: #f5f5f5;
+  background: var(--background-mute, #f5f5f5);
   border-radius: 4px 4px 0 0;
 }
 
@@ -446,7 +446,7 @@ function handleMenuClick({ key }: { key: string }) {
   text-overflow: ellipsis;
   font-size: 14px;
   font-weight: 500;
-  color: rgb(0 0 0 / 85%);
+  color: var(--text-color, rgb(0 0 0 / 85%));
   white-space: nowrap;
 }
 
@@ -456,7 +456,7 @@ function handleMenuClick({ key }: { key: string }) {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 12px;
-  color: rgb(0 0 0 / 45%);
+  color: var(--text-color-secondary, rgb(0 0 0 / 45%));
   white-space: nowrap;
 }
 
@@ -466,7 +466,7 @@ function handleMenuClick({ key }: { key: string }) {
 
 .tag-more {
   font-size: 12px;
-  color: rgb(0 0 0 / 45%);
+  color: var(--text-color-secondary, rgb(0 0 0 / 45%));
 }
 
 .material-stats {
@@ -474,7 +474,7 @@ function handleMenuClick({ key }: { key: string }) {
   gap: 16px;
   align-items: center;
   font-size: 12px;
-  color: rgb(0 0 0 / 45%);
+  color: var(--text-color-secondary, rgb(0 0 0 / 45%));
 }
 
 .stat-item {
@@ -507,19 +507,19 @@ function handleMenuClick({ key }: { key: string }) {
   justify-content: center;
   width: 28px;
   height: 28px;
-  color: rgb(0 0 0 / 45%);
+  color: var(--text-color-secondary, rgb(0 0 0 / 45%));
   cursor: pointer;
   border-radius: 4px;
   transition: all 0.3s;
 }
 
 .action-btn:hover {
-  color: #1890ff;
-  background: #f5f5f5;
+  color: var(--primary-color, #1890ff);
+  background: var(--background-mute, #f5f5f5);
 }
 
 .action-btn--danger:hover {
-  color: #ff4d4f;
+  color: var(--error-color, #ff4d4f);
 }
 
 /* 列表视图样式 */
@@ -528,17 +528,17 @@ function handleMenuClick({ key }: { key: string }) {
   align-items: center;
   padding: 12px 16px;
   cursor: pointer;
-  background: white;
-  border-bottom: 1px solid #f0f0f0;
+  background: var(--component-background, white);
+  border-bottom: 1px solid var(--border-color, #f0f0f0);
   transition: background 0.3s;
 }
 
 .material-list-item:hover {
-  background: #fafafa;
+  background: var(--background-mute, #fafafa);
 }
 
 .material-list-item--selected {
-  background: #e6f7ff;
+  background: var(--primary-color-light, #e6f7ff);
 }
 
 .list-col {
@@ -573,7 +573,7 @@ function handleMenuClick({ key }: { key: string }) {
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 500;
-  color: rgb(0 0 0 / 85%);
+  color: var(--text-color, rgb(0 0 0 / 85%));
   white-space: nowrap;
 }
 
@@ -588,7 +588,7 @@ function handleMenuClick({ key }: { key: string }) {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 12px;
-  color: rgb(0 0 0 / 45%);
+  color: var(--text-color-secondary, rgb(0 0 0 / 45%));
   white-space: nowrap;
 }
 
@@ -602,7 +602,7 @@ function handleMenuClick({ key }: { key: string }) {
   flex-shrink: 0;
   width: 120px;
   font-size: 14px;
-  color: rgb(0 0 0 / 65%);
+  color: var(--text-color-secondary, rgb(0 0 0 / 65%));
 }
 
 .list-col--stats {
@@ -611,14 +611,14 @@ function handleMenuClick({ key }: { key: string }) {
   gap: 16px;
   width: 120px;
   font-size: 14px;
-  color: rgb(0 0 0 / 45%);
+  color: var(--text-color-secondary, rgb(0 0 0 / 45%));
 }
 
 .list-col--time {
   flex-shrink: 0;
   width: 100px;
   font-size: 12px;
-  color: rgb(0 0 0 / 45%);
+  color: var(--text-color-secondary, rgb(0 0 0 / 45%));
 }
 
 .list-col--actions {

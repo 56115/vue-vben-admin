@@ -318,20 +318,20 @@ const importColumns = [
 }
 
 .template-download .label {
-  color: rgb(0 0 0 / 65%);
+  color: var(--text-color-secondary, rgb(0 0 0 / 65%));
 }
 
 .upload-area {
   padding: 32px;
   text-align: center;
-  background: #fafafa;
-  border: 2px dashed #d9d9d9;
+  background: var(--background-mute, #fafafa);
+  border: 2px dashed var(--border-color, #d9d9d9);
   border-radius: 8px;
   transition: border-color 0.3s;
 }
 
 .upload-area:hover {
-  border-color: #1890ff;
+  border-color: var(--primary-color, #1890ff);
 }
 
 .import-progress {
@@ -340,7 +340,7 @@ const importColumns = [
 
 .progress-text {
   margin-top: 8px;
-  color: rgb(0 0 0 / 45%);
+  color: var(--text-color-secondary, rgb(0 0 0 / 45%));
   text-align: center;
 }
 
@@ -355,11 +355,11 @@ const importColumns = [
 }
 
 .result-stats .success {
-  color: #52c41a;
+  color: var(--success-color, #52c41a);
 }
 
 .result-stats .failed {
-  color: #ff4d4f;
+  color: var(--error-color, #ff4d4f);
 }
 
 .error-table {
@@ -371,21 +371,21 @@ const importColumns = [
 .export-info {
   padding: 16px;
   margin-bottom: 24px;
-  background: #f6ffed;
-  border: 1px solid #b7eb8f;
+  background: var(--success-bg-color, #f6ffed);
+  border: 1px solid var(--success-border-color, #b7eb8f);
   border-radius: 8px;
 }
 
 .export-info h4 {
   margin: 0 0 12px;
   font-size: 14px;
-  color: rgb(0 0 0 / 85%);
+  color: var(--text-color, rgb(0 0 0 / 85%));
 }
 
 .export-info ul {
   padding-left: 20px;
   margin: 0;
-  color: rgb(0 0 0 / 65%);
+  color: var(--text-color-secondary, rgb(0 0 0 / 65%));
 }
 
 .export-info li {

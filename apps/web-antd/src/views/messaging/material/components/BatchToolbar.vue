@@ -237,7 +237,7 @@ function handleDelete() {
   z-index: 1000;
   min-width: 600px;
   padding: 12px 20px;
-  background: white;
+  background: var(--component-background, white);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
   transform: translateX(-50%);
@@ -259,7 +259,7 @@ function handleDelete() {
   width: 1px;
   height: 20px;
   margin: 0 4px;
-  background: #e8e8e8;
+  background: var(--border-color, #e8e8e8);
 }
 
 /* 动画 */
