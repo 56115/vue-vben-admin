@@ -29,6 +29,9 @@ import {
   LinkOutlined,
   FileOutlined,
   FolderOpenOutlined,
+  ImportOutlined,
+  ExportOutlined,
+  HistoryOutlined,
 } from '@ant-design/icons-vue';
 import { useModalForm } from '#/composables';
 import { requestClient } from '#/api/request';
@@ -36,6 +39,9 @@ import MaterialCard from './components/MaterialCard.vue';
 import BatchToolbar from './components/BatchToolbar.vue';
 import FilterPanel from './components/FilterPanel.vue';
 import MaterialDetailDrawer from './components/MaterialDetailDrawer.vue';
+import ImportExportModal from './components/ImportExportModal.vue';
+import VersionManager from './components/VersionManager.vue';
+import AIAssistant from './components/AIAssistant.vue';
 import { useMaterialLibrary } from './composables/useMaterialLibrary';
 import type { MaterialItem, MaterialFormState } from './types';
 
@@ -83,6 +89,13 @@ const categoryFormState = ref({
   name: '',
   parentId: null as number | null,
 });
+
+// ==================== 导入导出 ====================
+const importExportVisible = ref(false);
+
+// ==================== 版本管理 ====================
+const versionManagerVisible = ref(false);
+const versionManagerMaterial = ref<MaterialItem | null>(null);
 
 // 分类树数据
 const categoryTreeData = computed(() => {
@@ -314,6 +327,9 @@ onMounted(() => {
             <Button @click="goToStatistics">
               <BarChartOutlined /> 数据统计
             </Button>
+            <Button @click="importExportVisible = true">
+              <ImportOutlined /> 导入/导出
+            </Button>
             <Button type="primary" :icon="h(PlusOutlined)" @click="openCreate">
               新建素材
             </Button>
@@ -534,6 +550,20 @@ onMounted(() => {
         </Form.Item>
       </Form>
     </Modal>
+
+    <!-- 导入导出弹窗 -->
+    <ImportExportModal
+      v-model:visible="importExportVisible"
+      :selected-ids="selectedIds"
+      @success="fetchMaterials"
+    />
+
+    <!-- 版本管理抽屉 -->
+    <VersionManager
+      v-model:visible="versionManagerVisible"
+      :material="versionManagerMaterial"
+      @restored="fetchMaterials"
+    />
   </div>
 </template>
 

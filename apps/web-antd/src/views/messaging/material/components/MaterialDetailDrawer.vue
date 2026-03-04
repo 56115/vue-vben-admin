@@ -32,6 +32,7 @@ import {
   SwapOutlined,
 } from '@ant-design/icons-vue';
 import { requestClient } from '#/api/request';
+import AIAssistant from './AIAssistant.vue';
 import type { MaterialItem, VersionItem, UsageRecord, SimilarMaterial } from '../types';
 
 const props = defineProps<{
@@ -207,6 +208,25 @@ watch(() => props.visible, (visible) => {
     similarMaterials.value = [];
   }
 });
+
+// 处理应用标签
+async function handleApplyTags(tags: string[]) {
+  if (!props.material) return;
+
+  try {
+    await requestClient.put(`/messaging/material/${props.material.id}`, {
+      tags: [...(props.material.tags || []), ...tags],
+    });
+    message.success('标签已应用');
+    // 刷新素材数据
+    const res = await requestClient.get<MaterialItem>(`/messaging/material/${props.material.id}`);
+    if (props.material) {
+      Object.assign(props.material, res);
+    }
+  } catch (e) {
+    message.error('应用标签失败');
+  }
+}
 </script>
 
 <template>
@@ -402,6 +422,9 @@ watch(() => props.visible, (visible) => {
           </div>
         </TabPane>
       </Tabs>
+
+      <!-- AI 助手 -->
+      <AIAssistant :material="material" @apply-tags="handleApplyTags" />
 
       <!-- 底部操作 -->
       <div class="drawer-footer">
