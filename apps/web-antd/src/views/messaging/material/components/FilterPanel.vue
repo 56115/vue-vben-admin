@@ -274,8 +274,8 @@ function handleSortChange(value: string) {
 .filter-panel {
   padding: 16px;
   margin-bottom: 16px;
-  background: var(--component-background, #f6ffed);
-  border: 1px solid var(--border-color, #b7eb8f);
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
   border-radius: 8px;
 }
 
@@ -296,7 +296,7 @@ function handleSortChange(value: string) {
 
 .filter-label {
   font-size: 13px;
-  color: var(--text-color-secondary, rgb(0 0 0 / 65%));
+  color: hsl(var(--muted-foreground));
 }
 
 .clickable-tag {
@@ -311,7 +311,7 @@ function handleSortChange(value: string) {
 .filter-advanced {
   padding-top: 12px;
   margin-top: 12px;
-  border-top: 1px dashed var(--border-color, #d9f7be);
+  border-top: 1px dashed hsl(var(--border));
 }
 
 .advanced-row {
@@ -322,12 +322,12 @@ function handleSortChange(value: string) {
 }
 
 .range-separator {
-  color: var(--text-color-secondary, rgb(0 0 0 / 45%));
+  color: hsl(var(--muted-foreground));
 }
 
 .sort-indicator {
   float: right;
   font-weight: bold;
-  color: var(--primary-color, #1890ff);
+  color: hsl(var(--primary));
 }
 </style>

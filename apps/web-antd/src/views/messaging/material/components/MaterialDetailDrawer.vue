@@ -494,7 +494,7 @@ async function handleApplyTags(tags: string[]) {
   width: 48px;
   height: 48px;
   font-size: 24px;
-  background: var(--background-mute, #f5f5f5);
+  background: hsl(var(--muted));
   border-radius: 8px;
 }
 
@@ -520,7 +520,7 @@ async function handleApplyTags(tags: string[]) {
 
 .type-label {
   font-size: 13px;
-  color: var(--text-color-secondary, rgb(0 0 0 / 45%));
+  color: hsl(var(--muted-foreground));
 }
 
 .header-actions {
@@ -539,7 +539,7 @@ async function handleApplyTags(tags: string[]) {
   min-height: 200px;
   padding: 24px;
   margin-bottom: 24px;
-  background: var(--background-mute, #f5f5f5);
+  background: hsl(var(--muted));
   border-radius: 8px;
 }
 
@@ -560,7 +560,7 @@ async function handleApplyTags(tags: string[]) {
   overflow-y: auto;
   font-size: 14px;
   line-height: 1.6;
-  color: var(--text-color, rgb(0 0 0 / 85%));
+  color: hsl(var(--foreground));
   overflow-wrap: break-word;
   white-space: pre-wrap;
 }
@@ -570,13 +570,13 @@ async function handleApplyTags(tags: string[]) {
 }
 
 .preview-link a {
-  color: var(--primary-color, #1890ff);
+  color: hsl(var(--primary));
   word-break: break-all;
 }
 
 .preview-placeholder {
   font-size: 48px;
-  color: var(--text-color-secondary, rgb(0 0 0 / 45%));
+  color: hsl(var(--muted-foreground));
   text-align: center;
 }
 
@@ -599,7 +599,7 @@ async function handleApplyTags(tags: string[]) {
   margin-bottom: 12px;
   font-size: 14px;
   font-weight: 600;
-  color: var(--text-color, rgb(0 0 0 / 85%));
+  color: hsl(var(--foreground));
 }
 
 .info-grid {
@@ -616,12 +616,12 @@ async function handleApplyTags(tags: string[]) {
 
 .info-label {
   font-size: 12px;
-  color: var(--text-color-secondary, rgb(0 0 0 / 45%));
+  color: hsl(var(--muted-foreground));
 }
 
 .info-value {
   font-size: 14px;
-  color: var(--text-color, rgb(0 0 0 / 85%));
+  color: hsl(var(--foreground));
 }
 
 .stats-grid {
@@ -633,7 +633,7 @@ async function handleApplyTags(tags: string[]) {
 .stat-card {
   padding: 16px;
   text-align: center;
-  background: var(--success-bg-color, #f6ffed);
+  background: hsl(var(--accent));
   border: 1px solid var(--success-border-color, #b7eb8f);
   border-radius: 8px;
 }
@@ -648,12 +648,12 @@ async function handleApplyTags(tags: string[]) {
   margin-bottom: 4px;
   font-size: 24px;
   font-weight: 600;
-  color: var(--text-color, rgb(0 0 0 / 85%));
+  color: hsl(var(--foreground));
 }
 
 .stat-label {
   font-size: 12px;
-  color: var(--text-color-secondary, rgb(0 0 0 / 45%));
+  color: hsl(var(--muted-foreground));
 }
 
 .tags-list {
@@ -665,7 +665,7 @@ async function handleApplyTags(tags: string[]) {
 .desc-section p {
   font-size: 14px;
   line-height: 1.6;
-  color: var(--text-color-secondary, rgb(0 0 0 / 65%));
+  color: hsl(var(--muted-foreground));
   white-space: pre-wrap;
 }
 
@@ -683,14 +683,14 @@ async function handleApplyTags(tags: string[]) {
 
 .version-item {
   padding: 12px;
-  background: var(--component-background, white);
-  border: 1px solid var(--border-color, #f0f0f0);
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
   border-radius: 8px;
 }
 
 .version-item.is-current {
-  background: var(--primary-color-light, #e6f7ff);
-  border-color: var(--primary-color-light-border, #91d5ff);
+  background: hsl(var(--accent));
+  border-color: hsl(var(--primary));
 }
 
 .version-header {
@@ -708,7 +708,7 @@ async function handleApplyTags(tags: string[]) {
 .version-time {
   margin-left: auto;
   font-size: 12px;
-  color: var(--text-color-secondary, rgb(0 0 0 / 45%));
+  color: hsl(var(--muted-foreground));
 }
 
 .version-info p {
@@ -719,13 +719,13 @@ async function handleApplyTags(tags: string[]) {
 .version-author {
   margin-top: 4px;
   font-size: 12px;
-  color: var(--text-color-secondary, rgb(0 0 0 / 45%));
+  color: hsl(var(--muted-foreground));
 }
 
 .version-actions {
   padding-top: 8px;
   margin-top: 8px;
-  border-top: 1px dashed var(--border-color, #f0f0f0);
+  border-top: 1px dashed hsl(var(--border));
 }
 
 .similar-list {
@@ -739,7 +739,7 @@ async function handleApplyTags(tags: string[]) {
   gap: 12px;
   align-items: center;
   padding: 12px;
-  border: 1px solid var(--border-color, #f0f0f0);
+  border: 1px solid hsl(var(--border));
   border-radius: 8px;
 }
 
@@ -750,7 +750,7 @@ async function handleApplyTags(tags: string[]) {
   width: 40px;
   height: 40px;
   font-size: 24px;
-  background: var(--background-mute, #f5f5f5);
+  background: hsl(var(--muted));
   border-radius: 8px;
 }
 
@@ -768,7 +768,7 @@ async function handleApplyTags(tags: string[]) {
 .similar-info p {
   margin: 0;
   font-size: 12px;
-  color: var(--text-color-secondary, rgb(0 0 0 / 45%));
+  color: hsl(var(--muted-foreground));
 }
 
 .drawer-footer {

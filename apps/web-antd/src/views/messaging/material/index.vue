@@ -578,7 +578,7 @@ onMounted(() => {
 .material-library {
   height: 100%;
   padding: 16px;
-  background: var(--background-mute, #f5f5f5);
+  background: hsl(var(--background));
 }
 
 .material-layout {
@@ -619,7 +619,7 @@ onMounted(() => {
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
-  background: var(--component-background, white);
+  background: hsl(var(--card));
   border-radius: 8px;
 }
 
@@ -660,6 +660,6 @@ onMounted(() => {
   display: flex;
   justify-content: flex-end;
   padding: 16px;
-  border-top: 1px solid var(--border-color, #f0f0f0);
+  border-top: 1px solid hsl(var(--border));
 }
 </style>
