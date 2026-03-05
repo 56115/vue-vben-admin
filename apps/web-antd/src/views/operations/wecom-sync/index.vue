@@ -327,8 +327,15 @@ const lastSyncResult = ref<SyncResult | null>(null);
 const syncProgress = ref<SyncProgress | null>(null);
 let pollingTimer: ReturnType<typeof setTimeout> | null = null;
 
-const formatTime = (time: string) => {
-  return dayjs(time).format('YYYY-MM-DD HH:mm');
+const formatTime = (time: string | null | undefined) => {
+  if (!time || time === 'Invalid Date') {
+    return '-';
+  }
+  const date = dayjs(time);
+  if (!date.isValid()) {
+    return '-';
+  }
+  return date.format('YYYY-MM-DD HH:mm');
 };
 
 const fetchSyncStats = async () => {
