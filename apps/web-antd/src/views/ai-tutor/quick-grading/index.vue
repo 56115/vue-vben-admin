@@ -62,15 +62,18 @@ const handleFileChange = (info: {
   file: UploadFile;
   fileList: UploadFile[];
 }) => {
-  fileList.value = info.fileList.slice(-1);
+  const latest = info.fileList.slice(-1);
+  fileList.value = latest;
 
-  if (info.file.originFileObj) {
+  // 从最终列表中取文件生成预览，避免 info.file 状态不一致
+  const rawFile = latest[0]?.originFileObj;
+  if (rawFile) {
     const reader = new FileReader();
     reader.onload = (e) => {
       previewUrl.value = e.target?.result as string;
     };
-    reader.readAsDataURL(info.file.originFileObj);
-  } else if (info.fileList.length === 0) {
+    reader.readAsDataURL(rawFile);
+  } else {
     previewUrl.value = '';
   }
 };

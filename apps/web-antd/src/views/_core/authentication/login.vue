@@ -3,7 +3,12 @@ import type { VbenFormSchema } from '@vben/common-ui';
 
 import { computed, markRaw, ref, onMounted } from 'vue';
 
-import { AuthenticationLogin, SliderCaptcha, z, RememberMeHelper } from '@vben/common-ui';
+import {
+  AuthenticationLogin,
+  SliderCaptcha,
+  z,
+  RememberMeHelper,
+} from '@vben/common-ui';
 import type { RememberMeData } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
@@ -81,8 +86,10 @@ async function handleUsernameBlur(username: string) {
       const lastTenantFromStorage = localStorage.getItem(LAST_TENANT_KEY);
       const lastTenant = lastTenantFromRemember || lastTenantFromStorage;
 
-      const lastTenantExists = tenants.value.find(t => t.code === lastTenant);
-      selectedTenant.value = lastTenantExists ? lastTenant! : tenants.value[0].code;
+      const lastTenantExists = tenants.value.find((t) => t.code === lastTenant);
+      selectedTenant.value = lastTenantExists
+        ? lastTenant!
+        : tenants.value[0].code;
 
       // 自动设置租户代码到表单
       setTimeout(() => {
@@ -129,7 +136,7 @@ const formSchema = computed((): VbenFormSchema[] => {
     schemas.push({
       component: 'VbenSelect',
       componentProps: {
-        options: tenants.value.map(t => ({
+        options: tenants.value.map((t) => ({
           label: `${t.name} (${t.code})`,
           value: t.code,
         })),
@@ -141,7 +148,9 @@ const formSchema = computed((): VbenFormSchema[] => {
       fieldName: 'tenantCode',
       label: $t('authentication.selectTenant'),
       defaultValue: selectedTenant.value,
-      rules: z.string().min(1, { message: $t('authentication.tenantPlaceholder') }),
+      rules: z
+        .string()
+        .min(1, { message: $t('authentication.tenantPlaceholder') }),
     });
   }
 
@@ -218,14 +227,17 @@ async function handleLogin(values: any) {
     const errorMessage = error?.response?.data?.message;
 
     const errorMessages: Record<string, string> = {
-      'TENANT_NOT_FOUND': $t('authentication.tenantNotFound'),
-      'USER_NOT_FOUND': $t('authentication.userNotFound'),
-      'INVALID_CREDENTIALS': $t('authentication.invalidCredentials'),
-      'ACCOUNT_DISABLED': $t('authentication.accountDisabled'),
-      'TOO_MANY_ATTEMPTS': $t('authentication.tooManyAttempts'),
+      TENANT_NOT_FOUND: $t('authentication.tenantNotFound'),
+      USER_NOT_FOUND: $t('authentication.userNotFound'),
+      INVALID_CREDENTIALS: $t('authentication.invalidCredentials'),
+      ACCOUNT_DISABLED: $t('authentication.accountDisabled'),
+      TOO_MANY_ATTEMPTS: $t('authentication.tooManyAttempts'),
     };
 
-    const message = errorMessages[errorCode] || errorMessage || $t('authentication.loginFailed');
+    const message =
+      errorMessages[errorCode] ||
+      errorMessage ||
+      $t('authentication.loginFailed');
 
     notification.error({
       message: $t('authentication.loginFailed'),

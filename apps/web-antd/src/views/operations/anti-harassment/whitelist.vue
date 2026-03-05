@@ -83,7 +83,7 @@ async function fetchWhitelist() {
     const res = await requestClient.get<{
       items: WhitelistItem[];
       total: number;
-    }>('/anti-harassment/whitelist', {
+    }>('/operations/anti-harassment/whitelist', {
       params: {
         page: currentPage.value,
         pageSize: pageSize.value,
@@ -128,7 +128,7 @@ async function handleAdd() {
 
   loading.value = true;
   try {
-    await requestClient.post('/anti-harassment/whitelist', {
+    await requestClient.post('/operations/anti-harassment/whitelist', {
       customerId: formState.value.customerId,
       shareEnabled: formState.value.shareEnabled,
       sharedTo: formState.value.sharedTo,
@@ -150,7 +150,7 @@ async function handleAdd() {
 
 async function handleDelete(id: number) {
   try {
-    await requestClient.delete(`/anti-harassment/whitelist/${id}`);
+    await requestClient.delete(`/operations/anti-harassment/whitelist/${id}`);
     message.success('删除成功');
     fetchWhitelist();
   } catch (e: any) {
@@ -160,7 +160,7 @@ async function handleDelete(id: number) {
 
 async function handleToggleShare(enabled: boolean) {
   try {
-    await requestClient.patch('/anti-harassment/whitelist/config', {
+    await requestClient.patch('/operations/anti-harassment/whitelist/config', {
       shareEnabled: enabled,
     });
     message.success('设置已更新');

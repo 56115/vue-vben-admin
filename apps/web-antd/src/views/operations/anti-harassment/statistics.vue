@@ -161,16 +161,16 @@ async function loadData() {
     const [overviewRes, analysisRes, effectivenessRes, listRes] =
       await Promise.all([
         requestClient.get<StatisticsOverview>(
-          '/anti-harassment/statistics/overview',
+          '/operations/anti-harassment/statistics/overview',
         ),
         requestClient.get<ViolationAnalysis>(
-          '/anti-harassment/statistics/violation-analysis',
+          '/operations/anti-harassment/statistics/violation-analysis',
         ),
         requestClient.get<RuleEffectiveness>(
-          '/anti-harassment/statistics/rule-effectiveness',
+          '/operations/anti-harassment/statistics/rule-effectiveness',
         ),
         requestClient.get<ListStatus>(
-          '/anti-harassment/statistics/list-status',
+          '/operations/anti-harassment/statistics/list-status',
         ),
       ]);
     overview.value = overviewRes;

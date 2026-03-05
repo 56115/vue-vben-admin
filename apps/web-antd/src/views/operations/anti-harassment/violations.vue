@@ -208,7 +208,7 @@ async function fetchRecords() {
     const res = await requestClient.get<{
       items: ViolationRecord[];
       total: number;
-    }>('/anti-harassment/violations', { params });
+    }>('/operations/anti-harassment/violations', { params });
 
     records.value = res.items || [];
     total.value = res.total || 0;
@@ -222,7 +222,7 @@ async function fetchRecords() {
 async function fetchStatistics() {
   try {
     const res = await requestClient.get<ViolationStatistics>(
-      '/anti-harassment/violations/statistics',
+      '/operations/anti-harassment/violations/statistics',
     );
     statistics.value = res;
   } catch (e) {
@@ -237,7 +237,7 @@ async function handleRetryFailed() {
       total: number;
       succeeded: number;
       failed: number;
-    }>('/anti-harassment/violations/retry-failed');
+    }>('/operations/anti-harassment/violations/retry-failed');
     message.success(
       `重试完成：成功 ${res.succeeded} 条，失败 ${res.failed} 条`,
     );

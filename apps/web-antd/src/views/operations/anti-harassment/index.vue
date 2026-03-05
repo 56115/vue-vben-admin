@@ -160,7 +160,7 @@ const {
     const res = await requestClient.get<{
       items: AntiHarassmentRule[];
       total?: number;
-    }>('/anti-harassment/rules', {
+    }>('/operations/anti-harassment/rules', {
       params: { page: params.page, pageSize: params.pageSize },
     });
     return {
@@ -169,7 +169,7 @@ const {
     };
   },
   deleteApi: async (id) => {
-    await requestClient.delete(`/anti-harassment/rules/${id}`);
+    await requestClient.delete(`/operations/anti-harassment/rules/${id}`);
   },
 });
 
@@ -179,7 +179,7 @@ async function fetchSensitiveWords() {
   wordsLoading.value = true;
   try {
     const res = await requestClient.get<{ items: SensitiveWord[] }>(
-      '/anti-harassment/sensitive-words',
+      '/operations/anti-harassment/sensitive-words',
       { params: { pageSize: 100 } },
     );
     sensitiveWords.value = res.items || [];
@@ -193,10 +193,10 @@ async function fetchSensitiveWords() {
 async function fetchListCounts() {
   try {
     const [whiteRes, blackRes] = await Promise.all([
-      requestClient.get<{ total: number }>('/anti-harassment/lists', {
+      requestClient.get<{ total: number }>('/operations/anti-harassment/lists', {
         params: { listType: 'WHITELIST', pageSize: 1 },
       }),
-      requestClient.get<{ total: number }>('/anti-harassment/lists', {
+      requestClient.get<{ total: number }>('/operations/anti-harassment/lists', {
         params: { listType: 'BLACKLIST', pageSize: 1 },
       }),
     ]);
@@ -210,7 +210,7 @@ async function fetchListCounts() {
 async function fetchViolationCount() {
   try {
     const res = await requestClient.get<{ totalCount: number }>(
-      '/anti-harassment/violations/statistics',
+      '/operations/anti-harassment/violations/statistics',
     );
     violationCount.value = res.totalCount || 0;
   } catch (e) {
@@ -283,12 +283,12 @@ async function handleSaveRule() {
 
     if (editingRule.value) {
       await requestClient.put(
-        `/anti-harassment/rules/${editingRule.value.id}`,
+        `/operations/anti-harassment/rules/${editingRule.value.id}`,
         payload,
       );
       message.success('规则更新成功');
     } else {
-      await requestClient.post('/anti-harassment/rules', payload);
+      await requestClient.post('/operations/anti-harassment/rules', payload);
       message.success('规则创建成功');
     }
 
@@ -334,7 +334,7 @@ function buildRuleConfig() {
 
 async function handleDeleteRule(id: number) {
   try {
-    await requestClient.delete(`/anti-harassment/rules/${id}`);
+    await requestClient.delete(`/operations/anti-harassment/rules/${id}`);
     message.success('规则删除成功');
     fetchData();
   } catch (e: unknown) {
@@ -345,7 +345,7 @@ async function handleDeleteRule(id: number) {
 
 async function handleToggleRule(rule: AntiHarassmentRule) {
   try {
-    await requestClient.patch(`/anti-harassment/rules/${rule.id}/toggle`, {
+    await requestClient.patch(`/operations/anti-harassment/rules/${rule.id}/toggle`, {
       isActive: !rule.isActive,
     });
     message.success(rule.isActive ? '规则已禁用' : '规则已启用');

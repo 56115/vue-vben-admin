@@ -67,7 +67,7 @@ async function fetchBlacklist() {
     const res = await requestClient.get<{
       items: BlacklistItem[];
       total: number;
-    }>('/anti-harassment/blacklist', {
+    }>('/operations/anti-harassment/blacklist', {
       params: {
         page: currentPage.value,
         pageSize: pageSize.value,
@@ -85,7 +85,7 @@ async function fetchBlacklist() {
 
 async function handleDelete(id: number) {
   try {
-    await requestClient.delete(`/anti-harassment/blacklist/${id}`);
+    await requestClient.delete(`/operations/anti-harassment/blacklist/${id}`);
     message.success('删除成功');
     fetchBlacklist();
   } catch (e: any) {
@@ -95,7 +95,7 @@ async function handleDelete(id: number) {
 
 async function handleToggleOrgShare(enabled: boolean) {
   try {
-    await requestClient.patch('/anti-harassment/blacklist/config', {
+    await requestClient.patch('/operations/anti-harassment/blacklist/config', {
       orgShareEnabled: enabled,
     });
     message.success('设置已更新');
@@ -107,7 +107,7 @@ async function handleToggleOrgShare(enabled: boolean) {
 
 async function handleToggleInterOrgShare(enabled: boolean) {
   try {
-    await requestClient.patch('/anti-harassment/blacklist/config', {
+    await requestClient.patch('/operations/anti-harassment/blacklist/config', {
       interOrgShareEnabled: enabled,
     });
     message.success('设置已更新');
