@@ -379,9 +379,7 @@ const sourceVariables = computed(() => {
                           {{ template.category }}
                         </Tag>
                         <Text type="secondary" style="font-size: 12px">
-                          {{
-                            template.activeVersion?.variables?.length || 0
-                          }}
+                          {{ template.activeVersion?.variables?.length || 0 }}
                           变量
                         </Text>
                       </div>
@@ -404,9 +402,8 @@ const sourceVariables = computed(() => {
                 :ellipsis="{ rows: 5, expandable: true }"
                 type="secondary"
                 style="font-size: 12px"
-              >
-                <pre>{{ selectedTemplate.activeVersion?.userPromptTpl }}</pre>
-              </Paragraph>
+                :content="selectedTemplate.activeVersion?.userPromptTpl || ''"
+              />
             </Card>
           </Col>
 
