@@ -132,7 +132,7 @@ const { tableProps, filters, fetchData, handleDelete, refresh } = useCrudTable<A
       status: params.status,
       computeType: params.computeType,
     });
-    return { items: response.list || [], total: response.total || 0 };
+    return { items: response.items || [], total: response.total || 0 };
   },
   deleteApi: async (id: string | number) => {
     await deleteAudience(Number(id));
@@ -238,7 +238,7 @@ async function loadMembers(audienceId: number, page = 1) {
       page,
       pageSize: membersPagination.value.pageSize,
     });
-    membersData.value = res.list || [];
+    membersData.value = res.items || [];
     membersPagination.value = {
       page: res.page,
       pageSize: res.pageSize,

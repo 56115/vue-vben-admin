@@ -59,13 +59,15 @@ export interface CustomerRfmProfile {
   externalMemberId: string | null;
 }
 
-/** 分页响应 */
-export interface PaginatedResponse<T> {
-  list: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
+/** RFM 客户分页响应（使用 data 和 pagination） */
+export interface RfmCustomerPaginatedResponse<T> {
+  data: T[];
+  pagination: {
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPages: number;
+  };
 }
 
 /** 批量计算结果 */
@@ -196,7 +198,7 @@ export async function getCustomersBySegment(
   segment: RfmSegment,
   params?: { page?: number; pageSize?: number },
 ) {
-  return requestClient.get<PaginatedResponse<CustomerRfmProfile>>(
+  return requestClient.get<RfmCustomerPaginatedResponse<CustomerRfmProfile>>(
     `/marketing/retail/rfm/segments/${segment}`,
     { params },
   );

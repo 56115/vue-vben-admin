@@ -248,7 +248,7 @@ function handleSortChange(value: string) {
         <DatePicker.RangePicker
           v-model:value="localFilters.dateRange"
           style="width: 280px"
-          placeholder="['开始日期', '结束日期']"
+          :placeholder="['开始日期', '结束日期']"
         />
 
         <span class="filter-label" style="margin-left: 16px">使用次数：</span>

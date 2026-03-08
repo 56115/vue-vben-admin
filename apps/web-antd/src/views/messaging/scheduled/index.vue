@@ -102,12 +102,12 @@ const targetTypeOptions = [
 const { tableProps, fetchData } = useCrudTable<ScheduledMessage>({
   fetchApi: async (params) => {
     const res = await requestClient.get<{
-      data: ScheduledMessage[];
+      items: ScheduledMessage[];
       total?: number;
     }>('/messaging/scheduled', {
       params: { page: params.page, pageSize: params.pageSize },
     });
-    return { items: res.data || [], total: res.total || res.data?.length || 0 };
+    return { items: res.items || [], total: res.total || 0 };
   },
 });
 

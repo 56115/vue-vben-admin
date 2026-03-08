@@ -136,7 +136,7 @@ const { tableProps, filters, fetchData } = useCrudTable<
     };
     if (params.status) apiParams.status = params.status;
     const res = await getDirectMessages(apiParams);
-    return { items: (res as any).data || [], total: res.total || 0 };
+    return { items: res.items || [], total: res.total || 0 };
   },
 });
 

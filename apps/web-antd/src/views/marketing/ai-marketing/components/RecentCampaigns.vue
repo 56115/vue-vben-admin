@@ -68,12 +68,12 @@ async function fetchRecentCampaigns() {
   loading.value = true;
   try {
     const response = await requestClient.get<{
-      list: CampaignItem[];
+      items: CampaignItem[];
       total: number;
     }>('/marketing/campaign', {
       params: { page: 1, pageSize: 5 },
     });
-    campaigns.value = response.list || [];
+    campaigns.value = response.items || [];
   } catch (error) {
     console.error('Failed to fetch recent campaigns:', error);
   } finally {

@@ -295,8 +295,8 @@ async function loadCustomersBySegment(segment: RfmSegment) {
       page: customerPagination.value.current,
       pageSize: customerPagination.value.pageSize,
     });
-    customerList.value = result.list;
-    customerPagination.value.total = result.total;
+    customerList.value = result.data;
+    customerPagination.value.total = result.pagination.total;
   } catch (e) {
     console.error('加载客户列表失败', e);
     message.error('加载客户列表失败');

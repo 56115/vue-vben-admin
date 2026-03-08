@@ -110,12 +110,12 @@ const columns = [
 const { tableProps, fetchData, handleDelete } = useCrudTable<CampaignItem>({
   fetchApi: async (params) => {
     const response = await requestClient.get<{
-      list: CampaignItem[];
+      items: CampaignItem[];
       total: number;
     }>('/marketing/campaign', {
       params: { page: params.page, pageSize: params.pageSize },
     });
-    return { items: response.list || [], total: response.total || 0 };
+    return { items: response.items || [], total: response.total || 0 };
   },
   deleteApi: async (id) => {
     await requestClient.delete(`/marketing/campaign/${id}`);
