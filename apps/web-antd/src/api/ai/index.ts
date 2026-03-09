@@ -2,8 +2,11 @@
  * AI 教师 API 接口
  */
 import { requestClient } from '../request';
+import type { PaginatedResponse } from '#/typings/shared';
 
 // ==================== 类型定义 ====================
+
+export type { PaginatedResponse };
 
 export interface TutorSession {
   id: string;
@@ -554,17 +557,6 @@ export interface GradingHistoryItem {
   processingMs: number;
   createdAt: string;
   paperImageUrls?: PaperImageUrls[]; // 试卷图片 URLs
-}
-
-/**
- * 分页响应
- */
-export interface PaginatedResponse<T> {
-  items: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
 }
 
 /**

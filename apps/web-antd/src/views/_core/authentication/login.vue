@@ -154,12 +154,12 @@ const formSchema = computed((): VbenFormSchema[] => {
     });
   }
 
-  // 密码输入框（无租户时禁用）
+  // 密码输入框（多租户时禁用，需先选择租户）
   schemas.push({
     component: 'VbenInputPassword',
     componentProps: {
       placeholder: $t('authentication.password'),
-      disabled: tenants.value.length === 0 && isUsernameBlurred.value,
+      disabled: tenants.value.length > 1 && isUsernameBlurred.value,
     },
     fieldName: 'password',
     label: $t('authentication.password'),

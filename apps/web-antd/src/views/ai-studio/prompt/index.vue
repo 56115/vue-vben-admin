@@ -111,7 +111,8 @@ const loadTemplates = async () => {
       offset: (pagination.value.current - 1) * pagination.value.pageSize,
       search: searchKeyword.value || undefined,
       category: categoryFilter.value,
-      tags: tagsFilter.value.join(','),
+      tags:
+        tagsFilter.value.length > 0 ? tagsFilter.value.join(',') : undefined,
       activeOnly: statusFilter.value,
       includeSystem: systemFilter.value,
     };
@@ -157,11 +158,11 @@ const resetFilters = () => {
 };
 
 /**
- * 处理分页变化
+ * 处理表格变化（分页、排序等）
  */
-const handlePageChange = (page: number, pageSize: number) => {
-  pagination.value.current = page;
-  pagination.value.pageSize = pageSize;
+const handleTableChange = (pag: { current?: number; pageSize?: number }) => {
+  pagination.value.current = pag.current ?? 1;
+  pagination.value.pageSize = pag.pageSize ?? 20;
   loadTemplates();
 };
 
@@ -368,19 +369,19 @@ const columns = [
   },
   {
     title: '版本',
-    dataIndex: 'version',
-    key: 'version',
+    dataIndex: 'latestVersion',
+    key: 'latestVersion',
     width: 80,
     align: 'center',
     customRender: ({ text }: { text: number }) => `v${text}`,
   },
   {
     title: '状态',
-    dataIndex: 'isActive',
-    key: 'isActive',
+    dataIndex: 'activeVersionId',
+    key: 'activeVersionId',
     width: 100,
     align: 'center',
-    customRender: ({ text }: { text: boolean }) =>
+    customRender: ({ text }: { text: string | null }) =>
       text ? (
         <Badge status="success" text="已发布" />
       ) : (
@@ -389,12 +390,12 @@ const columns = [
   },
   {
     title: '类型',
-    dataIndex: 'isSystem',
-    key: 'isSystem',
+    dataIndex: 'type',
+    key: 'type',
     width: 100,
     align: 'center',
-    customRender: ({ text }: { text: boolean }) =>
-      text ? <Tag color="blue">系统</Tag> : <Tag>自定义</Tag>,
+    customRender: ({ text }: { text: string }) =>
+      text === 'SYSTEM' ? <Tag color="blue">系统</Tag> : <Tag>自定义</Tag>,
   },
   {
     title: '使用量',
@@ -599,7 +600,7 @@ loadCategoriesAndTags();
       row-key="id"
       size="middle"
       :scroll="{ x: 1300 }"
-      @change="handlePageChange"
+      @change="handleTableChange"
     >
       <template #bodyCell="{ column, record }">
         <!-- 名称列 -->
@@ -620,7 +621,7 @@ loadCategoriesAndTags();
                 type="text"
                 size="small"
                 @click="goToEdit(record)"
-                :disabled="record.isSystem"
+                :disabled="record.type === 'SYSTEM'"
               >
                 <EditOutlined />
               </Button>
@@ -648,9 +649,9 @@ loadCategoriesAndTags();
                     <FileTextOutlined />
                     克隆
                   </Menu.Item>
-                  <Menu.Divider v-if="!record.isSystem" />
+                  <Menu.Divider v-if="record.type !== 'SYSTEM'" />
                   <Menu.Item
-                    v-if="!record.isSystem"
+                    v-if="record.type !== 'SYSTEM'"
                     key="delete"
                     danger
                     @click="handleDelete(record)"

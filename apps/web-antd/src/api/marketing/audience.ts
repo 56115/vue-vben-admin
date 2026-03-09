@@ -1,6 +1,9 @@
 import { requestClient } from '#/api/request';
+import type { PaginatedResponse } from '#/typings/shared';
 
 // ==================== 类型定义 ====================
+
+export type { PaginatedResponse };
 
 /** 人群包状态 */
 export type AudienceStatus =
@@ -53,15 +56,6 @@ export interface Audience {
   createdBy: number | null;
   createdAt: string;
   updatedAt: string;
-}
-
-/** 分页响应 */
-export interface PaginatedResponse<T> {
-  items: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
 }
 
 /** 人群包成员 */

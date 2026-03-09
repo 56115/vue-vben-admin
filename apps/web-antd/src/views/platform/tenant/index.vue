@@ -63,6 +63,7 @@ const subscriptionModalVisible = ref(false);
 const currentTenantId = ref<string | null>(null);
 const currentSubscriptions = ref<string[]>([]);
 const subscriptionModalLoading = ref(false);
+const appModulesLoading = ref(false);
 
 const columns = [
   { title: '租户代码', dataIndex: 'code', key: 'code', width: 120 },
@@ -217,14 +218,16 @@ function handleTableChange(pag: any) {
 
 // Subscription management functions
 async function fetchAllAppModules() {
+  appModulesLoading.value = true;
   try {
-    const res = await requestClient.get<{ data: AppModule[] }>(
-      '/platform/app-modules',
-    );
-    allAppModules.value = res.data;
+    const res = await requestClient.get<AppModule[]>('/platform/app-modules');
+    allAppModules.value = res.data || res || [];
   } catch (e: any) {
-    console.error(e);
-    message.error(e.message || '获取应用模块列表失败');
+    console.error('获取应用模块列表失败:', e);
+    message.error(e?.message || '获取应用模块列表失败，请检查权限或联系管理员');
+    allAppModules.value = [];
+  } finally {
+    appModulesLoading.value = false;
   }
 }
 
@@ -373,26 +376,34 @@ onMounted(() => {
         <p class="mb-4 text-gray-600">
           请选择租户可以使用的应用模块（可多选）：
         </p>
-        <Checkbox.Group
-          v-model:value="currentSubscriptions"
-          style="width: 100%"
-        >
-          <div class="grid grid-cols-1 gap-3">
-            <Checkbox
-              v-for="module in allAppModules"
-              :key="module.id"
-              :value="module.code"
-              class="mb-2"
-            >
-              <div class="flex flex-col">
-                <span class="font-medium">{{ module.name }}</span>
-                <span class="text-xs text-gray-500">{{
-                  module.description
-                }}</span>
-              </div>
-            </Checkbox>
-          </div>
-        </Checkbox.Group>
+        <div v-if="appModulesLoading" class="py-8 text-center text-gray-500">
+          加载中...
+        </div>
+        <template v-else-if="allAppModules.length > 0">
+          <Checkbox.Group
+            v-model:value="currentSubscriptions"
+            style="width: 100%"
+          >
+            <div class="grid grid-cols-1 gap-3">
+              <Checkbox
+                v-for="module in allAppModules"
+                :key="module.id"
+                :value="module.code"
+                class="mb-2"
+              >
+                <div class="flex flex-col">
+                  <span class="font-medium">{{ module.name }}</span>
+                  <span class="text-xs text-gray-500">{{
+                    module.description
+                  }}</span>
+                </div>
+              </Checkbox>
+            </div>
+          </Checkbox.Group>
+        </template>
+        <div v-else class="py-8 text-center text-gray-500">
+          暂无应用模块，请联系管理员配置系统模块
+        </div>
       </div>
     </Modal>
   </div>

@@ -372,14 +372,16 @@ watch(
           <Timeline.Item
             v-for="version in versions"
             :key="version.id"
-            :color="version.version === template?.version ? 'green' : 'gray'"
+            :color="
+              version.version === template?.latestVersion ? 'green' : 'gray'
+            "
           >
             <template #dot>
               <div
                 class="version-dot"
                 :class="{
                   selected: selectedVersions.includes(version.id),
-                  current: version.version === template?.version,
+                  current: version.version === template?.latestVersion,
                 }"
                 @click="toggleVersionSelection(version.id)"
               >
@@ -394,7 +396,7 @@ watch(
               size="small"
               :class="{
                 'version-card': true,
-                'version-current': version.version === template?.version,
+                'version-current': version.version === template?.latestVersion,
                 'version-selected': selectedVersions.includes(version.id),
               }"
             >
@@ -405,7 +407,7 @@ watch(
                       >v{{ version.version }}</Typography.Text
                     >
                     <Tag
-                      v-if="version.version === template?.version"
+                      v-if="version.version === template?.latestVersion"
                       color="green"
                     >
                       当前
@@ -442,7 +444,7 @@ watch(
                 <Button
                   type="link"
                   size="small"
-                  :disabled="version.version === template?.version"
+                  :disabled="version.version === template?.latestVersion"
                   @click="handleRollback(version)"
                 >
                   <ReloadOutlined />

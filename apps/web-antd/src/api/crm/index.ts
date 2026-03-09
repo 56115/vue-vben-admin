@@ -1,6 +1,9 @@
 import { requestClient } from '#/api/request';
+import type { PaginatedResponse } from '#/typings/shared';
 
 // ==================== Types ====================
+
+export type { PaginatedResponse };
 
 export interface Customer {
   id: number;
@@ -95,14 +98,6 @@ export interface ActivityStats {
   byChannel: Record<string, number>;
   recentCount: number;
   todayCount: number;
-}
-
-export interface PaginatedResponse<T> {
-  items: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages?: number;
 }
 
 // ==================== Customer API ====================

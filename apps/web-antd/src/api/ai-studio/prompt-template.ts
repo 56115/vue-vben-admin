@@ -13,28 +13,30 @@ export interface PromptTemplate {
   name: string;
   description: string | null;
   category: string | null;
-  templateContent: string;
-  variables: Array<{
-    name: string;
-    type: string;
-    required: boolean;
-    description?: string;
-    defaultValue?: any;
-  }>;
-  defaultValues: Record<string, any> | null;
-  modelConfig: {
-    model?: string;
-    temperature?: number;
-    top_p?: number;
-    max_tokens?: number;
-  } | null;
-  version: number;
-  isActive: boolean;
-  isSystem: boolean;
+  type: 'TENANT' | 'SYSTEM';
+  scenario: string | null;
+  subjectCode: string | null;
   tags: string[];
+  activeVersionId: string | null;
+  latestVersion: number;
   usageCount: number;
+  createdBy: string | null;
   createdAt: string;
   updatedAt: string;
+  currentVersion: {
+    id: string;
+    templateId: string;
+    version: number;
+    systemPrompt: string | null;
+    userPromptTpl: string;
+    variables: unknown[];
+    outputSchema: unknown;
+    modelConfig: Record<string, unknown>;
+    modelName: string | null;
+    changeLog: string | null;
+    createdBy: string | null;
+    createdAt: string;
+  } | null;
 }
 
 export interface PromptTemplateListParams {
@@ -58,9 +60,49 @@ export interface PromptTemplateListResponse {
  * 获取提示词模板列表
  */
 export async function getPromptTemplates(params?: PromptTemplateListParams) {
-  return requestClient.get<PromptTemplateListResponse>('/prompt-templates', {
-    params,
+  // 转换分页参数: limit/offset -> page/pageSize
+  const queryParams: Record<string, any> = { ...params };
+  if (params?.limit !== undefined && params?.offset !== undefined) {
+    queryParams.page = Math.floor(params.offset / params.limit) + 1;
+    queryParams.pageSize = params.limit;
+    delete queryParams.limit;
+    delete queryParams.offset;
+  }
+
+  // 转换参数名: search -> keyword (后端 DTO 使用 keyword)
+  if (queryParams.search !== undefined) {
+    queryParams.keyword = queryParams.search;
+    delete queryParams.search;
+  }
+
+  // 转换 includeSystem -> type 筛选
+  if (queryParams.includeSystem !== undefined) {
+    if (queryParams.includeSystem === true) {
+      queryParams.type = 'SYSTEM';
+    } else if (queryParams.includeSystem === false) {
+      queryParams.type = 'TENANT';
+    }
+    delete queryParams.includeSystem;
+  }
+
+  // activeOnly 后端不支持，移除
+  delete queryParams.activeOnly;
+
+  const response = await requestClient.get<{
+    items: PromptTemplate[];
+    total: number;
+    page: number;
+    pageSize: number;
+  }>('/prompt-templates', {
+    params: queryParams,
   });
+
+  // 转换 API 响应格式: items -> data
+  // 注意：拦截器已提取 data，所以 response 就是 { items: [...], total: n }
+  return {
+    data: response.items || [],
+    total: response.total || 0,
+  };
 }
 
 /**
