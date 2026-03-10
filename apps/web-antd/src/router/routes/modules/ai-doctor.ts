@@ -12,7 +12,7 @@ const routes: RouteRecordRaw[] = [
       icon: 'ant-design:medicine-box-outlined',
       order: 6,
       title: 'AI 学习医生',
-      appModule: 'AI_DOCTOR',
+      appModule: 'LEARNING_DIAGNOSIS',
     },
     name: 'AIDoctor',
     path: '/ai-doctor',
@@ -26,10 +26,10 @@ const routes: RouteRecordRaw[] = [
         meta: {
           icon: 'ant-design:file-search-outlined',
           title: '诊断中心',
-          appModule: 'AI_DOCTOR',
+          appModule: 'LEARNING_DIAGNOSIS',
           permissions: [
-            'AI_DOCTOR:DIAGNOSIS:VIEW',
-            'AI_DOCTOR:DIAGNOSIS:CREATE',
+            'LEARNING_DIAGNOSIS:DIAGNOSIS:VIEW',
+            'LEARNING_DIAGNOSIS:DIAGNOSIS:CREATE',
           ],
         },
       },
@@ -42,10 +42,10 @@ const routes: RouteRecordRaw[] = [
         meta: {
           icon: 'ant-design:solution-outlined',
           title: '学习处方',
-          appModule: 'AI_DOCTOR',
+          appModule: 'LEARNING_DIAGNOSIS',
           permissions: [
-            'AI_DOCTOR:PRESCRIPTION:LIST',
-            'AI_DOCTOR:PRESCRIPTION:VIEW',
+            'LEARNING_DIAGNOSIS:PRESCRIPTION:LIST',
+            'LEARNING_DIAGNOSIS:PRESCRIPTION:VIEW',
           ],
         },
       },
@@ -58,8 +58,8 @@ const routes: RouteRecordRaw[] = [
         meta: {
           icon: 'ant-design:reload-outlined',
           title: '复诊追踪',
-          appModule: 'AI_DOCTOR',
-          permissions: ['AI_DOCTOR:FOLLOW_UP:VIEW'],
+          appModule: 'LEARNING_DIAGNOSIS',
+          permissions: ['LEARNING_DIAGNOSIS:FOLLOW_UP:VIEW'],
         },
       },
 
@@ -71,8 +71,8 @@ const routes: RouteRecordRaw[] = [
         meta: {
           icon: 'ant-design:customer-service-outlined',
           title: 'AI 咨询师',
-          appModule: 'AI_DOCTOR',
-          permissions: ['AI_DOCTOR:COUNSELOR:SESSION'],
+          appModule: 'LEARNING_DIAGNOSIS',
+          permissions: ['LEARNING_DIAGNOSIS:COUNSELOR:SESSION'],
         },
       },
 
@@ -84,8 +84,8 @@ const routes: RouteRecordRaw[] = [
         meta: {
           icon: 'ant-design:question-circle-outlined',
           title: '常见问题',
-          appModule: 'AI_DOCTOR',
-          permissions: ['AI_DOCTOR:COUNSELOR:SESSION'],
+          appModule: 'LEARNING_DIAGNOSIS',
+          permissions: ['LEARNING_DIAGNOSIS:COUNSELOR:SESSION'],
           hideInMenu: true, // 隐藏在菜单中，但保留路由
         },
       },
@@ -98,8 +98,8 @@ const routes: RouteRecordRaw[] = [
         meta: {
           icon: 'ant-design:file-done-outlined',
           title: '家长报告',
-          appModule: 'AI_DOCTOR',
-          permissions: ['AI_DOCTOR:COUNSELOR:PARENT_REPORT'],
+          appModule: 'LEARNING_DIAGNOSIS',
+          permissions: ['LEARNING_DIAGNOSIS:COUNSELOR:PARENT_REPORT'],
         },
       },
     ],

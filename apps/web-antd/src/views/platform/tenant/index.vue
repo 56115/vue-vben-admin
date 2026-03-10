@@ -220,7 +220,9 @@ function handleTableChange(pag: any) {
 async function fetchAllAppModules() {
   appModulesLoading.value = true;
   try {
-    const res = await requestClient.get<{ items: AppModule[]; total: number }>('/platform/app-modules');
+    const res = await requestClient.get<{ items: AppModule[]; total: number }>(
+      '/platform/app-modules',
+    );
     allAppModules.value = res.items || [];
   } catch (e: any) {
     console.error('获取应用模块列表失败:', e);
