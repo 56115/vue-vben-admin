@@ -175,7 +175,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '错题审核',
           appModule: 'LMS',
-          permissions: ['EDUCATION:PAPER:VIEW'],
+          permissions: ['LMS:TUTOR:USE'],
           hideInMenu: true,
         },
         children: [
@@ -187,7 +187,7 @@ const routes: RouteRecordRaw[] = [
             meta: {
               title: '错题列表',
               appModule: 'LMS',
-              permissions: ['EDUCATION:PAPER:VIEW'],
+              permissions: ['LMS:TUTOR:USE'],
               hideInMenu: true,
             },
           },
@@ -199,7 +199,7 @@ const routes: RouteRecordRaw[] = [
             meta: {
               title: '错题详情',
               appModule: 'LMS',
-              permissions: ['EDUCATION:PAPER:VIEW'],
+              permissions: ['LMS:TUTOR:USE'],
               hideInMenu: true,
               activeMenu: '/ai-tutor/mistake-review',
             },
@@ -216,7 +216,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '题库导入',
           appModule: 'LMS',
-          permissions: ['EDUCATION:QUESTION:IMPORT'],
+          permissions: ['LMS:QUESTION_BANK:IMPORT'],
           hideInMenu: true,
         },
       },
