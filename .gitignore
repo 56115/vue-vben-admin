@@ -22,6 +22,53 @@ yarn.lock
 package-lock.json
 .VSCodeCounter
 **/backend-mock/data
+**/backend-mock/**/*.js
+**/backend-mock/**/*.js.map
+
+# Compiled JavaScript files (source is TypeScript)
+**/__tests__/**/*.js
+**/__tests__/**/*.js.map
+apps/web-antd/**/*.js
+apps/web-antd/**/*.js.map
+apps/web-ele/**/*.js
+apps/web-ele/**/*.js.map
+apps/web-naive/**/*.js
+apps/web-naive/**/*.js.map
+apps/web-antd-mock/**/*.js
+apps/web-antd-mock/**/*.js.map
+apps/web-tdesign/**/*.js
+apps/web-tdesign/**/*.js.map
+# Catch-all for any other apps/web-* compiled files
+apps/web-*/**/*.js
+apps/web-*/**/*.js.map
+
+# Docs compiled files
+docs/**/*.js
+docs/**/*.js.map
+
+# Internal packages compiled files
+internal/**/*.js
+internal/**/*.js.map
+
+# Packages compiled files
+packages/**/*.js
+packages/**/*.js.map
+
+# Playground compiled files
+playground/**/*.js
+playground/**/*.js.map
+
+# Scripts compiled files
+scripts/**/*.js
+scripts/**/*.js.map
+
+# Root level compiled config files
+/*.config.js
+/*.config.js.map
+vitest.config.js
+vitest.config.js.map
+vitest.workspace.js
+vitest.workspace.js.map
 
 # local env files
 .env.local
