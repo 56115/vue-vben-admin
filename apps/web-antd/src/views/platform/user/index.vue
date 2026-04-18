@@ -133,7 +133,7 @@ const columns = [
 async function fetchData() {
   loading.value = true;
   try {
-    const res = await requestClient.get<{ data: UserItem[]; total: number }>(
+    const res = await requestClient.get<{ items: UserItem[]; total: number }>(
       '/platform/users',
       {
         params: {
@@ -142,7 +142,7 @@ async function fetchData() {
         },
       },
     );
-    dataSource.value = res.data;
+    dataSource.value = res.items;
     pagination.value.total = res.total;
   } catch (e: any) {
     console.error(e);
@@ -154,7 +154,7 @@ async function fetchData() {
 
 async function fetchTenants() {
   try {
-    const res = await requestClient.get<{ data: Tenant[] }>(
+    const res = await requestClient.get<{ data: Tenant[]; total: number }>(
       '/platform/tenants',
       {
         params: { page: 1, pageSize: 100 },
@@ -169,10 +169,10 @@ async function fetchTenants() {
 
 async function fetchAllRoles() {
   try {
-    const res = await requestClient.get<{ data: Role[] }>('/platform/roles', {
+    const res = await requestClient.get<{ items: Role[]; total: number }>('/platform/roles', {
       params: { page: 1, pageSize: 100 },
     });
-    allRoles.value = res.data;
+    allRoles.value = res.items;
   } catch (e: any) {
     console.error(e);
     message.error(e.message || '获取角色列表失败');
@@ -202,7 +202,7 @@ async function handleRoleSubmit() {
   roleModalLoading.value = true;
   try {
     await requestClient.put(`/platform/users/${currentUserId.value}/roles`, {
-      roleIds: currentUserRoles.value,
+      roleIds: currentUserRoles.value.map((id) => String(id)),
     });
     message.success('角色分配成功');
     roleModalVisible.value = false;
@@ -239,7 +239,7 @@ async function handleEdit(record: UserItem) {
     email: record.email || '',
     phone: record.phone || '',
     status: record.status,
-    tenantId: record.tenantId,
+    tenantId: String(record.tenantId || ''),
   };
   modalVisible.value = true;
 }

@@ -110,7 +110,7 @@ const columns = [
 async function fetchData() {
   loading.value = true;
   try {
-    const res = await requestClient.get<{ data: RoleItem[]; total: number }>(
+    const res = await requestClient.get<{ items: RoleItem[]; total: number }>(
       '/platform/roles',
       {
         params: {
@@ -119,7 +119,7 @@ async function fetchData() {
         },
       },
     );
-    dataSource.value = res.data;
+    dataSource.value = res.items;
     pagination.value.total = res.total;
   } catch (e: any) {
     console.error(e);
