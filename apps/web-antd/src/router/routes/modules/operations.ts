@@ -3,10 +3,8 @@ import type { RouteRecordRaw } from 'vue-router';
 /**
  * 运营管理模块路由
  *
- * 包含：员工任务、安全管控、企微同步、会员同步
- * 融入会员同步能力
- *
- * 新路由前缀: /operations
+ * 运营人员日常操作：员工任务分配、安全管控
+ * 渠道相关功能已移到「渠道中心」
  */
 const routes: RouteRecordRaw[] = [
   {
@@ -126,30 +124,6 @@ const routes: RouteRecordRaw[] = [
             'CRM:ANTI_HARASSMENT:VIEW',
           ],
           hideInMenu: true,
-        },
-      },
-      {
-        name: 'OperationsWecomSync',
-        path: 'wecom-sync',
-        component: () => import('#/views/operations/wecom-sync/index.vue'),
-        meta: {
-          icon: 'ant-design:cloud-sync-outlined',
-          title: '企微同步',
-          appModule: 'OPERATIONS',
-          permissions: ['OPERATIONS:WECOM_SYNC:VIEW', 'CRM:WECOM:VIEW'],
-        },
-      },
-      // 会员同步（原零售模块）
-      {
-        name: 'OperationsMemberSync',
-        path: 'member-sync',
-        component: () =>
-          import('#/views/operations/member-sync/member-sync.vue'),
-        meta: {
-          icon: 'ant-design:sync-outlined',
-          title: '会员同步',
-          appModule: 'OPERATIONS',
-          permissions: ['OPERATIONS:MEMBER_SYNC:VIEW', 'CRM:RETAIL:VIEW'],
         },
       },
     ],

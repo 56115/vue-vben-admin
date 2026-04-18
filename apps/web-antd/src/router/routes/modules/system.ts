@@ -1,5 +1,10 @@
 import type { RouteRecordRaw } from 'vue-router';
 
+/**
+ * 系统设置路由
+ *
+ * 通用系统级配置，不包含渠道相关配置（已移到渠道中心）
+ */
 const routes: RouteRecordRaw[] = [
   {
     meta: {
@@ -9,43 +14,16 @@ const routes: RouteRecordRaw[] = [
     },
     name: 'System',
     path: '/system',
-    redirect: '/system/wecom-config',
+    redirect: '/system/settings',
     children: [
+      // 渠道配置已移到「渠道中心」，此处保留系统级通用配置入口
       {
-        name: 'WecomConfig',
-        path: 'wecom-config',
-        component: () => import('#/views/system/wecom-config/index.vue'),
+        name: 'SystemSettings',
+        path: 'settings',
+        component: () => import('#/views/_core/fallback/coming-soon.vue'),
         meta: {
-          icon: 'lucide:badge-check',
-          title: '企业微信配置',
-        },
-      },
-      {
-        name: 'WecomSync',
-        path: 'wecom-sync',
-        component: () => import('#/views/system/wecom-sync/index.vue'),
-        meta: {
-          icon: 'lucide:refresh-cw',
-          title: '数据同步',
-        },
-      },
-      {
-        name: 'WecomSyncStatistics',
-        path: 'wecom-sync/statistics',
-        component: () => import('#/views/system/wecom-sync/statistics.vue'),
-        meta: {
-          icon: 'ant-design:bar-chart-outlined',
-          title: '同步统计',
-          hideInMenu: true,
-        },
-      },
-      {
-        name: 'WecomUsers',
-        path: 'wecom-users',
-        component: () => import('#/views/system/wecom-users/index.vue'),
-        meta: {
-          icon: 'lucide:users',
-          title: '员工管理',
+          icon: 'lucide:sliders-horizontal',
+          title: '通用配置',
         },
       },
     ],
