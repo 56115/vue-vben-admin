@@ -3,6 +3,20 @@ import type { VbenFormSchema } from '@vben/common-ui';
 
 import { computed, markRaw, ref, onMounted } from 'vue';
 
+// 等待租户加载完成的辅助函数
+function waitForTenantsLoading(isLoadingRef: globalThis.Ref<boolean>): Promise<void> {
+  return new Promise((resolve) => {
+    const check = () => {
+      if (!isLoadingRef.value) {
+        resolve();
+      } else {
+        setTimeout(check, 50);
+      }
+    };
+    check();
+  });
+}
+
 import {
   AuthenticationLogin,
   SliderCaptcha,
@@ -184,6 +198,17 @@ const formSchema = computed((): VbenFormSchema[] => {
  * 自定义登录提交处理（包装 AuthenticationLogin 的默认行为）
  */
 async function handleLogin(values: any) {
+  // 如果正在加载租户，等待加载完成，避免表单在提交过程中被重新渲染
+  if (isLoadingTenants.value) {
+    await waitForTenantsLoading(isLoadingTenants);
+  }
+
+  // 如果租户列表为空且未在加载中，主动触发加载
+  if (tenants.value.length === 0 && !isLoadingTenants.value && values.username) {
+    await handleUsernameBlur(values.username);
+    await waitForTenantsLoading(isLoadingTenants);
+  }
+
   try {
     const loginData: any = {
       username: values.username,
@@ -255,7 +280,7 @@ async function handleLogin(values: any) {
   <AuthenticationLogin
     ref="loginComponentRef"
     :form-schema="formSchema"
-    :loading="authStore.loginLoading || isLoadingTenants"
+    :loading="authStore.loginLoading"
     :show-remember-me="true"
     @submit="handleLogin"
   />

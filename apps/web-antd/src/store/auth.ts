@@ -11,6 +11,7 @@ import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
 import { getAccessCodesApi, getUserInfoApi, loginApi, logoutApi } from '#/api';
+import { clearUserCache } from '#/api/core/user';
 import { $t } from '#/locales';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -29,6 +30,10 @@ export const useAuthStore = defineStore('auth', () => {
     params: Recordable<any>,
     onSuccess?: () => Promise<void> | void,
   ) {
+    // 重置权限检查状态，确保每次登录都重新生成菜单和路由
+    // 这解决了切换用户登录时菜单不刷新的问题
+    accessStore.setIsAccessChecked(false);
+
     // 异步处理用户登录操作并获取 accessToken
     let userInfo: null | UserInfo = null;
     try {
@@ -81,6 +86,7 @@ export const useAuthStore = defineStore('auth', () => {
       // 不做任何处理
     }
     resetAllStores();
+    clearUserCache();
     accessStore.setLoginExpired(false);
 
     // 回登录页带上当前路由地址

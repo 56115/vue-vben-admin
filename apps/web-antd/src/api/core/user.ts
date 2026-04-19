@@ -68,6 +68,14 @@ export function getCachedBackendUserInfo(): BackendUserInfo | null {
 }
 
 /**
+ * 清除用户缓存信息（登出时调用）
+ */
+export function clearUserCache(): void {
+  cachedBackendUserInfo = null;
+  cachedPermissions = [];
+}
+
+/**
  * 获取用户信息
  */
 export async function getUserInfoApi(): Promise<UserInfo> {
