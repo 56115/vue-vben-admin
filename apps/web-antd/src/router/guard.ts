@@ -124,8 +124,8 @@ function setupAccessGuard(router: Router) {
       return to;
     }
 
-    // 是否已经生成过动态路由
-    if (accessStore.isAccessChecked) {
+    // 是否已经生成过动态路由（accessMenus 为空时也需重新生成，避免缓存旧菜单）
+    if (accessStore.isAccessChecked && accessStore.accessMenus.length > 0) {
       // 检查路由的应用模块和权限要求
       const appModule = to.meta.appModule as string | undefined;
       const permissions = to.meta.permissions as string[] | undefined;

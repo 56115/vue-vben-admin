@@ -58,6 +58,19 @@ async function generateAccessible(
     }
   });
 
+  // 清理旧路由：移除不在 accessibleRoutes 中的路由（切换用户时关键）
+  if (root && root.children) {
+    const accessibleNames = new Set(
+      accessibleRoutes.map((r) => r.name).filter(Boolean),
+    );
+    root.children = root.children.filter((child) => {
+      // 保留没有 name 的路由（框架内部路由）
+      if (!child.name) return true;
+      // 只保留在新用户 accessibleRoutes 中的路由
+      return accessibleNames.has(child.name);
+    });
+  }
+
   if (root) {
     if (root.name) {
       router.removeRoute(root.name);
