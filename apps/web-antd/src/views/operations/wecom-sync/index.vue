@@ -340,7 +340,9 @@ const formatTime = (time: string | null | undefined) => {
 
 const fetchSyncStats = async () => {
   try {
-    const res = await requestClient.get<SyncStats>('/operations/wecom-sync/stats');
+    const res = await requestClient.get<SyncStats>(
+      '/operations/wecom-sync/stats',
+    );
     syncStats.value = res;
   } catch (error: any) {
     console.error('获取同步统计失败', error);
@@ -416,6 +418,69 @@ const stopPolling = () => {
     clearTimeout(pollingTimer);
     pollingTimer = null;
   }
+};
+
+const pollSessionStatus = async (
+  sessionId: string,
+  onComplete: (result: Record<string, unknown>) => void,
+  onError: (error: string) => void,
+) => {
+  const poll = async () => {
+    try {
+      const session = await requestClient.get<{
+        id: string;
+        status: string;
+        overallProgress: number;
+        tasks: Array<{
+          type: string;
+          label: string;
+          status: string;
+          progress: number;
+          error: string | null;
+        }>;
+        result: Record<string, unknown> | null;
+        error: string | null;
+      }>(`/async-task-sessions/${sessionId}`);
+
+      // 找到当前正在执行的任务
+      const runningTask = session.tasks.find((t) => t.status === 'RUNNING');
+      const currentLabel = runningTask?.label || '准备中...';
+
+      syncProgress.value = {
+        title: `全量同步 - ${currentLabel}`,
+        percent: session.overallProgress,
+        status: session.status === 'FAILED' ? 'failed' : 'active',
+        total: session.tasks.length,
+        processed: session.tasks.filter((t) => t.status === 'COMPLETED').length,
+      };
+
+      if (session.status === 'COMPLETED') {
+        syncProgress.value = {
+          ...syncProgress.value,
+          percent: 100,
+          status: 'completed',
+        };
+        setTimeout(() => {
+          syncProgress.value = null;
+        }, 2000);
+        onComplete(session.result || {});
+        return;
+      } else if (session.status === 'FAILED') {
+        setTimeout(() => {
+          syncProgress.value = null;
+        }, 2000);
+        onError(session.error || '同步失败');
+        return;
+      }
+
+      pollingTimer = setTimeout(poll, 1000);
+    } catch (error: any) {
+      console.error('轮询会话状态失败', error);
+      pollingTimer = setTimeout(poll, 2000);
+    }
+  };
+
+  poll();
 };
 
 const handleSyncUsers = async () => {
@@ -543,54 +608,58 @@ const handleSyncCustomers = async () => {
 };
 
 const handleSyncAll = async () => {
+  stopPolling();
   syncingAll.value = true;
   lastSyncResult.value = null;
 
-  message.loading('正在同步数据，这可能需要几分钟时间...', 0);
-
   try {
     const res = await requestClient.post<{
-      success: boolean;
-      users: { created: number; updated: number; failed: number };
-      customers: {
-        created: number;
-        updated: number;
-        failed: number;
-        relationsCreated: number;
-      };
-    }>('/operations/wecom-sync/all', {}, { timeout: 600000 });
+      async: boolean;
+      sessionId?: string;
+      success?: boolean;
+      users?: Record<string, unknown>;
+      customers?: Record<string, unknown>;
+      groups?: Record<string, unknown>;
+    }>('/operations/wecom-sync/all');
 
-    message.destroy();
+    if (res.async && res.sessionId) {
+      // 异步模式：轮询会话进度
+      pollSessionStatus(
+        res.sessionId,
+        async (result) => {
+          const users = (result.users || {}) as Record<string, number>;
+          const customers = (result.customers || {}) as Record<string, number>;
 
-    lastSyncResult.value = {
-      success: res.success,
-      message: `全量同步完成：员工 ${res.users.created}/${res.users.updated}，客户 ${res.customers.created}/${res.customers.updated}，关系 ${res.customers.relationsCreated} 条`,
-    };
-
-    message.success('同步完成！');
-    await fetchSyncStats();
-  } catch (error: any) {
-    message.destroy();
-
-    if (error.message && error.message.includes('timeout')) {
-      lastSyncResult.value = {
-        success: false,
-        message:
-          '同步请求超时，但后台仍在继续同步。请稍后刷新页面查看同步结果。',
-      };
-      message.warning('请求超时，但同步仍在后台进行，请稍后查看结果');
-
-      setTimeout(() => {
-        fetchSyncStats();
-      }, 30000);
+          lastSyncResult.value = {
+            success: true,
+            message: `全量同步完成：员工新增 ${users.created ?? 0} / 更新 ${users.updated ?? 0}，客户新增 ${customers.created ?? 0} / 更新 ${customers.updated ?? 0}`,
+          };
+          message.success('同步完成！');
+          syncingAll.value = false;
+          await fetchSyncStats();
+        },
+        (error) => {
+          lastSyncResult.value = { success: false, message: error };
+          message.error('同步失败');
+          syncingAll.value = false;
+        },
+      );
     } else {
+      // 同步降级模式
       lastSyncResult.value = {
-        success: false,
-        message: error.message || '全量同步失败',
+        success: res.success ?? false,
+        message: '全量同步完成（同步模式）',
       };
-      message.error('同步失败');
+      message.success('同步完成！');
+      syncingAll.value = false;
+      await fetchSyncStats();
     }
-  } finally {
+  } catch (error: any) {
+    lastSyncResult.value = {
+      success: false,
+      message: error.message || '全量同步失败',
+    };
+    message.error('同步失败');
     syncingAll.value = false;
   }
 };
