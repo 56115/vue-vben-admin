@@ -6,7 +6,7 @@ export default defineConfig(async () => {
     vite: {
       server: {
         host: '0.0.0.0',
-        port: 5667,
+        port: 5666,
         strictPort: false, // 如果端口被占用则自动切换
         // SPA 回退支持 - 所有路由返回 index.html
         historyApiFallback: {
