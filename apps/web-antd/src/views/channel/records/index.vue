@@ -14,7 +14,7 @@ const recordItems = [
   {
     name: '任务记录',
     icon: '📋',
-    desc: '查看同步任务执行记录（开发中）',
+    desc: '查看同步任务执行记录',
     path: '/channel/records/tasks',
   },
 ];
