@@ -59,7 +59,7 @@
                   <img
                     :src="formState.logoInvertedUrl"
                     alt="反色logo"
-                    class="h-16 w-auto object-contain bg-gray-800 p-2"
+                    class="h-16 w-auto bg-gray-800 object-contain p-2"
                   />
                 </div>
                 <div v-else>

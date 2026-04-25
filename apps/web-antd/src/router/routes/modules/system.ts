@@ -17,8 +17,7 @@ const routes: RouteRecordRaw[] = [
       {
         name: 'SystemSettings',
         path: 'settings',
-        component: () =>
-          import('#/views/settings/branding/index.vue'),
+        component: () => import('#/views/settings/branding/index.vue'),
         meta: {
           icon: 'lucide:sliders-horizontal',
           title: '通用配置',
