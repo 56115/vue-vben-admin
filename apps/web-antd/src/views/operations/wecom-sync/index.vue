@@ -158,6 +158,59 @@
           <span class="progress-title">{{ syncProgress.title }}</span>
           <span class="progress-percent">{{ syncProgress.percent }}%</span>
         </div>
+
+        <!-- 多子任务时显示各任务明细（全量同步） -->
+        <div v-if="showTaskDetails" class="task-list mb-3">
+          <div
+            v-for="task in syncTasks"
+            :key="task.type"
+            class="task-item"
+          >
+            <div class="task-item-header">
+              <span class="task-status-icon">
+                <span v-if="task.status === 'COMPLETED'" class="text-green-500">✓</span>
+                <span v-else-if="task.status === 'RUNNING'" class="text-blue-500">▶</span>
+                <span v-else-if="task.status === 'FAILED'" class="text-red-500">✗</span>
+                <span v-else class="text-gray-400">○</span>
+              </span>
+              <span class="task-label">{{ task.label }}</span>
+              <span v-if="task.status === 'RUNNING'" class="task-percent text-blue-500">
+                {{ task.percent }}%
+              </span>
+              <span v-else-if="task.status === 'PENDING'" class="task-hint text-gray-400">
+                等待中
+              </span>
+            </div>
+
+            <!-- RUNNING: 子任务进度条 -->
+            <Progress
+              v-if="task.status === 'RUNNING'"
+              :percent="task.percent"
+              size="small"
+              status="active"
+              class="task-progress-bar"
+            />
+
+            <!-- COMPLETED: 显示结果数量 -->
+            <div v-if="task.status === 'COMPLETED' && task.result" class="task-result">
+              <span v-if="task.result.created !== undefined">新增 {{ task.result.created }}</span>
+              <span v-if="task.result.updated !== undefined"> / 更新 {{ task.result.updated }}</span>
+              <span v-if="task.result.failed && task.result.failed > 0" class="text-red-400">
+                / 失败 {{ task.result.failed }}
+              </span>
+              <span v-if="task.result.relationsCreated !== undefined">
+                / 关系 {{ task.result.relationsCreated }} 条
+              </span>
+            </div>
+
+            <!-- FAILED: 显示错误 -->
+            <div v-if="task.status === 'FAILED' && task.error" class="task-error text-red-500">
+              {{ task.error.length > 50 ? task.error.slice(0, 50) + '...' : task.error }}
+            </div>
+          </div>
+        </div>
+
+        <!-- 总进度条 -->
         <Progress
           :percent="syncProgress.percent"
           :status="
@@ -169,12 +222,6 @@
           "
           :stroke-color="{ from: '#108ee9', to: '#87d068' }"
         />
-        <div class="progress-info">
-          <span v-if="syncProgress.total">
-            已处理: {{ syncProgress.processed || 0 }} / {{ syncProgress.total }}
-          </span>
-          <span v-else>正在准备...</span>
-        </div>
       </div>
 
       <Alert
@@ -220,7 +267,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import {
   message,
   Row,
@@ -293,7 +340,8 @@ const syncingAll = ref(false);
 const lastSyncResult = ref<SyncResult | null>(null);
 const syncProgress = ref<SyncProgress | null>(null);
 
-const { start: startPolling, stop: stopPolling } = useSessionPolling(syncProgress);
+const { start: startPolling, stop: stopPolling, tasks: syncTasks } = useSessionPolling(syncProgress);
+const showTaskDetails = computed(() => syncTasks.value.length > 1);
 
 const formatTime = (time: string | null | undefined) => {
   if (!time || time === 'Invalid Date') {
@@ -626,6 +674,60 @@ onMounted(() => {
   margin-top: 8px;
   font-size: 12px;
   color: var(--text-color-secondary, #999);
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  background: var(--component-background-light, #fafafa);
+  border: 1px solid var(--border-color, #f0f0f0);
+  border-radius: 6px;
+}
+
+.task-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.task-item-header {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+}
+
+.task-status-icon {
+  width: 16px;
+  text-align: center;
+}
+
+.task-label {
+  flex: 1;
+  font-weight: 500;
+  color: var(--text-color, #333);
+}
+
+.task-percent,
+.task-hint {
+  font-size: 12px;
+}
+
+.task-progress-bar {
+  margin: 0 24px;
+}
+
+.task-result {
+  margin-left: 24px;
+  font-size: 12px;
+  color: var(--text-color-secondary, #666);
+}
+
+.task-error {
+  margin-left: 24px;
+  font-size: 12px;
 }
 
 :deep(.dark) {
