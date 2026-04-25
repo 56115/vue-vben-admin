@@ -109,7 +109,7 @@ const routes: RouteRecordRaw[] = [
       {
         name: 'ChannelRecordsTasks',
         path: 'records/tasks',
-        component: () => import('#/views/_core/fallback/coming-soon.vue'),
+        component: () => import('#/views/channel/records/tasks/index.vue'),
         meta: {
           icon: 'ant-design:unordered-list-outlined',
           title: '任务记录',
