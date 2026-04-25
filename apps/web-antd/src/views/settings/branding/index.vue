@@ -5,11 +5,7 @@
       description="配置品牌信息、企业联系方式，打造专属企业形象"
     >
       <Spin :spinning="loading">
-        <Form
-          :model="formState"
-          layout="vertical"
-          @finish="onSave"
-        >
+        <Form :model="formState" layout="vertical" @finish="onSave">
           <!-- 品牌信息卡片 -->
           <Card
             title="品牌信息"
@@ -17,18 +13,12 @@
             :bordered="false"
           >
             <template #extra>
-              <span class="text-sm text-gray-400">
-                自定义系统品牌标识
-              </span>
+              <span class="text-sm text-gray-400"> 自定义系统品牌标识 </span>
             </template>
 
             <div class="grid grid-cols-1 gap-6">
               <!-- 系统名称 -->
-              <FormItem
-                label="系统名称"
-                name="systemName"
-                class="mb-0"
-              >
+              <FormItem label="系统名称" name="systemName" class="mb-0">
                 <Input
                   v-model:value="formState.systemName"
                   placeholder="请输入系统名称，如：我的企业平台"
@@ -44,94 +34,94 @@
               <!-- Logo 上传区域 -->
               <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <!-- 正色 Logo -->
-                <FormItem
-                  label="正色 Logo"
-                  name="logoUrl"
-                  class="mb-0"
-                >
-                  <div class="space-y-3">
-                    <Upload
-                      name="file"
-                      list-type="picture-card"
-                      :show-upload-list="false"
-                      :before-upload="() => false"
-                      @change="(info) => handleLogoUpload(info, 'logoUrl')"
-                      class="logo-uploader"
-                    >
-                      <div
-                        v-if="formState.logoUrl"
-                        class="flex h-full items-center justify-center p-4"
+                <div class="space-y-3">
+                  <div class="mb-2 text-sm font-medium">正色 Logo</div>
+                  <FormItem name="logoUrl" class="mb-0">
+                    <FormItemRest>
+                      <Upload
+                        name="file"
+                        list-type="picture-card"
+                        :show-upload-list="false"
+                        :before-upload="() => false"
+                        @change="(info) => handleLogoUpload(info, 'logoUrl')"
+                        class="logo-uploader"
                       >
-                        <img
-                          :src="formState.logoUrl"
-                          alt="正色logo"
-                          class="max-h-full max-w-full object-contain"
-                        />
-                      </div>
-                      <div
-                        v-else
-                        class="flex h-32 flex-col items-center justify-center text-gray-400"
-                      >
-                        <PlusOutlined class="mb-2 text-2xl" />
-                        <div class="text-sm">点击上传 Logo</div>
-                        <div class="mt-1 text-xs">建议尺寸：200×60px</div>
-                      </div>
-                    </Upload>
+                        <div
+                          v-if="formState.logoUrl"
+                          class="flex h-full items-center justify-center p-4"
+                        >
+                          <img
+                            :src="formState.logoUrl"
+                            alt="正色logo"
+                            class="max-h-full max-w-full object-contain"
+                          />
+                        </div>
+                        <div
+                          v-else
+                          class="flex h-32 flex-col items-center justify-center text-gray-400"
+                        >
+                          <PlusOutlined class="mb-2 text-2xl" />
+                          <div class="text-sm">点击上传 Logo</div>
+                          <div class="mt-1 text-xs">建议尺寸：200×60px</div>
+                        </div>
+                      </Upload>
+                    </FormItemRest>
                     <Input
                       v-model:value="formState.logoUrl"
                       placeholder="或直接粘贴图片 URL"
                       class="rounded-lg"
                     />
-                  </div>
-                  <div class="mt-2 text-xs text-gray-400">
+                  </FormItem>
+                  <div class="text-xs text-gray-400">
                     适用于浅色背景，建议使用透明背景 PNG
                   </div>
-                </FormItem>
+                </div>
 
                 <!-- 反色 Logo -->
-                <FormItem
-                  label="反色 Logo"
-                  name="logoInvertedUrl"
-                  class="mb-0"
-                >
-                  <div class="space-y-3">
-                    <Upload
-                      name="file"
-                      list-type="picture-card"
-                      :show-upload-list="false"
-                      :before-upload="() => false"
-                      @change="(info) => handleLogoUpload(info, 'logoInvertedUrl')"
-                      class="logo-uploader"
-                    >
-                      <div
-                        v-if="formState.logoInvertedUrl"
-                        class="flex h-full items-center justify-center bg-gray-800 p-4"
+                <div class="space-y-3">
+                  <div class="mb-2 text-sm font-medium">反色 Logo</div>
+                  <FormItem name="logoInvertedUrl" class="mb-0">
+                    <FormItemRest>
+                      <Upload
+                        name="file"
+                        list-type="picture-card"
+                        :show-upload-list="false"
+                        :before-upload="() => false"
+                        @change="
+                          (info) => handleLogoUpload(info, 'logoInvertedUrl')
+                        "
+                        class="logo-uploader"
                       >
-                        <img
-                          :src="formState.logoInvertedUrl"
-                          alt="反色logo"
-                          class="max-h-full max-w-full object-contain"
-                        />
-                      </div>
-                      <div
-                        v-else
-                        class="flex h-32 flex-col items-center justify-center bg-gray-800 text-gray-400"
-                      >
-                        <PlusOutlined class="mb-2 text-2xl" />
-                        <div class="text-sm">点击上传 Logo</div>
-                        <div class="mt-1 text-xs">建议尺寸：200×60px</div>
-                      </div>
-                    </Upload>
+                        <div
+                          v-if="formState.logoInvertedUrl"
+                          class="flex h-full items-center justify-center bg-gray-800 p-4"
+                        >
+                          <img
+                            :src="formState.logoInvertedUrl"
+                            alt="反色logo"
+                            class="max-h-full max-w-full object-contain"
+                          />
+                        </div>
+                        <div
+                          v-else
+                          class="flex h-32 flex-col items-center justify-center bg-gray-800 text-gray-400"
+                        >
+                          <PlusOutlined class="mb-2 text-2xl" />
+                          <div class="text-sm">点击上传 Logo</div>
+                          <div class="mt-1 text-xs">建议尺寸：200×60px</div>
+                        </div>
+                      </Upload>
+                    </FormItemRest>
                     <Input
                       v-model:value="formState.logoInvertedUrl"
                       placeholder="或直接粘贴图片 URL"
                       class="rounded-lg"
                     />
-                  </div>
-                  <div class="mt-2 text-xs text-gray-400">
+                  </FormItem>
+                  <div class="text-xs text-gray-400">
                     适用于深色背景，建议使用白色或浅色 Logo
                   </div>
-                </FormItem>
+                </div>
               </div>
             </div>
           </Card>
@@ -143,17 +133,11 @@
             :bordered="false"
           >
             <template #extra>
-              <span class="text-sm text-gray-400">
-                展示企业详细信息
-              </span>
+              <span class="text-sm text-gray-400"> 展示企业详细信息 </span>
             </template>
 
             <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <FormItem
-                label="企业全称"
-                name="companyName"
-                class="mb-0"
-              >
+              <FormItem label="企业全称" name="companyName" class="mb-0">
                 <Input
                   v-model:value="formState.companyName"
                   placeholder="请输入企业营业执照全称"
@@ -162,11 +146,7 @@
                 />
               </FormItem>
 
-              <FormItem
-                label="企业简称"
-                name="companyShortName"
-                class="mb-0"
-              >
+              <FormItem label="企业简称" name="companyShortName" class="mb-0">
                 <Input
                   v-model:value="formState.companyShortName"
                   placeholder="请输入企业简称或品牌名"
@@ -175,11 +155,7 @@
                 />
               </FormItem>
 
-              <FormItem
-                label="联系邮箱"
-                name="contactEmail"
-                class="mb-0"
-              >
+              <FormItem label="联系邮箱" name="contactEmail" class="mb-0">
                 <Input
                   v-model:value="formState.contactEmail"
                   placeholder="example@company.com"
@@ -188,11 +164,7 @@
                 />
               </FormItem>
 
-              <FormItem
-                label="联系电话"
-                name="contactPhone"
-                class="mb-0"
-              >
+              <FormItem label="联系电话" name="contactPhone" class="mb-0">
                 <Input
                   v-model:value="formState.contactPhone"
                   placeholder="400-xxx-xxxx"
@@ -219,11 +191,7 @@
 
           <!-- 操作按钮 -->
           <div class="flex justify-end gap-3">
-            <Button
-              size="large"
-              class="rounded-lg px-8"
-              @click="handleReset"
-            >
+            <Button size="large" class="rounded-lg px-8" @click="handleReset">
               重置
             </Button>
             <Button
@@ -252,6 +220,7 @@ import {
   Card,
   Form,
   FormItem,
+  FormItemRest,
   Input,
   Spin,
   Upload,
