@@ -303,7 +303,9 @@ const formatDate = (dateStr: string) => {
 /**
  * 获取变更类型标签信息
  */
-const getChangeTypeTag = (changeLog: string | null): { text: string; color: string } | null => {
+const getChangeTypeTag = (
+  changeLog: string | null,
+): { text: string; color: string } | null => {
   if (!changeLog) return null;
   if (changeLog.includes('创建')) {
     return { text: '创建', color: 'green' };
@@ -415,9 +417,12 @@ watch(
                     >
                       当前
                     </Tag>
-                    <Tag v-if="getChangeTypeTag(version.changeLog)" :color="getChangeTypeTag(version.changeLog)!.color">
-                    {{ getChangeTypeTag(version.changeLog)!.text }}
-                  </Tag>
+                    <Tag
+                      v-if="getChangeTypeTag(version.changeLog)"
+                      :color="getChangeTypeTag(version.changeLog)!.color"
+                    >
+                      {{ getChangeTypeTag(version.changeLog)!.text }}
+                    </Tag>
                   </Space>
                 </Descriptions.Item>
 

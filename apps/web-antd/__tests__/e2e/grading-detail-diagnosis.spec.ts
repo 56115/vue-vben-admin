@@ -97,7 +97,10 @@ test('诊断批改详情页面数据问题', async ({ page }) => {
   console.log('='.repeat(60));
 
   // 5. 截图
-  await page.screenshot({ path: 'test-results/grading-296.png', fullPage: true });
+  await page.screenshot({
+    path: 'test-results/grading-296.png',
+    fullPage: true,
+  });
   console.log('\n📸 截图: test-results/grading-296.png');
 
   // 6. 断言

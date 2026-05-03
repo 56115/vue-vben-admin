@@ -1,9 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 
-import {
-  SwapOutlined,
-} from '@ant-design/icons-vue';
+import { SwapOutlined } from '@ant-design/icons-vue';
 import {
   Button,
   Card,
@@ -93,7 +91,12 @@ const computeDiff = (textA: string, textB: string) => {
       result.push({ type: 'removed', content: linesA[idxA]!, lineA: idxA + 1 });
       idxA++;
     } else if (linesA[idxA] === linesB[idxB]) {
-      result.push({ type: 'same', content: linesA[idxA]!, lineA: idxA + 1, lineB: idxB + 1 });
+      result.push({
+        type: 'same',
+        content: linesA[idxA]!,
+        lineA: idxA + 1,
+        lineB: idxB + 1,
+      });
       idxA++;
       idxB++;
     } else {
@@ -101,20 +104,35 @@ const computeDiff = (textA: string, textB: string) => {
       const futureInB = linesB.indexOf(linesA[idxA]!, idxB + 1);
       const futureInA = linesA.indexOf(linesB[idxB]!, idxA + 1);
 
-      if (futureInB !== -1 && (futureInA === -1 || futureInB - idxB <= futureInA - idxA)) {
+      if (
+        futureInB !== -1 &&
+        (futureInA === -1 || futureInB - idxB <= futureInA - idxA)
+      ) {
         // Lines added in B
         while (idxB < futureInB) {
-          result.push({ type: 'added', content: linesB[idxB]!, lineB: idxB + 1 });
+          result.push({
+            type: 'added',
+            content: linesB[idxB]!,
+            lineB: idxB + 1,
+          });
           idxB++;
         }
       } else if (futureInA !== -1) {
         // Lines removed from A
         while (idxA < futureInA) {
-          result.push({ type: 'removed', content: linesA[idxA]!, lineA: idxA + 1 });
+          result.push({
+            type: 'removed',
+            content: linesA[idxA]!,
+            lineA: idxA + 1,
+          });
           idxA++;
         }
       } else {
-        result.push({ type: 'removed', content: linesA[idxA]!, lineA: idxA + 1 });
+        result.push({
+          type: 'removed',
+          content: linesA[idxA]!,
+          lineA: idxA + 1,
+        });
         result.push({ type: 'added', content: linesB[idxB]!, lineB: idxB + 1 });
         idxA++;
         idxB++;
@@ -127,8 +145,8 @@ const computeDiff = (textA: string, textB: string) => {
 
 const systemPromptDiff = computed(() => {
   if (!versionAContent.value || !versionBContent.value) return [];
-  const contentA = (versionAContent.value.systemPrompt || '') || '';
-  const contentB = (versionBContent.value.systemPrompt || '') || '';
+  const contentA = versionAContent.value.systemPrompt || '' || '';
+  const contentB = versionBContent.value.systemPrompt || '' || '';
   return computeDiff(contentA.trim(), contentB.trim());
 });
 
@@ -144,7 +162,9 @@ const loadVersions = async () => {
   if (!props.templateId) return;
   loading.value = true;
   try {
-    const res = await getPromptTemplateVersions(props.templateId, { limit: 100 });
+    const res = await getPromptTemplateVersions(props.templateId, {
+      limit: 100,
+    });
     versions.value = res.data;
 
     if (props.initialVersionA) versionAId.value = Number(props.initialVersionA);
@@ -207,8 +227,9 @@ watch(
             placeholder="选择版本 A"
             style="width: 100%"
             show-search
-            :filter-option="(input: string, option: { label: string }) =>
-              option.label.toLowerCase().includes(input.toLowerCase())
+            :filter-option="
+              (input: string, option: { label: string }) =>
+                option.label.toLowerCase().includes(input.toLowerCase())
             "
           />
         </Col>
@@ -230,8 +251,9 @@ watch(
             placeholder="选择版本 B"
             style="width: 100%"
             show-search
-            :filter-option="(input: string, option: { label: string }) =>
-              option.label.toLowerCase().includes(input.toLowerCase())
+            :filter-option="
+              (input: string, option: { label: string }) =>
+                option.label.toLowerCase().includes(input.toLowerCase())
             "
           />
         </Col>
@@ -257,7 +279,13 @@ watch(
                 {{ line.lineB ?? '' }}
               </span>
               <span class="diff-prefix">
-                {{ line.type === 'added' ? '+' : line.type === 'removed' ? '-' : ' ' }}
+                {{
+                  line.type === 'added'
+                    ? '+'
+                    : line.type === 'removed'
+                      ? '-'
+                      : ' '
+                }}
               </span>
               <span class="diff-content">{{ line.content }}</span>
             </div>
@@ -276,10 +304,23 @@ watch(
                 :value="Math.abs(comparison.latencyDiffPercent)"
                 :precision="1"
                 suffix="%"
-                :value-style="{ color: comparison.latencyDiffPercent < 0 ? '#52c41a' : comparison.latencyDiffPercent > 0 ? '#ff4d4f' : '#999' }"
+                :value-style="{
+                  color:
+                    comparison.latencyDiffPercent < 0
+                      ? '#52c41a'
+                      : comparison.latencyDiffPercent > 0
+                        ? '#ff4d4f'
+                        : '#999',
+                }"
               />
               <Typography.Text type="secondary">
-                {{ comparison.latencyDiffPercent < 0 ? 'B 更快' : comparison.latencyDiffPercent > 0 ? 'A 更快' : '持平' }}
+                {{
+                  comparison.latencyDiffPercent < 0
+                    ? 'B 更快'
+                    : comparison.latencyDiffPercent > 0
+                      ? 'A 更快'
+                      : '持平'
+                }}
               </Typography.Text>
             </Card>
           </Col>
@@ -290,10 +331,23 @@ watch(
                 :value="Math.abs(comparison.successRateDiff * 100)"
                 :precision="2"
                 suffix="%"
-                :value-style="{ color: comparison.successRateDiff > 0 ? '#52c41a' : comparison.successRateDiff < 0 ? '#ff4d4f' : '#999' }"
+                :value-style="{
+                  color:
+                    comparison.successRateDiff > 0
+                      ? '#52c41a'
+                      : comparison.successRateDiff < 0
+                        ? '#ff4d4f'
+                        : '#999',
+                }"
               />
               <Typography.Text type="secondary">
-                {{ comparison.successRateDiff > 0 ? 'B 更高' : comparison.successRateDiff < 0 ? 'A 更高' : '持平' }}
+                {{
+                  comparison.successRateDiff > 0
+                    ? 'B 更高'
+                    : comparison.successRateDiff < 0
+                      ? 'A 更高'
+                      : '持平'
+                }}
               </Typography.Text>
             </Card>
           </Col>
@@ -304,10 +358,23 @@ watch(
                 :value="Math.abs(comparison.tokenDiffPercent)"
                 :precision="1"
                 suffix="%"
-                :value-style="{ color: comparison.tokenDiffPercent < 0 ? '#52c41a' : comparison.tokenDiffPercent > 0 ? '#ff4d4f' : '#999' }"
+                :value-style="{
+                  color:
+                    comparison.tokenDiffPercent < 0
+                      ? '#52c41a'
+                      : comparison.tokenDiffPercent > 0
+                        ? '#ff4d4f'
+                        : '#999',
+                }"
               />
               <Typography.Text type="secondary">
-                {{ comparison.tokenDiffPercent < 0 ? 'B 更省' : comparison.tokenDiffPercent > 0 ? 'A 更省' : '持平' }}
+                {{
+                  comparison.tokenDiffPercent < 0
+                    ? 'B 更省'
+                    : comparison.tokenDiffPercent > 0
+                      ? 'A 更省'
+                      : '持平'
+                }}
               </Typography.Text>
             </Card>
           </Col>
@@ -316,9 +383,21 @@ watch(
         <Card size="small">
           <Space>
             <Tag
-              :color="comparison.recommendedVersion === 'A' ? 'blue' : comparison.recommendedVersion === 'B' ? 'green' : 'default'"
+              :color="
+                comparison.recommendedVersion === 'A'
+                  ? 'blue'
+                  : comparison.recommendedVersion === 'B'
+                    ? 'green'
+                    : 'default'
+              "
             >
-              推荐：{{ comparison.recommendedVersion === 'A' ? '版本 A' : comparison.recommendedVersion === 'B' ? '版本 B' : '持平' }}
+              推荐：{{
+                comparison.recommendedVersion === 'A'
+                  ? '版本 A'
+                  : comparison.recommendedVersion === 'B'
+                    ? '版本 B'
+                    : '持平'
+              }}
             </Tag>
             <Typography.Text type="secondary">
               {{ comparison.recommendation }}

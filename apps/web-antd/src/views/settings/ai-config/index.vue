@@ -559,8 +559,8 @@ onMounted(() => {
 .form-hint {
   margin-top: 4px;
   font-size: 12px;
-  color: var(--text-color-secondary, #999);
   line-height: 1.5;
+  color: var(--text-color-secondary, #999);
 }
 
 /* 配额卡片 */

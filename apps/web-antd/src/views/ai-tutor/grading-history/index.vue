@@ -141,9 +141,7 @@ const handleRefresh = () => {
 const printingId = ref<string | null>(null);
 
 // 打印批改报告
-const handlePrint = async (
-  record: GradingRecord | Record<string, any>,
-) => {
+const handlePrint = async (record: GradingRecord | Record<string, any>) => {
   printingId.value = record.recordId;
   try {
     const printData = {
@@ -308,11 +306,11 @@ onMounted(() => {
 }
 
 .page-header h2 {
+  display: flex;
+  gap: 8px;
+  align-items: center;
   margin: 0 0 8px;
   font-size: 24px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .header-icon {
