@@ -6,16 +6,20 @@ export type CredentialScope = 'platform' | 'tenant';
 
 export type CredentialTestStatus =
   | 'AUTH_FAILED'
+  | 'MODEL_NOT_SUPPORTED'
   | 'NETWORK_ERROR'
   | 'OK'
   | 'TIMEOUT'
-  | 'UNKNOWN';
+  | 'UNKNOWN'
+  | 'UNKNOWN_ERROR';
 
 export interface CredentialTestResult {
   message?: string;
   status: CredentialTestStatus;
   testedAt?: string;
 }
+
+type CredentialTestResponse = CredentialTestResult | CredentialTestStatus;
 
 export interface AiCredentialDto {
   apiKeyHint: string;
@@ -89,10 +93,17 @@ export function deleteCredential(scope: CredentialScope, id: number) {
   return requestClient.delete<void>(`${basePath(scope)}/${id}`);
 }
 
-export function testCredential(scope: CredentialScope, id: number) {
-  return requestClient.post<CredentialTestResult>(
+function normalizeCredentialTestResult(
+  result: CredentialTestResponse,
+): CredentialTestResult {
+  return typeof result === 'string' ? { status: result } : result;
+}
+
+export async function testCredential(scope: CredentialScope, id: number) {
+  const result = await requestClient.post<CredentialTestResponse>(
     `${basePath(scope)}/${id}/test`,
   );
+  return normalizeCredentialTestResult(result);
 }
 
 // Default-model bindings

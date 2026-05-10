@@ -32,17 +32,28 @@ describe('TestConnectionButton', () => {
   it('shows loading state while request is in flight', async () => {
     let resolve!: (v: { status: string }) => void;
     testCredentialMock.mockImplementation(
-      () => new Promise((r) => { resolve = r as never; }),
+      () =>
+        new Promise((r) => {
+          resolve = r as never;
+        }),
     );
     const wrapper = mount(TestConnectionButton, {
       props: { credentialId: 42, scope: 'tenant' },
     });
     await wrapper.find('[data-testid="test-connection-btn"]').trigger('click');
-    expect(wrapper.find('[data-testid="test-connection-btn"]').attributes('disabled')).toBeDefined();
+    expect(
+      wrapper
+        .find('[data-testid="test-connection-btn"]')
+        .attributes('disabled'),
+    ).toBeDefined();
     expect(wrapper.text()).toContain('测试中');
     resolve({ status: 'OK' });
     await flushPromises();
-    expect(wrapper.find('[data-testid="test-connection-btn"]').attributes('disabled')).toBeUndefined();
+    expect(
+      wrapper
+        .find('[data-testid="test-connection-btn"]')
+        .attributes('disabled'),
+    ).toBeUndefined();
   });
 
   it('on OK status: emits update:status and shows success toast', async () => {
@@ -59,13 +70,28 @@ describe('TestConnectionButton', () => {
   });
 
   it('on AUTH_FAILED: shows failure toast containing AUTH_FAILED', async () => {
-    testCredentialMock.mockResolvedValue({ status: 'AUTH_FAILED', message: 'invalid key' });
+    testCredentialMock.mockResolvedValue({
+      status: 'AUTH_FAILED',
+      message: 'invalid key',
+    });
     const wrapper = mount(TestConnectionButton, {
       props: { credentialId: 9, scope: 'tenant' },
     });
     await wrapper.find('[data-testid="test-connection-btn"]').trigger('click');
     await flushPromises();
     expect(messageError).toHaveBeenCalled();
+    const errArg = messageError.mock.calls[0]?.[0] as string;
+    expect(errArg).toContain('AUTH_FAILED');
+  });
+
+  it('handles raw status string responses from backend', async () => {
+    testCredentialMock.mockResolvedValue('AUTH_FAILED');
+    const wrapper = mount(TestConnectionButton, {
+      props: { credentialId: 9, scope: 'tenant' },
+    });
+    await wrapper.find('[data-testid="test-connection-btn"]').trigger('click');
+    await flushPromises();
+    expect(wrapper.emitted('update:status')?.[0]?.[0]).toBe('AUTH_FAILED');
     const errArg = messageError.mock.calls[0]?.[0] as string;
     expect(errArg).toContain('AUTH_FAILED');
   });

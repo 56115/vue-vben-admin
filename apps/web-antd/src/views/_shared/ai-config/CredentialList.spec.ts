@@ -49,7 +49,9 @@ describe('CredentialList', () => {
     expect(card.text()).toContain('OpenAI Default');
     expect(card.text()).toContain('sk-...abc');
     expect(card.text()).toContain('2'); // model count
-    expect(card.find('[data-testid="cred-status-badge"]').text()).toContain('OK');
+    expect(card.find('[data-testid="cred-status-badge"]').text()).toContain(
+      'OK',
+    );
   });
 
   it("emits 'edit' event with credential id when 编辑 clicked", async () => {
@@ -73,7 +75,9 @@ describe('CredentialList', () => {
     const wrapper = mount(CredentialList, { props: { scope: 'tenant' } });
     await flushPromises();
     await wrapper.find('[data-testid="cred-delete-1"]').trigger('click');
-    await wrapper.find('[data-testid="cred-delete-confirm-1"]').trigger('click');
+    await wrapper
+      .find('[data-testid="cred-delete-confirm-1"]')
+      .trigger('click');
     await flushPromises();
     const dlg = wrapper.find('[data-testid="cred-occupied-dialog"]');
     expect(dlg.exists()).toBe(true);
@@ -89,6 +93,19 @@ describe('CredentialList', () => {
     expect(tcb.exists()).toBe(true);
     expect(tcb.props('credentialId')).toBe(1);
     expect(tcb.props('scope')).toBe('tenant');
+  });
+
+  it('updates status badge after connection test event', async () => {
+    listCredentialsMock.mockResolvedValue(SAMPLE);
+    const wrapper = mount(CredentialList, { props: { scope: 'tenant' } });
+    await flushPromises();
+    wrapper
+      .findComponent({ name: 'TestConnectionButton' })
+      .vm.$emit('update:status', 'AUTH_FAILED');
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('[data-testid="cred-status-badge"]').text()).toContain(
+      'AUTH_FAILED',
+    );
   });
 
   it("forwards scope='platform' into listCredentials", async () => {

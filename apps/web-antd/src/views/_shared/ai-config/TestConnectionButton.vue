@@ -3,7 +3,11 @@ import { ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 
-import type { CredentialScope, CredentialTestStatus } from './credentials.api';
+import type {
+  CredentialScope,
+  CredentialTestResult,
+  CredentialTestStatus,
+} from './credentials.api';
 
 import { testCredential } from './credentials.api';
 
@@ -20,10 +24,18 @@ const emit = defineEmits<{
 
 const loading = ref(false);
 
+function normalizeTestResult(
+  result: CredentialTestResult | CredentialTestStatus,
+): CredentialTestResult {
+  return typeof result === 'string' ? { status: result } : result;
+}
+
 async function runTest() {
   loading.value = true;
   try {
-    const result = await testCredential(props.scope, props.credentialId);
+    const result = normalizeTestResult(
+      await testCredential(props.scope, props.credentialId),
+    );
     emit('update:status', result.status);
     if (result.status === 'OK') {
       message.success('连接测试成功');
@@ -56,19 +68,21 @@ async function runTest() {
 <style scoped>
 .test-conn-btn {
   display: inline-flex;
-  align-items: center;
   gap: 6px;
+  align-items: center;
   padding: 4px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  background: var(--ant-color-bg-container, #fff);
   border: 1px solid var(--ant-color-border, #d9d9d9);
   border-radius: 4px;
-  background: var(--ant-color-bg-container, #fff);
-  cursor: pointer;
-  font-size: 12px;
 }
+
 .test-conn-btn[disabled] {
   cursor: not-allowed;
   opacity: 0.6;
 }
+
 .spinner {
   width: 10px;
   height: 10px;
@@ -77,6 +91,7 @@ async function runTest() {
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
