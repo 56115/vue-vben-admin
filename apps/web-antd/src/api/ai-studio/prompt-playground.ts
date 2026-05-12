@@ -156,7 +156,10 @@ export async function getTestHistoryStats(
 
 /**
  * 创建 SSE 流式测试连接
- * 返回 EventSource 用于接收流式响应
+ * 使用 fetch + ReadableStream 读取后端 SSE 流，支持 JWT Authorization 头
+ *
+ * 后端端点: GET /ai-studio/prompt-templates/:id/playground/stream
+ * SSE 事件类型: meta | token | done | error
  */
 export function createLlmTestStream(
   templateId: string,
@@ -165,56 +168,122 @@ export function createLlmTestStream(
   onError?: (error: Error) => void,
   onComplete?: () => void,
 ): { abort: () => void } {
-  // 由于 SSE 需要 GET 请求，我们需要使用 POST 端点并轮询
-  // 或者使用 fetch API 处理 SSE
   const controller = new AbortController();
 
   const startStream = async () => {
     try {
-      // 使用同步 API 进行测试（简化实现）
-      // 生产环境应该使用真正的 SSE 或 WebSocket
-      const result = await testPromptWithLlmSync(templateId, params);
+      // 从 access store 读取 token（与 requestClient 同一来源）
+      const { useAccessStore } = await import('@vben/stores');
+      const accessStore = useAccessStore();
+      const token = accessStore.accessToken;
 
-      // 模拟流式事件
-      onEvent({
-        type: LlmStreamEventType.START,
-        data: {
-          model: result.model,
-          renderedPrompt: result.renderedPrompt,
+      // 构建查询参数
+      const query = new URLSearchParams();
+      query.set('variables', JSON.stringify(params.variables));
+      if (params.model) query.set('model', params.model);
+      if (params.temperature !== undefined)
+        query.set('temperature', String(params.temperature));
+      if (params.maxTokens !== undefined)
+        query.set('maxTokens', String(params.maxTokens));
+
+      const url = `${import.meta.env.VITE_GLOB_API_URL || ''}/ai-studio/prompt-templates/${templateId}/playground/stream?${query.toString()}`;
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: token ? `Bearer ${token}` : '',
+          Accept: 'text/event-stream',
         },
-        timestamp: Date.now(),
+        signal: controller.signal,
       });
 
-      if (result.response) {
-        // 模拟逐字输出
-        for (let i = 0; i < result.response.length; i += 10) {
-          if (controller.signal.aborted) break;
-          const chunk = result.response.slice(
-            i,
-            Math.min(i + 10, result.response.length),
-          );
-          onEvent({
-            type: LlmStreamEventType.CONTENT,
-            data: { content: chunk },
-            timestamp: Date.now(),
-          });
-          await new Promise((resolve) => setTimeout(resolve, 50));
+      if (!response.ok) {
+        throw new Error(`SSE request failed: ${response.status} ${response.statusText}`);
+      }
+
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error('Response body is not readable');
+      }
+
+      // SSE 解析状态
+      let buffer = '';
+      let metaReceived = false;
+
+      const decoder = new TextDecoder();
+
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        if (controller.signal.aborted) break;
+
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+
+        // 按行分割处理 SSE 事件
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || ''; // 保留未完整行
+
+        let currentEventType = '';
+        let currentData = '';
+
+        for (const line of lines) {
+          if (line.startsWith('event:')) {
+            currentEventType = line.slice(6).trim();
+          } else if (line.startsWith('data:')) {
+            currentData = line.slice(5).trim();
+          } else if (line === '' && currentEventType) {
+            // 事件结束，处理
+            handleSseEvent(
+              currentEventType,
+              currentData,
+              onEvent,
+              () => {
+                metaReceived = true;
+              },
+            );
+            currentEventType = '';
+            currentData = '';
+          }
         }
       }
 
-      onEvent({
-        type: LlmStreamEventType.DONE,
-        data: {
-          content: result.response,
-          model: result.model,
-          usage: result.tokenUsage,
-          latencyMs: result.latencyMs,
-        },
-        timestamp: Date.now(),
-      });
+      // 处理 buffer 中剩余内容
+      if (buffer.trim()) {
+        const lines = buffer.split('\n');
+        let currentEventType = '';
+        let currentData = '';
+        for (const line of lines) {
+          if (line.startsWith('event:')) {
+            currentEventType = line.slice(6).trim();
+          } else if (line.startsWith('data:')) {
+            currentData = line.slice(5).trim();
+          }
+        }
+        if (currentEventType) {
+          handleSseEvent(currentEventType, currentData, onEvent, () => {
+            metaReceived = true;
+          });
+        }
+      }
+
+      if (!metaReceived) {
+        // 没有收到任何事件，但流正常结束
+        onEvent({
+          type: LlmStreamEventType.DONE,
+          data: {},
+          timestamp: Date.now(),
+        });
+      }
 
       onComplete?.();
     } catch (error) {
+      if ((error as Error).name === 'AbortError') {
+        // 用户主动取消，不触发 error 回调
+        onComplete?.();
+        return;
+      }
       onEvent({
         type: LlmStreamEventType.ERROR,
         data: { error: (error as Error).message },
@@ -229,4 +298,69 @@ export function createLlmTestStream(
   return {
     abort: () => controller.abort(),
   };
+}
+
+/**
+ * 解析单个 SSE 事件并转换为 LlmStreamEvent
+ */
+function handleSseEvent(
+  eventType: string,
+  data: string,
+  onEvent: (event: LlmStreamEvent) => void,
+  _onMeta: () => void,
+): void {
+  let payload: Record<string, unknown> = {};
+  try {
+    payload = JSON.parse(data);
+  } catch {
+    // 非 JSON 数据，当作纯文本
+  }
+
+  switch (eventType) {
+    case 'meta': {
+      _onMeta();
+      onEvent({
+        type: LlmStreamEventType.START,
+        data: {
+          renderedPrompt: payload.renderedPrompt as
+            | { systemPrompt: string; userPrompt: string }
+            | undefined,
+          usage: payload.tokensIn
+            ? {
+                promptTokens: Number(payload.tokensIn),
+                completionTokens: Number(payload.tokensOut || 0),
+                totalTokens:
+                  Number(payload.tokensIn) + Number(payload.tokensOut || 0),
+              }
+            : undefined,
+        },
+        timestamp: Date.now(),
+      });
+      break;
+    }
+    case 'token': {
+      onEvent({
+        type: LlmStreamEventType.CONTENT,
+        data: { content: String(payload.delta || '') },
+        timestamp: Date.now(),
+      });
+      break;
+    }
+    case 'done': {
+      onEvent({
+        type: LlmStreamEventType.DONE,
+        data: {},
+        timestamp: Date.now(),
+      });
+      break;
+    }
+    case 'error': {
+      onEvent({
+        type: LlmStreamEventType.ERROR,
+        data: { error: String(payload.error || 'Unknown SSE error') },
+        timestamp: Date.now(),
+      });
+      break;
+    }
+  }
 }
