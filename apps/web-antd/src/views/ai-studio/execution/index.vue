@@ -36,6 +36,7 @@ import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import ExecutionFlowView from './components/ExecutionFlowView.vue';
 import GradingQuestionList from './components/GradingQuestionList.vue';
+import ExecutionControlPanel from './components/ExecutionControlPanel.vue';
 import { useFeatureModules } from '../composables/useFeatureModules';
 import type {
   GradingQuestion,
@@ -404,6 +405,18 @@ const handleRetry = async (id: number) => {
   }
 };
 
+const handleControlUpdated = async () => {
+  await fetchData();
+  if (detailExecution.value) {
+    const fresh = dataSource.value.find(
+      (item) => item.id === detailExecution.value!.id,
+    );
+    if (fresh) {
+      detailExecution.value = fresh;
+    }
+  }
+};
+
 const openTrace = (traceId: string) => {
   router.push(`/ai-studio/trace/${traceId}`);
 };
@@ -645,6 +658,14 @@ onMounted(() => {
         :style="{ cursor: isDragging ? 'ew-resize' : 'ew-resize' }"
       ></div>
       <div v-if="detailExecution" class="execution-detail">
+        <ExecutionControlPanel
+          :pipeline-key="detailExecution.pipelineKey"
+          :execution-id="String(detailExecution.id)"
+          :status="detailExecution.status"
+          data-testid="execution-control-panel"
+          @updated="handleControlUpdated"
+        />
+
         <Descriptions :column="2" bordered size="small">
           <Descriptions.Item label="执行ID">{{
             detailExecution.id
