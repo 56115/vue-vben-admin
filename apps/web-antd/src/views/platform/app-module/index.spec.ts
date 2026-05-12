@@ -7,6 +7,7 @@ const getMock = vi.fn();
 const postMock = vi.fn();
 const putMock = vi.fn();
 const deleteMock = vi.fn();
+const hasPermissionMock = vi.fn();
 
 vi.mock('#/api/request', () => ({
   requestClient: {
@@ -17,20 +18,41 @@ vi.mock('#/api/request', () => ({
   },
 }));
 
+vi.mock('#/utils/permissions', () => ({
+  hasPermission: (...args: unknown[]) => hasPermissionMock(...args),
+}));
+
 vi.mock('ant-design-vue', async () => {
   const vue = await import('vue');
   return {
+    Button: { name: 'Button', template: '<button><slot /></button>' },
+    Form: Object.assign(
+      { name: 'Form', template: '<form><slot /></form>' },
+      { Item: { name: 'FormItem', template: '<div><slot /></div>' } },
+    ),
+    Input: Object.assign(
+      { name: 'Input', template: '<input />' },
+      { TextArea: { name: 'InputTextArea', template: '<textarea />' } },
+    ),
     message: { error: vi.fn(), success: vi.fn() },
+    Modal: { name: 'Modal', template: '<div><slot /></div>' },
+    Popconfirm: { name: 'Popconfirm', template: '<span><slot /></span>' },
+    Space: { name: 'Space', template: '<span><slot /></span>' },
     Table: {
       name: 'Table',
       props: ['columns', 'dataSource'],
       setup(props: { columns: unknown[]; dataSource: unknown[] }) {
         return () =>
-          vue.h(
-            'div',
-            { 'data-testid': 'table' },
+          vue.h('div', { 'data-testid': 'table' }, [
             JSON.stringify({ columns: props.columns, rows: props.dataSource }),
-          );
+            vue.h(
+              'div',
+              {},
+              props.columns.some((column: any) => column.key === 'action')
+                ? '编辑 删除'
+                : '',
+            ),
+          ]);
       },
     },
     Tag: { name: 'Tag', template: '<span><slot /></span>' },
@@ -58,6 +80,7 @@ describe('AppModulePage', () => {
     postMock.mockReset();
     putMock.mockReset();
     deleteMock.mockReset();
+    hasPermissionMock.mockReset().mockReturnValue(false);
   });
 
   it('loads the protected system catalog route', async () => {
@@ -70,12 +93,23 @@ describe('AppModulePage', () => {
     );
   });
 
-  it('does not render create edit or delete actions', async () => {
+  it('does not render create edit or delete actions without matching permissions', async () => {
     const wrapper = mount(AppModulePage);
     await flushPromises();
 
     expect(wrapper.text()).not.toContain('新增模块');
     expect(wrapper.text()).not.toContain('编辑');
     expect(wrapper.text()).not.toContain('删除');
+  });
+
+  it('renders edit and delete actions with matching permissions', async () => {
+    hasPermissionMock.mockImplementation((code: string) =>
+      ['PLATFORM:APP_MODULE:EDIT', 'PLATFORM:APP_MODULE:DELETE'].includes(code),
+    );
+    const wrapper = mount(AppModulePage);
+    await flushPromises();
+
+    expect(wrapper.text()).toContain('编辑');
+    expect(wrapper.text()).toContain('删除');
   });
 });

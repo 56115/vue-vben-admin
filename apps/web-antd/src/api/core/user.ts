@@ -84,17 +84,9 @@ export async function getUserInfoApi(): Promise<UserInfo> {
   // 缓存完整的后端用户信息
   cachedBackendUserInfo = result;
 
-  // 缓存权限码（合并所有角色的权限 + 订阅的模块代码）
+  // 缓存权限码：只包含角色权限，不混入租户订阅模块码。
   const rolePermissions = result.roles.flatMap((role) => role.permissions);
-  const now = new Date();
-  const subscribedModules = result.tenant.subscriptions
-    .filter(
-      (s) =>
-        (s.status === 'ACTIVE' || s.status === 'TRIAL') &&
-        (s.expiredAt === null || new Date(s.expiredAt) > now),
-    )
-    .map((s) => s.appModuleCode);
-  cachedPermissions = [...new Set([...rolePermissions, ...subscribedModules])];
+  cachedPermissions = [...new Set(rolePermissions)];
 
   // 提取角色名称列表
   const roleNames = result.roles.map((role) => role.roleName);
