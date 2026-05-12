@@ -34,7 +34,7 @@ const routes: RouteRecordRaw[] = [
           icon: 'ant-design:appstore-outlined',
           title: '应用模块',
           appModule: 'PLATFORM',
-          permissions: ['PLATFORM:APP_MODULE:LIST'],
+          permissions: ['PLATFORM:APP_MODULE:MANAGE'],
         },
       },
       {

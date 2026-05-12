@@ -221,7 +221,7 @@ async function fetchAllAppModules() {
   appModulesLoading.value = true;
   try {
     const res = await requestClient.get<{ items: AppModule[]; total: number }>(
-      '/platform/app-modules',
+      '/platform/app-modules/subscription-options',
     );
     allAppModules.value = res.items || [];
   } catch (e: any) {
