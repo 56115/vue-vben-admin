@@ -85,7 +85,12 @@ vi.mock('ant-design-vue', async () => {
             : null,
         ]);
 
-      return () => vue.h('ul', { 'data-testid': 'category-tree' }, props.treeData.map(renderNode));
+      return () =>
+        vue.h(
+          'ul',
+          { 'data-testid': 'category-tree' },
+          props.treeData.map(renderNode),
+        );
     },
   };
 
@@ -96,7 +101,11 @@ vi.mock('ant-design-vue', async () => {
 
   return {
     Button,
-    Card: { name: 'Card', template: '<section><slot name="title" /><slot name="extra" /><slot /></section>' },
+    Card: {
+      name: 'Card',
+      template:
+        '<section><slot name="title" /><slot name="extra" /><slot /></section>',
+    },
     Empty: { name: 'Empty', template: '<div />' },
     Form: Object.assign(
       { name: 'Form', template: '<form><slot /></form>' },
@@ -127,7 +136,10 @@ vi.mock('ant-design-vue', async () => {
 });
 
 vi.mock('@ant-design/icons-vue', () => {
-  const icon = (name: string) => ({ name, template: `<span data-icon="${name}" />` });
+  const icon = (name: string) => ({
+    name,
+    template: `<span data-icon="${name}" />`,
+  });
   return {
     AppstoreOutlined: icon('AppstoreOutlined'),
     BarChartOutlined: icon('BarChartOutlined'),
@@ -149,7 +161,11 @@ vi.mock('@ant-design/icons-vue', () => {
 });
 
 vi.mock('./components/MaterialCard.vue', () => ({
-  default: { name: 'MaterialCard', props: ['material'], template: '<article class="material-card">{{ material.name }}</article>' },
+  default: {
+    name: 'MaterialCard',
+    props: ['material'],
+    template: '<article class="material-card">{{ material.name }}</article>',
+  },
 }));
 vi.mock('./components/BatchToolbar.vue', () => ({
   default: { name: 'BatchToolbar', template: '<div />' },
@@ -196,7 +212,9 @@ describe('MaterialPage category management', () => {
     putMock.mockReset().mockResolvedValue({});
     deleteMock.mockReset().mockResolvedValue({});
     pushMock.mockReset();
-    confirmMock.mockReset().mockImplementation(({ onOk }: { onOk?: () => unknown }) => onOk?.());
+    confirmMock
+      .mockReset()
+      .mockImplementation(({ onOk }: { onOk?: () => unknown }) => onOk?.());
     messageMock.error.mockReset();
     messageMock.success.mockReset();
     messageMock.warning.mockReset();
@@ -209,14 +227,18 @@ describe('MaterialPage category management', () => {
 
     await wrapper.get('[data-testid="select-category-1"]').trigger('click');
     await flushPromises();
-    expect(wrapper.findComponent({ name: 'Tree' }).props('selectedKeys')).toEqual([1]);
+    expect(
+      wrapper.findComponent({ name: 'Tree' }).props('selectedKeys'),
+    ).toEqual([1]);
 
     await wrapper.get('[data-testid="delete-category-1"]').trigger('click');
     await flushPromises();
 
-    expect(confirmMock).toHaveBeenCalledWith(expect.objectContaining({
-      title: '确认删除分类',
-    }));
+    expect(confirmMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: '确认删除分类',
+      }),
+    );
     expect(deleteMock).toHaveBeenCalledWith('/messaging/material/categories/1');
     expect(getMock).toHaveBeenCalledWith('/messaging/material/categories/tree');
     expect(getMock).toHaveBeenCalledWith(
@@ -225,7 +247,9 @@ describe('MaterialPage category management', () => {
         params: expect.objectContaining({ page: 1, pageSize: 20 }),
       }),
     );
-    expect(wrapper.findComponent({ name: 'Tree' }).props('selectedKeys')).toEqual(['all']);
+    expect(
+      wrapper.findComponent({ name: 'Tree' }).props('selectedKeys'),
+    ).toEqual(['all']);
   });
 
   it('shows the backend reason when a category cannot be deleted', async () => {
@@ -248,7 +272,9 @@ describe('MaterialPage category management', () => {
     expect(messageMock.error).toHaveBeenCalledWith(
       'Cannot delete category with materials',
     );
-    expect(wrapper.findComponent({ name: 'Tree' }).props('selectedKeys')).toEqual([1]);
+    expect(
+      wrapper.findComponent({ name: 'Tree' }).props('selectedKeys'),
+    ).toEqual([1]);
   });
 
   it('keeps the all categories tree node visible when no categories exist', async () => {
@@ -267,7 +293,11 @@ describe('MaterialPage category management', () => {
     const wrapper = mount(MaterialPage);
     await flushPromises();
 
-    expect(wrapper.get('[data-testid="select-category-all"]').exists()).toBe(true);
-    expect(wrapper.findComponent({ name: 'Tree' }).props('selectedKeys')).toEqual(['all']);
+    expect(wrapper.get('[data-testid="select-category-all"]').exists()).toBe(
+      true,
+    );
+    expect(
+      wrapper.findComponent({ name: 'Tree' }).props('selectedKeys'),
+    ).toEqual(['all']);
   });
 });

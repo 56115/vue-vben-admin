@@ -111,9 +111,7 @@ const stepBindings = computed(() => {
 
 // 当前选中的绑定
 const selectedBinding = computed(() => {
-  return stepBindings.value.find(
-    (b) => b.id === selectedBindingId.value,
-  );
+  return stepBindings.value.find((b) => b.id === selectedBindingId.value);
 });
 
 // 当前选中的提示词模板
@@ -313,7 +311,8 @@ const handleVariableClick = (varName: string) => {
 
   // 获取变量来源信息
   const varDef = templateVariables.value.find((v) => v.name === varName);
-  const source = varDef?.description || (varDef?.inferred ? '自动推断' : '模板定义');
+  const source =
+    varDef?.description || (varDef?.inferred ? '自动推断' : '模板定义');
 
   selectedVariable.value = {
     name: varName,
@@ -400,7 +399,11 @@ watch(
                 :value="binding.id"
               >
                 <Space>
-                  <Tag :color="binding.bindingType === 'PRIMARY' ? 'blue' : 'orange'">
+                  <Tag
+                    :color="
+                      binding.bindingType === 'PRIMARY' ? 'blue' : 'orange'
+                    "
+                  >
                     {{ binding.bindingType }}
                   </Tag>
                   <span>{{ binding.promptTemplate?.name }}</span>
@@ -530,9 +533,7 @@ watch(
                   <Tag color="green">
                     预估成本: ${{ tokenCost.cost.toFixed(4) }}
                   </Tag>
-                  <Tag>
-                    字符数: {{ renderResult?.text?.length || 0 }}
-                  </Tag>
+                  <Tag> 字符数: {{ renderResult?.text?.length || 0 }} </Tag>
                 </Space>
               </div>
 
@@ -554,7 +555,9 @@ watch(
 
               <!-- 渲染内容 -->
               <div class="render-content">
-                <pre v-if="showRaw" class="content-raw">{{ renderResult?.text }}</pre>
+                <pre v-if="showRaw" class="content-raw">{{
+                  renderResult?.text
+                }}</pre>
                 <pre
                   v-else-if="highlightVars"
                   ref="highlightedContentRef"
@@ -562,7 +565,9 @@ watch(
                   v-html="highlightedContent"
                   @click="handleContentClick"
                 />
-                <pre v-else class="content-rendered">{{ renderResult?.text }}</pre>
+                <pre v-else class="content-rendered">{{
+                  renderResult?.text
+                }}</pre>
               </div>
 
               <!-- 变量替换追踪 -->
@@ -623,7 +628,9 @@ watch(
             </Descriptions.Item>
 
             <Descriptions.Item label="原始值">
-              <pre class="trace-value">{{ JSON.stringify(selectedVariable.original, null, 2) }}</pre>
+              <pre class="trace-value">{{
+                JSON.stringify(selectedVariable.original, null, 2)
+              }}</pre>
             </Descriptions.Item>
 
             <Descriptions.Item label="转换后">
@@ -637,9 +644,7 @@ watch(
               <span v-else-if="typeof selectedVariable.original === 'object'">
                 JSON 对象被序列化为字符串
               </span>
-              <span v-else>
-                直接转换为字符串
-              </span>
+              <span v-else> 直接转换为字符串 </span>
             </Descriptions.Item>
           </Descriptions>
 

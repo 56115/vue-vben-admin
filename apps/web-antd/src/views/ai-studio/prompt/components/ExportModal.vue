@@ -45,7 +45,9 @@ const emit = defineEmits<{
 
 // ==================== 状态 ====================
 
-const activeFormat = ref<'json' | 'langchain' | 'langchain-chat' | 'openai' | 'markdown'>('json');
+const activeFormat = ref<
+  'json' | 'langchain' | 'langchain-chat' | 'openai' | 'markdown'
+>('json');
 const generatingLink = ref(false);
 const previewLink = ref('');
 
@@ -73,7 +75,11 @@ const previewContent = computed(() => {
 const formatOptions = [
   { value: 'json', label: 'JSON', desc: 'OmniReach 标准格式' },
   { value: 'langchain', label: 'LangChain', desc: 'LangChain PromptTemplate' },
-  { value: 'langchain-chat', label: 'LangChain Chat', desc: 'LangChain ChatPromptTemplate' },
+  {
+    value: 'langchain-chat',
+    label: 'LangChain Chat',
+    desc: 'LangChain ChatPromptTemplate',
+  },
   { value: 'openai', label: 'OpenAI API', desc: 'OpenAI API 请求格式' },
   { value: 'markdown', label: 'Markdown', desc: 'Markdown 文档格式' },
 ];
@@ -91,15 +97,17 @@ const handleCopy = () => {
 };
 
 const handleDownload = () => {
-  const { format } = activeFormat.value === 'langchain-chat'
-    ? { format: 'langchain' as const }
-    : { format: activeFormat.value as 'json' | 'langchain' | 'markdown' };
+  const { format } =
+    activeFormat.value === 'langchain-chat'
+      ? { format: 'langchain' as const }
+      : { format: activeFormat.value as 'json' | 'langchain' | 'markdown' };
 
   const content = previewContent.value;
-  const safeName = (props.template.key || props.template.name || 'prompt').replace(
-    /[^a-z0-9_-]/gi,
-    '_',
-  );
+  const safeName = (
+    props.template.key ||
+    props.template.name ||
+    'prompt'
+  ).replace(/[^a-z0-9_-]/gi, '_');
 
   let filename: string;
   let mimeType: string;
@@ -155,7 +163,11 @@ const handleCopyLink = () => {
         <!-- 左侧：格式选择 -->
         <Col :span="8">
           <Card size="small" title="选择格式">
-            <Radio.Group v-model:value="activeFormat" direction="vertical" class="format-radio-group">
+            <Radio.Group
+              v-model:value="activeFormat"
+              direction="vertical"
+              class="format-radio-group"
+            >
               <Radio
                 v-for="opt in formatOptions"
                 :key="opt.value"
@@ -183,14 +195,8 @@ const handleCopyLink = () => {
                 生成预览链接
               </Button>
             </div>
-            <div v-else
->
-              <Input
-                :value="previewLink"
-                size="small"
-                readonly
-                class="mb-2"
-              >
+            <div v-else>
+              <Input :value="previewLink" size="small" readonly class="mb-2">
                 <template #addonAfter>
                   <Button size="small" @click="handleCopyLink">
                     <CopyOutlined />
@@ -211,7 +217,10 @@ const handleCopyLink = () => {
               <Space>
                 <ExportOutlined />
                 <span>预览</span>
-                <Tag color="blue">{{ formatOptions.find((o: any) => o.value === activeFormat)?.label }}</Tag>
+                <Tag
+                  color="blue"
+                  >{{ formatOptions.find((o: any) => o.value === activeFormat)?.label }}</Tag
+                >
               </Space>
             </template>
             <template #extra>

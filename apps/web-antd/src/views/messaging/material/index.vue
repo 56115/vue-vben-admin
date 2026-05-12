@@ -109,8 +109,11 @@ function flattenCategories(items: CategoryItem[]): CategoryItem[] {
 function getCategoryErrorMessage(error: unknown) {
   const responseData =
     error && typeof error === 'object' && 'response' in error
-      ? (error as { response?: { data?: { error?: string; message?: string } } })
-          .response?.data
+      ? (
+          error as {
+            response?: { data?: { error?: string; message?: string } };
+          }
+        ).response?.data
       : undefined;
 
   return responseData?.message || responseData?.error || '删除分类失败';
@@ -660,18 +663,18 @@ onMounted(() => {
 
 .tree-node {
   display: flex;
+  gap: 6px;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   min-width: 0;
-  gap: 6px;
 }
 
 .tree-node__label {
   display: inline-flex;
-  min-width: 0;
   gap: 6px;
   align-items: center;
+  min-width: 0;
 }
 
 .tree-node__delete {
