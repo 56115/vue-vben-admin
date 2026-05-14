@@ -144,6 +144,17 @@ const routes: RouteRecordRaw[] = [
           permissions: ['AI_STUDIO:METRICS:COST'],
         },
       },
+      {
+        name: 'AITenantConfig',
+        path: 'tenant-config',
+        component: () => import('#/views/ai-studio/tenant-config/index.vue'),
+        meta: {
+          icon: 'ant-design:setting-outlined',
+          title: '租户配置',
+          appModule: 'AI_STUDIO',
+          permissions: ['AI_STUDIO:TENANT_CONFIG:READ'],
+        },
+      },
     ],
   },
 ];
