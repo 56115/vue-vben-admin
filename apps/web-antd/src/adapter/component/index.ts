@@ -31,45 +31,30 @@ import { IconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 import { isEmpty } from '@vben/utils';
 
+import Button from 'ant-design-vue/es/button';
+import Checkbox, { CheckboxGroup } from 'ant-design-vue/es/checkbox';
+import Divider from 'ant-design-vue/es/divider';
+import Input, { InputPassword, Textarea } from 'ant-design-vue/es/input';
+import InputNumber from 'ant-design-vue/es/input-number';
+import Radio, { RadioGroup } from 'ant-design-vue/es/radio';
+import Rate from 'ant-design-vue/es/rate';
+import Select from 'ant-design-vue/es/select';
+import Space from 'ant-design-vue/es/space';
+import Switch from 'ant-design-vue/es/switch';
+import Upload from 'ant-design-vue/es/upload';
 import { message, notification } from 'ant-design-vue';
 
 const AutoComplete = defineAsyncComponent(
   () => import('ant-design-vue/es/auto-complete'),
 );
-const Button = defineAsyncComponent(() => import('ant-design-vue/es/button'));
-const Checkbox = defineAsyncComponent(
-  () => import('ant-design-vue/es/checkbox'),
-);
-const CheckboxGroup = defineAsyncComponent(() =>
-  import('ant-design-vue/es/checkbox').then((res) => res.CheckboxGroup),
-);
 const DatePicker = defineAsyncComponent(
   () => import('ant-design-vue/es/date-picker'),
-);
-const Divider = defineAsyncComponent(() => import('ant-design-vue/es/divider'));
-const Input = defineAsyncComponent(() => import('ant-design-vue/es/input'));
-const InputNumber = defineAsyncComponent(
-  () => import('ant-design-vue/es/input-number'),
-);
-const InputPassword = defineAsyncComponent(() =>
-  import('ant-design-vue/es/input').then((res) => res.InputPassword),
 );
 const Mentions = defineAsyncComponent(
   () => import('ant-design-vue/es/mentions'),
 );
-const Radio = defineAsyncComponent(() => import('ant-design-vue/es/radio'));
-const RadioGroup = defineAsyncComponent(() =>
-  import('ant-design-vue/es/radio').then((res) => res.RadioGroup),
-);
 const RangePicker = defineAsyncComponent(() =>
   import('ant-design-vue/es/date-picker').then((res) => res.RangePicker),
-);
-const Rate = defineAsyncComponent(() => import('ant-design-vue/es/rate'));
-const Select = defineAsyncComponent(() => import('ant-design-vue/es/select'));
-const Space = defineAsyncComponent(() => import('ant-design-vue/es/space'));
-const Switch = defineAsyncComponent(() => import('ant-design-vue/es/switch'));
-const Textarea = defineAsyncComponent(() =>
-  import('ant-design-vue/es/input').then((res) => res.Textarea),
 );
 const TimePicker = defineAsyncComponent(
   () => import('ant-design-vue/es/time-picker'),
@@ -80,7 +65,6 @@ const TreeSelect = defineAsyncComponent(
 const Cascader = defineAsyncComponent(
   () => import('ant-design-vue/es/cascader'),
 );
-const Upload = defineAsyncComponent(() => import('ant-design-vue/es/upload'));
 const Image = defineAsyncComponent(() => import('ant-design-vue/es/image'));
 const PreviewGroup = defineAsyncComponent(() =>
   import('ant-design-vue/es/image').then((res) => res.ImagePreviewGroup),
